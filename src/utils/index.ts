@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { Wrapper, Route } from "./types";
 
-export const applyMiddleware = (middleware: Wrapper[], router: Router) => {
-    for (const f of middleware) {
-        f(router);
+export const applyMiddleware = (middlewareWrappers: Wrapper[], router: Router) => {
+    for (const wrapper of middlewareWrappers) {
+        wrapper(router);
     }
 };
 
