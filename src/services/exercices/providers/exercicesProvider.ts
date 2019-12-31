@@ -1,13 +1,8 @@
-export const getExercicesFromDb = () => {
-    const exercices = [
-        {
-            "Name": "Press de banca",
-            "Muscule": "Chest"
-        },
-        {
-            "Name": "Pull de triceps",
-            "Muscule": "Triceps"
-        }
-    ]
-    return exercices;
+import { QueryResult } from "pg";
+import { database } from "../../../config/database";
+
+export const getExercicesFromDb = async () => {
+    const response: QueryResult = await database.query('SELECT * FROM planets');
+
+    return response.rows;
 }
