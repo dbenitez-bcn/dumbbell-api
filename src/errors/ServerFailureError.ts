@@ -1,5 +1,5 @@
 import { DumbbellError } from "./DumbbellError";
-class ServerError extends DumbbellError {
+export class ServerFailureError extends DumbbellError {
     constructor(code: number, message: string) {
         super(code, message)
     }
