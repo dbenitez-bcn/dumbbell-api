@@ -1,6 +1,5 @@
 import { QueryResult } from "pg";
 import { database } from "../../../config/database";
-import { ServerFailureError } from "../../../errors/ServerFailureError";
 
 export const getExercises = async () => {
     const response: QueryResult = await database.query(`SELECT * FROM ${process.env.DB_TB_EXERCISES}  ORDER BY id ASC`);
