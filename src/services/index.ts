@@ -1,3 +1,3 @@
-import exercicesRoutes from "./exercices/routes";
+import exercisesRoutes from "./exercises/routes";
 
-export default [...exercicesRoutes];
+export default [...exercisesRoutes];
