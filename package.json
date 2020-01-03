@@ -15,7 +15,7 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -44,7 +44,8 @@
     "@types/jest": "^24.0.25",
     "@types/pg": "^7.14.0",
     "jest": "^24.9.0",
+    "pg": "^7.17.0",
     "ts-jest": "^24.2.0",
-    "pg": "^7.17.0"
+    "ts-mockito": "^2.5.0"
   }
 }
