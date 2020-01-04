@@ -4,19 +4,23 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export class DumbbellDatabase {
-    private static instance: DumbbellDatabase;
+    private static instance?: DumbbellDatabase;
 
     private constructor(
         private _database: Pool
     ) { }
 
     static database(): Pool {
-        if (this.instance != null) return this.instance._database;
+        if (this.instance != undefined) return this.instance._database;
         else return new DumbbellDatabase(defaultDatabase)._database;
     }
 
     static buildMockDatabase(database: Pool) {
         this.instance = new DumbbellDatabase(database);
+    }
+
+    static destroy() {
+        if (this.instance != undefined) this.instance = undefined;
     }
 }
 
