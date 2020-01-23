@@ -104,6 +104,9 @@ dist/
 # DynamoDB Local files
 .dynamodb/
 
+# Docker volume with database data
+database/
+
 # Temporary folders
 tmp/
 temp/

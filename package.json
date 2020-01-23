@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
-    "test": "jest --coverage --verbose"
+    "test": "jest --coverage --verbose",
+    "db:start": "docker-compose up",
+    "db:stop": "docker-compose down --remove-orphans"
   },
   "keywords": [],
   "author": "",
