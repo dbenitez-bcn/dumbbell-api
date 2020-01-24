@@ -5,7 +5,7 @@ import { applyMiddleware, applyRoutes } from "../../utils";
 import middleware from "../../middleware";
 import errorHandlers from "../../middleware/errorHandlers";
 import routes from "./routes";
-import { DumbbellDatabase } from "../../config/database";
+import { DumbbellDatabase } from "../../models/database/dumbbellDatabase";
 import { Pool } from "pg";
 import { Constants } from "../../config/constants";
 

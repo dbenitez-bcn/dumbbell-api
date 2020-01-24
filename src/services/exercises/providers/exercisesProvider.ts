@@ -1,5 +1,5 @@
 import { QueryResult } from "pg";
-import { DumbbellDatabase } from "../../../config/database";
+import { DumbbellDatabase } from "../../../models/database/dumbbellDatabase";
 
 export const getExercises = async () => {
     const response: QueryResult = await DumbbellDatabase.database().query(`SELECT * FROM ${process.env.DB_TB_EXERCISES}  ORDER BY id ASC`);

@@ -2,7 +2,7 @@ import { Router } from "express";
 import cors from "cors";
 import parser from "body-parser";
 import compression from "compression";
-import { Wrapper } from "../utils/types";
+import { Wrapper } from "../models/types";
 
 export const handleCors: Wrapper = (router: Router) =>
   router.use(cors({ credentials: true, origin: true }));

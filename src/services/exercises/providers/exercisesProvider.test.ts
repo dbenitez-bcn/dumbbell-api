@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { when, mock, anyString, instance } from "ts-mockito";
-import { DumbbellDatabase } from "../../../config/database";
+import { DumbbellDatabase } from "../../../models/database/dumbbellDatabase";
 import { getExercises, createExercise } from "./exercisesProvider";
 
 beforeEach(setUpDatabaseMock);
