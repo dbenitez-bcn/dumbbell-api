@@ -1,6 +1,5 @@
 import { DumbbellDatabase } from "./dumbbellDatabase";
 import { Pool } from "pg";
-import { anyString, mock, when } from "ts-mockito";
 
 afterEach(() => {
     DumbbellDatabase.destroy();

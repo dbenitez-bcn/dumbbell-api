@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { getExercisesHandler, createExerciseHandler } from "./exercisesController";
 
 export default [
