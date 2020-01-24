@@ -7,6 +7,7 @@ import errorHandlers from "../../middleware/errorHandlers";
 import routes from "./routes";
 import { DumbbellDatabase } from "../../config/database";
 import { Pool } from "pg";
+import { Constants } from "../../config/constants";
 
 
 describe("ExercicesController", () => {
@@ -43,7 +44,7 @@ describe("ExercicesController", () => {
             const response = await request(router).get("/exercises");
 
             expect(response.status).toEqual(500);
-            expect(response.text).toEqual("A problem has occurred when accessing to database");
+            expect(response.text).toEqual(Constants.DATABASE_ACCESS_FAILED);
         });
 
         it("Should return a notFound when no results are returned", async () => {
@@ -54,7 +55,7 @@ describe("ExercicesController", () => {
             const response = await request(router).get("/exercises");
 
             expect(response.status).toEqual(404);
-            expect(response.text).toEqual("No exercises found");
+            expect(response.text).toEqual(Constants.NO_EXERCICES_FOUND);
         });
 
     });
@@ -90,7 +91,7 @@ describe("ExercicesController", () => {
                 .send(params)
 
             expect(response.status).toEqual(500);
-            expect(response.text).toEqual("A problem has occurred when accessing to database");
+            expect(response.text).toEqual(Constants.DATABASE_ACCESS_FAILED);
         });
 
         it("Should return a unsuccess response when non params are send", async () => {
@@ -99,7 +100,7 @@ describe("ExercicesController", () => {
                 .send({})
 
             expect(response.status).toEqual(422);
-            expect(response.text).toEqual("Missing params");
+            expect(response.text).toEqual(Constants.MISSING_PARAMS);
         });
     });
 });
