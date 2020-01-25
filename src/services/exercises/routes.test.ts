@@ -6,7 +6,7 @@ import errorHandlers from "../../middleware/errorHandlers";
 import routes from "./routes";
 
 
-describe("ExercicesController", () => {
+describe("ExercisesController", () => {
     let router: Router;
 
     beforeEach(() => {

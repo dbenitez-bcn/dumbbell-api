@@ -1,7 +1,7 @@
 ## DUMBBELL API
 
 # Description
-An API of workout exercices.
+An API of workout exercises.
 
 # Getting started
 - Populate your .env file on the root project

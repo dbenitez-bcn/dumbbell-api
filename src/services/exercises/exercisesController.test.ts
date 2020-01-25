@@ -10,7 +10,7 @@ import { Pool } from "pg";
 import { Constants } from "../../config/constants";
 
 
-describe("ExercicesController", () => {
+describe("ExercisesController", () => {
     let router: Router;
 
     beforeEach(() => {
@@ -55,7 +55,7 @@ describe("ExercicesController", () => {
             const response = await request(router).get("/exercises");
 
             expect(response.status).toEqual(404);
-            expect(response.text).toEqual(Constants.NO_EXERCICES_FOUND);
+            expect(response.text).toEqual(Constants.NO_EXERCISES_FOUND);
         });
 
     });

@@ -6,7 +6,7 @@ export const getExercisesHandler = async (req: Request, res: Response) => {
   try {
     const result = await getExercises();
     if (result.length > 0) res.status(200).send(result);
-    else res.status(404).send(Constants.NO_EXERCICES_FOUND);
+    else res.status(404).send(Constants.NO_EXERCISES_FOUND);
 
   } catch (e) {
     databaseErrorHandler(res);
