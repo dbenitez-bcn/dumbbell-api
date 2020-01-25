@@ -1,0 +1,12 @@
+1. Run tall test
+    > npm test
+2. Pull al repo changes
+    > git pull -r
+3. Resolve conflicts if needed
+4. Run all test again
+    > npm test
+5. Commit changes
+    > git add
+    > git commit -m 
+6. Push code
+    > git push
