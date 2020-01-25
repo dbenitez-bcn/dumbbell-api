@@ -7,7 +7,10 @@
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
     "test": "jest --coverage --verbose",
     "db:start": "docker-compose up",
-    "db:stop": "docker-compose down --remove-orphans"
+    "db:stop": "docker-compose down --remove-orphans",
+    "db:drop": "rm -R src/database/data/",
+    "db:migration:run": "npx ts-node ./node_modules/.bin/typeorm migration:run",
+    "db:migration:new": "npx ts-node ./node_modules/.bin/typeorm migration:generate -n migration"
   },
   "keywords": [],
   "author": "",
@@ -42,6 +45,7 @@
     "supertest": "^4.0.2",
     "swagger-ui-express": "^4.1.2",
     "tsc-watch": "^4.0.0",
+    "typeorm": "^0.2.22",
     "typescript": "^3.7.4"
   },
   "devDependencies": {
