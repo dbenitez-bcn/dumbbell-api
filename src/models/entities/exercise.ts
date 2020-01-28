@@ -1,24 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column } from 'typeorm';
+import { BaseTableEntity } from './baseTableEntity';
 
-@Entity()
-export class Exercise {
+@Entity(process.env.DB_TB_EXERCISES)
+export class Exercise extends BaseTableEntity{
     constructor (id: number, created_at: string, updated_at: string, name: string, description: string, difficulty: number) {
-        this.id = id;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        super(id, created_at, updated_at)
         this.name = name;
         this.description = description;
         this.difficulty = difficulty;
     }
-    
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @CreateDateColumn()
-    created_at: string;
-
-    @UpdateDateColumn()
-    updated_at: string;
 
     @Column('varchar')
     name: string;
