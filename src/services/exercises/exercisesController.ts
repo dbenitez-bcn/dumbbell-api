@@ -16,9 +16,10 @@ export const getExercisesHandler = async (req: Request, res: Response) => {
 export const createExerciseHandler = async (req: Request, res: Response) => {
   const name = req.body.name
   const description = req.body.description
-  if (name != null && description != null) {
+  const difficulty = req.body.difficulty
+  if (name != null && description != null && difficulty != null) {
     try {
-      const result = await createExercise(name, description);
+      const result = await createExercise(name, description, difficulty);
       res.status(201).send(result);
     } catch (e) {
       databaseErrorHandler(res);

@@ -62,7 +62,8 @@ describe("ExercisesController", () => {
     describe("Create exercise", () => {
         const params = {
             name: "a name",
-            description: "a description"
+            description: "a description",
+            difficulty: "a difficulty"
         };
 
         it("Should return a success response", async () => {
@@ -77,7 +78,8 @@ describe("ExercisesController", () => {
             expect(response.status).toEqual(201);
             expect(response.body).toEqual({
                 name: "a name",
-                description: "a description"
+                description: "a description",
+                difficulty: "a difficulty"
             });
         });
 

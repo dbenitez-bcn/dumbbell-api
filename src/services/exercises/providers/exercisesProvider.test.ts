@@ -14,7 +14,7 @@ describe("ExerciseProvider", () => {
     });
     describe("Create exercise", () => {
         test("Should return the created exercise", async () => {
-            const result = await createExercise("testName", "testDescription");
+            const result = await createExercise("testName", "testDescription", 5);
             expect(result).toBe("testResult");
         });
     });
