@@ -1,4 +1,4 @@
-import { getExercisesHandler, createExerciseHandler, getExerciseByIdHandler } from "./exercisesController";
+import { getExercisesHandler, createExerciseHandler, getExerciseByIdHandler, deleteExerciseByIdHandler } from "./exercisesController";
 import { Endpoints } from "../../config/constants";
 
 export default [
@@ -16,5 +16,10 @@ export default [
     path: Endpoints.EXERCISE + "/:id",
     method: "get",
     handler: getExerciseByIdHandler
+  },
+  {
+    path: Endpoints.EXERCISE + "/:id",
+    method: "delete",
+    handler: deleteExerciseByIdHandler
   }
 ];

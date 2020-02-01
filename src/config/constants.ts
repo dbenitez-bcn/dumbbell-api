@@ -4,6 +4,7 @@ export class Constants {
     public static DATABASE_ACCESS_FAILED = "A problem has occurred when accessing to database";
     public static INVALID_ID = "Invalid id";
     public static NO_EXERCISE_FOUND = "No exercise found";
+    static EXERCISE_DELETED = "Exercise delated successfully";
 }
 
 export class Endpoints {
