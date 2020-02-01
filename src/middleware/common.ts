@@ -20,5 +20,4 @@ export const handleCompression: Wrapper = (router: Router) => {
 
 export const exercisesMiddleware: Wrapper = (router: Router) => {
   router.use(Endpoints.EXERCISE, exerciceValidator)
-  router.use(Endpoints.EXERCISES, exerciceValidator)
 }

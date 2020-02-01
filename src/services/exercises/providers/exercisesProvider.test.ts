@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { when, mock, anyString, instance } from "ts-mockito";
 import { DumbbellDatabase } from "../../../models/database/dumbbellDatabase";
-import { getExercises, createExercise } from "./exercisesProvider";
+import { getExercises, createExercise, getExerciseById } from "./exercisesProvider";
 
 beforeEach(setUpDatabaseMock);
 
@@ -15,7 +15,13 @@ describe("ExerciseProvider", () => {
     describe("Create exercise", () => {
         test("Should return the created exercise", async () => {
             const result = await createExercise("testName", "testDescription", 5);
-            expect(result).toBe("testResult");
+            expect(result).toEqual(["testResult"]);
+        });
+    });
+    describe("Get exercise by id", () => {
+        test("Should return all exercises", async () => {
+            const result = await getExerciseById(5);
+            expect(result).toEqual(["testResult"]);
         });
     });
 });
