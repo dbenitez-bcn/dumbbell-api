@@ -7,7 +7,7 @@ import errorHandlers from "../../middleware/errorHandlers";
 import routes from "./routes";
 import { DumbbellDatabase } from "../../models/database/dumbbellDatabase";
 import { Pool } from "pg";
-import { Constants } from "../../config/constants";
+import { Constants, Endpoints } from "../../config/constants";
 
 
 describe("ExercisesController", () => {
@@ -30,7 +30,7 @@ describe("ExercisesController", () => {
             when(poolMock.query(anyString())).thenReturn({ rows: ["testResult"] });
             DumbbellDatabase.buildMockDatabase(instance(poolMock))
 
-            const response = await request(router).get("/exercises")
+            const response = await request(router).get(Endpoints.EXERCISES)
 
             expect(response.status).toEqual(200);
             expect(response.body).toEqual(["testResult"]);
@@ -41,7 +41,7 @@ describe("ExercisesController", () => {
             when(poolMock.query(anyString())).thenThrow(new Error());
             DumbbellDatabase.buildMockDatabase(instance(poolMock));
 
-            const response = await request(router).get("/exercises");
+            const response = await request(router).get(Endpoints.EXERCISES);
 
             expect(response.status).toEqual(500);
             expect(response.text).toEqual(Constants.DATABASE_ACCESS_FAILED);
@@ -52,7 +52,7 @@ describe("ExercisesController", () => {
             when(poolMock.query(anyString())).thenReturn({ rows: [] });
             DumbbellDatabase.buildMockDatabase(instance(poolMock));
 
-            const response = await request(router).get("/exercises");
+            const response = await request(router).get(Endpoints.EXERCISES);
 
             expect(response.status).toEqual(404);
             expect(response.text).toEqual(Constants.NO_EXERCISES_FOUND);
@@ -72,7 +72,7 @@ describe("ExercisesController", () => {
             DumbbellDatabase.buildMockDatabase(instance(poolMock))
 
             const response = await request(router)
-                .post("/exercise")
+                .post(Endpoints.EXERCISE)
                 .send(params)
 
             expect(response.status).toEqual(201);
@@ -89,7 +89,7 @@ describe("ExercisesController", () => {
             DumbbellDatabase.buildMockDatabase(instance(poolMock));
 
             const response = await request(router)
-                .post("/exercise")
+                .post(Endpoints.EXERCISE)
                 .send(params)
 
             expect(response.status).toEqual(500);
@@ -98,7 +98,7 @@ describe("ExercisesController", () => {
 
         it("Should return a unsuccess response when non params are send", async () => {
             const response = await request(router)
-                .post("/exercise")
+                .post(Endpoints.EXERCISE)
                 .send({})
 
             expect(response.status).toEqual(422);
