@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import { Constants } from "../../../config/constants";
 import { Middleware } from "../../../models/types";
 
+// TODO: Apply DRY to whole method
 export const exerciceValidator: Middleware = (req: Request, res: Response, next: NextFunction) => {
     const params = req.body;
     const id = req.url.split('/')[1];
@@ -21,6 +22,14 @@ export const exerciceValidator: Middleware = (req: Request, res: Response, next:
         case "DELETE":
             if (!parseInt(id)) {
                 return res.status(422).send(Constants.INVALID_ID)
+            }
+            break;
+        case "PUT":
+            if (!parseInt(id)) {
+                return res.status(422).send(Constants.INVALID_ID)
+            }
+            if (params.name == null || params.description == null || params.difficulty == null) {
+                return res.status(422).send(Constants.MISSING_PARAMS);
             }
             break;
     }

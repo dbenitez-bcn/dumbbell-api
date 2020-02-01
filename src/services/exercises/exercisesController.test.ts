@@ -161,8 +161,7 @@ describe("ExercisesController", () => {
             const response = await request(router)
                 .delete(`${Endpoints.EXERCISE}/5`);
 
-            expect(response.status).toEqual(200);
-            expect(response.text).toEqual(Constants.EXERCISE_DELETED);
+            expect(response.status).toEqual(204);
         });
 
         it("Should return an error when an invalid id is passed", async () => {
@@ -185,4 +184,68 @@ describe("ExercisesController", () => {
             expect(response.text).toEqual(Constants.DATABASE_ACCESS_FAILED);
         });
     });
+
+    describe("Update exercise", () => {
+        const params = {
+            name: "a name",
+            description: "a description",
+            difficulty: "a difficulty"
+        };
+
+        it("Should return a success response", async () => {
+            const poolMock: Pool = mock(Pool);
+            when(poolMock.query(anyString())).thenReturn({ rows: [params] });
+            DumbbellDatabase.buildMockDatabase(instance(poolMock))
+
+            const response = await request(router)
+                .put(`${Endpoints.EXERCISE}/5`)
+                .send(params)
+
+            expect(response.status).toEqual(204);
+        });
+
+        it("Should return an error when an invalid id is passed", async () => {
+            const response = await request(router)
+                .put(`${Endpoints.EXERCISE}/invalid`);
+
+            expect(response.status).toEqual(422);
+            expect(response.text).toEqual(Constants.INVALID_ID);
+        });
+
+        it("Should return an error when a serverException is thrown", async () => {
+            const poolMock: Pool = mock(Pool);
+            when(poolMock.query(anyString())).thenThrow(new Error());
+            DumbbellDatabase.buildMockDatabase(instance(poolMock));
+
+            const response = await request(router)
+                .put(`${Endpoints.EXERCISE}/5`)
+                .send(params)
+
+            expect(response.status).toEqual(500);
+            expect(response.text).toEqual(Constants.DATABASE_ACCESS_FAILED);
+        });
+
+        it("Should return a unsuccess response when non params are send", async () => {
+            const response = await request(router)
+                .put(`${Endpoints.EXERCISE}/5`)
+                .send({})
+
+            expect(response.status).toEqual(422);
+            expect(response.text).toEqual(Constants.MISSING_PARAMS);
+        });
+
+        it("Should return a notFound when no results are returned", async () => {
+            const poolMock: Pool = mock(Pool);
+            when(poolMock.query(anyString())).thenReturn({ rows: [] });
+            DumbbellDatabase.buildMockDatabase(instance(poolMock));
+
+            const response = await request(router)
+                .put(`${Endpoints.EXERCISE}/5`)
+                .send(params);
+
+            expect(response.status).toEqual(404);
+            expect(response.text).toEqual(Constants.NO_EXERCISE_FOUND);
+        });
+
+    })
 });

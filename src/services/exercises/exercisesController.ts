@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getExercises, createExercise, getExerciseById, deleteExerciseById } from './providers/exercisesProvider'
+import { getExercises, createExercise, getExerciseById, deleteExerciseById, updateExercise } from './providers/exercisesProvider'
 import { Constants } from "../../config/constants";
 
 export const getExercisesHandler = async (req: Request, res: Response) => {
@@ -40,10 +40,29 @@ export const deleteExerciseByIdHandler = async (req: Request, res: Response) => 
   const id = parseInt(req.params.id);
   try {
     const result = await deleteExerciseById(id);
-    res.status(200).send(Constants.EXERCISE_DELETED);
+    res.status(204).send();
   } catch (e) {
     databaseErrorHandler(res);
   }
+}
+
+export const updateExerciseHandler = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const name = req.body.name
+  const description = req.body.description
+  const difficulty = req.body.difficulty
+    try {
+      const exercise = await getExerciseById(id);
+      if (exercise.length > 0){
+        await updateExercise(id, name, description, difficulty);
+        res.status(204).send();
+      }
+      else {
+        res.status(404).send(Constants.NO_EXERCISE_FOUND);
+      }
+    } catch (e) {
+      databaseErrorHandler(res);
+    }
 }
 
 function databaseErrorHandler(res: Response) {

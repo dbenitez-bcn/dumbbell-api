@@ -20,3 +20,8 @@ export const deleteExerciseById = async (id: Number) => {
     const response: QueryResult = await DumbbellDatabase.database().query(`DELETE FROM ${process.env.DB_TB_EXERCISES} WHERE id = ${id}`);
     return response.rows;
 }
+
+export const updateExercise = async (id: Number, name: String, description: String, difficulty: Number) => {
+    const response: QueryResult = await DumbbellDatabase.database().query(`UPDATE ${process.env.DB_TB_EXERCISES} SET name = '${name}', description = '${description}', difficulty = '${difficulty}', updated_at = now() WHERE id = ${id}`);
+    return response.rows;
+}
