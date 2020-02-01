@@ -17,16 +17,12 @@ export const createExerciseHandler = async (req: Request, res: Response) => {
   const name = req.body.name
   const description = req.body.description
   const difficulty = req.body.difficulty
-  if (name != null && description != null && difficulty != null) {
     try {
       const result = await createExercise(name, description, difficulty);
       res.status(201).send(result);
     } catch (e) {
       databaseErrorHandler(res);
     }
-  } else {
-    res.status(422).send(Constants.MISSING_PARAMS);
-  }
 }
 
 function databaseErrorHandler(res: Response) {

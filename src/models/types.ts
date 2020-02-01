@@ -8,7 +8,7 @@ type Middleware = (
     req: Request,
     res: Response,
     next: NextFunction
-) => Promise<void> | void;
+) => Promise<void> | void | Response;
 
 type Route = {
     path: string;
