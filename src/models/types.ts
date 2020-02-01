@@ -1,10 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 
-export { Wrapper, Handler, Route }
+export { Wrapper, Middleware, Route }
 
 type Wrapper = ((router: Router) => void);
 
-type Handler = (
+type Middleware = (
     req: Request,
     res: Response,
     next: NextFunction
@@ -13,5 +13,5 @@ type Handler = (
 type Route = {
     path: string;
     method: string;
-    handler: Handler | Handler[];
+    handler: Middleware | Middleware[];
 };
