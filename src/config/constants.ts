@@ -4,6 +4,9 @@ export class Constants {
     public static DATABASE_ACCESS_FAILED = "A problem has occurred when accessing to database";
     public static INVALID_ID = "Invalid id";
     public static NO_EXERCISE_FOUND = "No exercise found";
+    static INVALID_NAME_PARAM = "Invalid name. This params can't be empty";
+    static INVALID_DESCRIPTION_PARAM = "Invalid description. This params can't be empty";
+    static INVALID_DIFFICULTY_PARAM = "Invalid difficulty: This params must be a number between 1 to 10";
 }
 
 export class Endpoints {

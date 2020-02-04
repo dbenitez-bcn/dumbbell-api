@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from "express"
 import { Constants } from "../../../config/constants";
 import { Middleware } from "../../../models/types";
 
-// TODO: Apply DRY to whole method
 export const exerciceValidator: Middleware = (req: Request, res: Response, next: NextFunction) => {
     const params = req.body;
     const id = req.url.split('/')[1];
+    const validParams = validateParams(params);
     
     switch(req.method) {
         case "GET":
@@ -14,9 +14,8 @@ export const exerciceValidator: Middleware = (req: Request, res: Response, next:
             }
             break;
         case "POST":
-            // TODO: Check each field and return specific errors
-            if (params.name == null || params.description == null || params.difficulty == null) {
-                return res.status(422).send(Constants.MISSING_PARAMS);
+            if (validParams !== null) {
+                return res.status(422).send(validParams)
             }
             break;
         case "DELETE":
@@ -28,11 +27,37 @@ export const exerciceValidator: Middleware = (req: Request, res: Response, next:
             if (!parseInt(id)) {
                 return res.status(422).send(Constants.INVALID_ID)
             }
-            if (params.name == null || params.description == null || params.difficulty == null) {
-                return res.status(422).send(Constants.MISSING_PARAMS);
+            if (validParams !== null) {
+                return res.status(422).send(validParams)
             }
             break;
     }
 
     next();
+}
+
+function validateParams(params: any): String | null {
+    if (hasMissingParams(params)) {
+        return Constants.MISSING_PARAMS;
+    } else {
+        if(params.name.length == 0) {
+            return Constants.INVALID_NAME_PARAM
+        }
+        if(params.description.length == 0) {
+            return Constants.INVALID_DESCRIPTION_PARAM
+        }
+        if(!isValidDifficultty(params.difficulty)) {
+            return Constants.INVALID_DIFFICULTY_PARAM
+        }
+    }
+
+    return null;
+}
+
+function hasMissingParams(params: any): Boolean {
+    return params.name == null || params.description == null || params.difficulty == null;
+}
+
+function isValidDifficultty(difficulty: any): Boolean {
+    return Number.isInteger(difficulty) && difficulty > 1 && difficulty < 10
 }
