@@ -10,17 +10,130 @@
     "produces": ["application/json"],
     "paths": {
       "/exercises": {
-        "get": {
-          "tags": ["Fetch exercises"],
+        "get": {  
+          "tags": ["Exercises"],
           "summary": "Fetch all exercises",
           "responses": {
             "200": {
               "description": "OK"
+            },
+            "404": {
+              "description": "No exercises found"
             }
           },
           "content": {
             "application/json": {}
           }
+        }
+      },
+      "/exercise/:id": {
+        "get": {  
+          "tags": ["Exercises"],
+          "summary": "Fetch one exercise",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "No exercises found"
+            },
+            "422": {
+              "description": "Invalid id"
+            }
+          },
+          "content": {
+            "application/json": {}
+          }
+        },
+        "put": {  
+          "tags": ["Exercises"],
+          "summary": "Updates an exercise",
+          "responses": {
+            "201": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "No exercises found"
+            },
+            "422": {
+              "description": "Invalid params"
+            }
+          },
+          "content": {
+            "application/json": {}
+          },
+          "parameters": [
+            {
+              "name": "name",
+              "description": "Specifies the name string",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "description",
+              "description": "Specifies the description string",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "difficulty",
+              "description": "Specifies the difficulty value. Must be a number between 1 and 10",
+              "required": true,
+              "type": "int"
+            }
+          ]
+        },
+        "delete": {  
+          "tags": ["Exercises"],
+          "summary": "Deletes one exercise",
+          "responses": {
+            "204": {
+              "description": "OK"
+            },
+            "422": {
+              "description": "Invalid id"
+            }
+          },
+          "content": {
+            "application/json": {}
+          }
+        }
+      },
+      "/exercise": {
+        "post": {  
+          "tags": ["Exercises"],
+          "summary": "Creates an exercise",
+          "responses": {
+            "201": {
+              "description": "OK"
+            },
+            "422": {
+              "description": "Invalid params"
+            }
+          },
+          "content": {
+            "application/json": {}
+          },
+          "parameters": [
+            {
+              "name": "name",
+              "description": "Specifies the name string",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "description",
+              "description": "Specifies the description string",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "difficulty",
+              "description": "Specifies the difficulty value. Must be a number between 1 and 10",
+              "required": true,
+              "type": "int"
+            }
+          ]
         }
       },
       "/search": {
