@@ -5,7 +5,7 @@ import { Middleware } from "../../../models/types";
 export const exerciceValidator: Middleware = (req: Request, res: Response, next: NextFunction) => {
     const params = req.body;
     const id = req.url.split('/')[1];
-    const validParams = validateParams(params);
+    const hasValidParams = getErrorMessageOrPassValidation(params);
     
     switch(req.method) {
         case "GET":
@@ -14,8 +14,8 @@ export const exerciceValidator: Middleware = (req: Request, res: Response, next:
             }
             break;
         case "POST":
-            if (validParams !== null) {
-                return res.status(422).send(validParams)
+            if (hasValidParams !== true) {
+                return res.status(422).send(hasValidParams)
             }
             break;
         case "DELETE":
@@ -27,8 +27,8 @@ export const exerciceValidator: Middleware = (req: Request, res: Response, next:
             if (!parseInt(id)) {
                 return res.status(422).send(Constants.INVALID_ID)
             }
-            if (validParams !== null) {
-                return res.status(422).send(validParams)
+            if (hasValidParams !== true) {
+                return res.status(422).send(hasValidParams)
             }
             break;
     }
@@ -36,7 +36,7 @@ export const exerciceValidator: Middleware = (req: Request, res: Response, next:
     next();
 }
 
-function validateParams(params: any): String | null {
+function getErrorMessageOrPassValidation(params: any): String | Boolean {
     if (hasMissingParams(params)) {
         return Constants.MISSING_PARAMS;
     } else {
@@ -51,7 +51,7 @@ function validateParams(params: any): String | null {
         }
     }
 
-    return null;
+    return true;
 }
 
 function hasMissingParams(params: any): Boolean {
