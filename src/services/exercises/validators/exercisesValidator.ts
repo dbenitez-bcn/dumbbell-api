@@ -59,5 +59,5 @@ function hasMissingParams(params: any): Boolean {
 }
 
 function isValidDifficultty(difficulty: any): Boolean {
-    return Number.isInteger(difficulty) && difficulty > 1 && difficulty < 10
+    return Number.isInteger(difficulty) && difficulty >= 1 && difficulty <= 10
 }

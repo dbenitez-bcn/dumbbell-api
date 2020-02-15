@@ -139,7 +139,22 @@ describe("ExercisesController", () => {
             const noNameParams = {
                 name: "a name",
                 description: "a description",
-                difficulty: 100
+                difficulty: 11
+            };
+
+            const response = await request(router)
+                .post(Endpoints.EXERCISE)
+                .send(noNameParams)
+
+            expect(response.status).toEqual(422);
+            expect(response.text).toEqual(Constants.INVALID_DIFFICULTY_PARAM);
+        });
+
+        it("Should return a unsuccess response with message when difficulty invalid is send", async () => {
+            const noNameParams = {
+                name: "a name",
+                description: "a description",
+                difficulty: 0
             };
 
             const response = await request(router)
