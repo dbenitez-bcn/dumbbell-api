@@ -83,6 +83,28 @@ describe("ExercisesController", () => {
             });
         });
 
+        it("Should return a success response when difficulty is a valid number as string", async () => {
+            const stringDifficultyParams = {
+                name: "a name",
+                description: "a description",
+                difficulty: "5"
+            };
+            const poolMock: Pool = mock(Pool);
+            when(poolMock.query(anyString())).thenReturn({ rows: [stringDifficultyParams] });
+            DumbbellDatabase.buildMockDatabase(instance(poolMock))
+
+            const response = await request(router)
+                .post(Endpoints.EXERCISE)
+                .send(params)
+
+            expect(response.status).toEqual(201);
+            expect(response.body).toEqual({
+                name: "a name",
+                description: "a description",
+                difficulty: "5"
+            });
+        });
+
         it("Should return an error when a serverException is thrown", async () => {
             const poolMock: Pool = mock(Pool);
             when(poolMock.query(anyString())).thenThrow(new Error());

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { Constants } from "../../../config/constants";
 import { Middleware } from "../../../models/types";
+import { isNumber } from "util";
 
 export const exerciceValidator: Middleware = (req: Request, res: Response, next: NextFunction) => {
     const params = req.body;
@@ -59,5 +60,5 @@ function hasMissingParams(params: any): Boolean {
 }
 
 function isValidDifficultty(difficulty: any): Boolean {
-    return Number.isInteger(difficulty) && difficulty >= 1 && difficulty <= 10
+    return isNumber(Number(difficulty)) && difficulty >= 1 && difficulty <= 10
 }
