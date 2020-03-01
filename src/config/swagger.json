@@ -26,6 +26,43 @@
           }
         }
       },
+      "/exercise": {
+        "post": {  
+          "tags": ["Exercises"],
+          "summary": "Creates an exercise",
+          "responses": {
+            "201": {
+              "description": "OK"
+            },
+            "422": {
+              "description": "Invalid params"
+            }
+          },
+          "content": {
+            "application/json": {}
+          },
+          "parameters": [
+            {
+              "name": "name",
+              "description": "Specifies the name string",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "description",
+              "description": "Specifies the description string",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "difficulty",
+              "description": "Specifies the difficulty value. Must be a number between 1 and 10",
+              "required": true,
+              "type": "Integer / String"
+            }
+          ]
+        }
+      },
       "/exercise/:id": {
         "get": {  
           "tags": ["Exercises"],
@@ -97,69 +134,6 @@
           "content": {
             "application/json": {}
           }
-        }
-      },
-      "/exercise": {
-        "post": {  
-          "tags": ["Exercises"],
-          "summary": "Creates an exercise",
-          "responses": {
-            "201": {
-              "description": "OK"
-            },
-            "422": {
-              "description": "Invalid params"
-            }
-          },
-          "content": {
-            "application/json": {}
-          },
-          "parameters": [
-            {
-              "name": "name",
-              "description": "Specifies the name string",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "description",
-              "description": "Specifies the description string",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "difficulty",
-              "description": "Specifies the difficulty value. Must be a number between 1 and 10",
-              "required": true,
-              "type": "int"
-            }
-          ]
-        }
-      },
-      "/search": {
-        "get": {
-          "tags": ["Search Text"],
-          "summary": "Search by places using opencagedata service",
-          "responses": {
-            "200": {
-              "description": "OK"
-            },
-            "400": {
-              "description": "Bad request"
-            }
-          },
-          "content": {
-            "application/json": {}
-          },
-          "parameters": [
-            {
-              "name": "q",
-              "in": "query",
-              "description": "Specifies the query string",
-              "required": true,
-              "type": "string"
-            }
-          ]
         }
       }
     }
