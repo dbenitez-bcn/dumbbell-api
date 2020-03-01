@@ -128,7 +128,7 @@ describe("ExercisesController", () => {
         });
 
         it("Should return a unsuccess response with message when empty name is send", async () => {
-            const noNameParams = {
+            const emptyNameParams = {
                 name: "",
                 description: "a description",
                 difficulty: 5
@@ -136,14 +136,14 @@ describe("ExercisesController", () => {
 
             const response = await request(router)
                 .post(Endpoints.EXERCISE)
-                .send(noNameParams)
+                .send(emptyNameParams)
 
             expect(response.status).toEqual(422);
             expect(response.text).toEqual(Constants.INVALID_NAME_PARAM);
         });
 
         it("Should return a unsuccess response with message when empty description is send", async () => {
-            const noNameParams = {
+            const emptyDescriptionParams = {
                 name: "a name",
                 description: "",
                 difficulty: 5
@@ -151,14 +151,14 @@ describe("ExercisesController", () => {
 
             const response = await request(router)
                 .post(Endpoints.EXERCISE)
-                .send(noNameParams)
+                .send(emptyDescriptionParams)
 
             expect(response.status).toEqual(422);
             expect(response.text).toEqual(Constants.INVALID_DESCRIPTION_PARAM);
         });
 
         it("Should return a unsuccess response with message when difficulty invalid is send", async () => {
-            const noNameParams = {
+            const invalidDifficulttyParams = {
                 name: "a name",
                 description: "a description",
                 difficulty: 11
@@ -166,14 +166,14 @@ describe("ExercisesController", () => {
 
             const response = await request(router)
                 .post(Endpoints.EXERCISE)
-                .send(noNameParams)
+                .send(invalidDifficulttyParams)
 
             expect(response.status).toEqual(422);
             expect(response.text).toEqual(Constants.INVALID_DIFFICULTY_PARAM);
         });
 
         it("Should return a unsuccess response with message when difficulty invalid is send", async () => {
-            const noNameParams = {
+            const invalidDifficulttyParams = {
                 name: "a name",
                 description: "a description",
                 difficulty: 0
@@ -181,14 +181,14 @@ describe("ExercisesController", () => {
 
             const response = await request(router)
                 .post(Endpoints.EXERCISE)
-                .send(noNameParams)
+                .send(invalidDifficulttyParams)
 
             expect(response.status).toEqual(422);
             expect(response.text).toEqual(Constants.INVALID_DIFFICULTY_PARAM);
         });
 
         it("Should return a unsuccess response with message when difficulty invalid is send", async () => {
-            const noNameParams = {
+            const invalidDifficulttyParams = {
                 name: "a name",
                 description: "a description",
                 difficulty: "a difficulty"
@@ -196,7 +196,7 @@ describe("ExercisesController", () => {
 
             const response = await request(router)
                 .post(Endpoints.EXERCISE)
-                .send(noNameParams)
+                .send(invalidDifficulttyParams)
 
             expect(response.status).toEqual(422);
             expect(response.text).toEqual(Constants.INVALID_DIFFICULTY_PARAM);
