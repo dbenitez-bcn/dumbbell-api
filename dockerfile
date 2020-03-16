@@ -1,14 +1,8 @@
 FROM node:latest
-
-RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-COPY package.json /usr/src/app/
+COPY package-lock.json .
+COPY package.json .
 RUN npm install
-
-COPY . /usr/src/app
-
-EXPOSE 9000
-
-#RUN npm run db:migration:run
-
-CMD [ "npm", "run", "dev" ]
+COPY dist .
+COPY wait-for-it.sh .
+CMD APP_ENV=alpha node server.js
