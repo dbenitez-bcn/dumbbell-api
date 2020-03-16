@@ -24,9 +24,20 @@ export class DumbbellDatabase {
     }
 }
 
+export function getDatabaseHost() {
+    switch (process.env.APP_ENV) {
+        case 'dev':
+            return process.env.DB_HOST_DEV;
+        case 'alpha':
+            return process.env.DB_HOST_ALPHA;
+        default:
+            return process.env.DB_HOST_DEV;
+    }
+}
+
 const defaultDatabase: Pool = new Pool({
     user: process.env.DB_USER,
-    host: process.env.DB_HOST,
+    host: getDatabaseHost(),
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     port: 5432
