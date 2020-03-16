@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: dumbbell-database
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - "./src/database/data:/var/lib/postgresql/data"
+    ports:
+      - 5432:5432
+  adminer:
+    container_name: dumbbell-adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8083:8080
+  api:
+    container_name: dumbbell-api
+    image: api-dumbbell
+    environment: 
+      APP_ENV: alpha
+    env_file:
+      - .env
+    ports:
+      - 9000:9000
+    command: ["./wait-for-it.sh", "db:5432", "--", "node", "server.js"]
