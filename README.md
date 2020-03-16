@@ -24,4 +24,5 @@ An API of workout exercises.
 - `npm run db:migration:new`: Generates a new migration
 
 ## Postman library
-Comming soon...
+- Use Dumbbell.postman_collection.json file to import the collection to your postman
+- Use Dumbbell-environment.postman_environment.json file to import the environment variables to your postman
