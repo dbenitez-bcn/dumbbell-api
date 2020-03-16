@@ -1,4 +1,4 @@
-import { DumbbellDatabase } from "./dumbbellDatabase";
+import { DumbbellDatabase, getDatabaseHost } from "./dumbbellDatabase";
 import { Pool } from "pg";
 
 afterEach(() => {
@@ -23,12 +23,30 @@ describe("DumbbellDatabase", () => {
         expect(firstDatabase).toBe(DumbbellDatabase.database())
     });
 
-    it ("Should destroy the instance", () => {
+    it("Should destroy the instance", () => {
         const firstDatabase: Pool = new Pool();
         DumbbellDatabase.buildMockDatabase(firstDatabase);
 
         DumbbellDatabase.destroy();
 
         expect(firstDatabase).not.toEqual(DumbbellDatabase.database());
-    })
+    });
+
+    it("Should return dev host when app env is dev", () => {
+        process.env.APP_ENV = 'dev';
+        process.env.DB_HOST_DEV = 'expected';
+        
+        const result = getDatabaseHost();
+
+        expect(result).toBe('expected');
+    });
+
+    it("Should return alpha host when app env is alpha", () => {
+        process.env.APP_ENV = 'alpha';
+        process.env.DB_HOST_ALPHA = 'expected';
+        
+        const result = getDatabaseHost();
+
+        expect(result).toBe('expected');
+    });
 });
