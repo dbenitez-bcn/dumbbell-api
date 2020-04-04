@@ -7,7 +7,7 @@ export const getExercises = async () => {
 }
 
 export const createExercise = async (name: String, description: String, difficulty: Number) => {
-    const response: QueryResult = await DumbbellDatabase.database().query(`INSERT INTO ${process.env.DB_TB_EXERCISES} (name, description, difficulty) VALUES ('${name}', '${description}', '${difficulty}') RETURNING *`);
+    const response: QueryResult = await DumbbellDatabase.database().query(`INSERT INTO ${process.env.DB_TB_EXERCISES} (name, description, difficulty) VALUES ($aesc6$${name}$aesc6$, $aesc6$${description}$aesc6$, $aesc6$${difficulty}$aesc6$) RETURNING *`);
     return response.rows;
 }
 
@@ -22,6 +22,6 @@ export const deleteExerciseById = async (id: Number) => {
 }
 
 export const updateExercise = async (id: Number, name: String, description: String, difficulty: Number) => {
-    const response: QueryResult = await DumbbellDatabase.database().query(`UPDATE ${process.env.DB_TB_EXERCISES} SET name = '${name}', description = '${description}', difficulty = '${difficulty}', updated_at = now() WHERE id = ${id}`);
+    const response: QueryResult = await DumbbellDatabase.database().query(`UPDATE ${process.env.DB_TB_EXERCISES} SET name = $aesc6$${name}$aesc6$, description = $aesc6$${description}$aesc6$, difficulty = $aesc6$${difficulty}$aesc6$, updated_at = now() WHERE id = ${id}`);
     return response.rows;
 }
