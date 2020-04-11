@@ -1,12 +1,11 @@
 
-version: 2.0
+version: 2.1
 jobs:
   build:
     docker:
       - image: circleci/node:13.5.0
     steps:
       - checkout
-      - run:
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
