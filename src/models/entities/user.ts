@@ -3,8 +3,8 @@ import { Entity, Unique, Column, PrimaryGeneratedColumn, CreateDateColumn, Updat
 @Entity(process.env.DB_TB_USERS)
 @Unique(['username'])
 export class User {
-    @PrimaryGeneratedColumn()
-    id!: number;
+    @PrimaryGeneratedColumn('uuid')
+    id!: string;
 
     @Column('varchar')
     username!: string;
