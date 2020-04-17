@@ -4,7 +4,7 @@ import { validate } from "class-validator";
 import { Constants } from "../../config/constants";
 
 export const parseUserRegistrationBody = async (body: UserRegistrationBody): Promise<UserRegistrationRequest> => {
-    const request = new UserRegistrationRequest(body);
+    const request = new UserRegistrationRequest(body.username, body.email, body.password);
     const errors = await validate(request);
     if (errors.length > 0) {
         const key = Object.keys(errors[0].constraints)[0];

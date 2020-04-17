@@ -3,10 +3,10 @@ import { MinLength, Matches, IsEmail } from 'class-validator';
 import { Constants } from "../../config/constants";
 
 export class UserRegistrationRequest {
-    constructor(body: UserRegistrationBody) {
-        this.username = body.username;
-        this.email = body.email;
-        this.password = body.password;
+    constructor(username: string, email: string, password: string) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 
     @MinLength(4, {
