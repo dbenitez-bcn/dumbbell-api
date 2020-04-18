@@ -1,5 +1,6 @@
-import { DumbbellDatabase, getDatabaseHost } from "./dumbbellDatabase";
 import { Pool } from "pg";
+import { DumbbellDatabase } from "./dumbbellDatabase";
+import { getDatabaseHost } from "../../utils/getDatabaseHost";
 
 afterEach(() => {
     DumbbellDatabase.destroy();

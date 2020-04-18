@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import dotenv from "dotenv";
+import { getDatabaseHost } from "../../utils/getDatabaseHost";
 
 dotenv.config();
 
@@ -21,17 +22,6 @@ export class DumbbellDatabase {
 
     static destroy() {
         if (this.instance != undefined) this.instance = undefined;
-    }
-}
-
-export function getDatabaseHost() {
-    switch (process.env.APP_ENV) {
-        case 'dev':
-            return process.env.DB_HOST_DEV;
-        case 'alpha':
-            return process.env.DB_HOST_ALPHA;
-        default:
-            return process.env.DB_HOST_DEV;
     }
 }
 
