@@ -6,6 +6,7 @@ import middleware from "./middleware";
 import errorHandlers from "./middleware/errorHandlers";
 import dotenv from "dotenv";
 import { createConnection } from "typeorm";
+import { getDatabaseHost } from "./utils/getDatabaseHost";
 
 dotenv.config();
 
@@ -17,10 +18,11 @@ process.on("unhandledRejection", e => {
   console.log(e);
   process.exit(1);
 });
+const dbHost = getDatabaseHost();
 
 createConnection({
   type: "postgres",
-  host: process.env.DB_HOST,
+  host: dbHost,
   port: 5432,
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
