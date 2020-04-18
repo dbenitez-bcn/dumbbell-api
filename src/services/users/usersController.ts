@@ -23,6 +23,10 @@ export const userRegistrationHandler = async (req: Request, res: Response) => {
         await repo.save(user);
         res.status(201).send();
     } catch (error) {
-        res.status(409).send(Constants.USERNAME_ALREADY_EXIST);
+        if (error.detail.includes('username')) {
+            res.status(409).send(Constants.USERNAME_ALREADY_EXIST);
+        } else {
+            res.status(409).send(Constants.EMAIL_ALREADY_EXIST);
+        }
     }
 }

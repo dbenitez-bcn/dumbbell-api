@@ -75,15 +75,27 @@ describe('Users controller', () => {
             expect(sendSpy).toBeCalledWith('Invalid params');
         })
 
-        // TOOD: Add a test for checking email
-        test('given an existing username or email should fail and send an error', async () => {
-            saveSpy.mockRejectedValue(new Error());
+        test('given an existing username should fail and send an error', async () => {
+            saveSpy.mockRejectedValue({
+                detail: 'Key (username)=(username) already exists.',
+            });
             const { userRegistrationHandler } = require('./usersController');
 
             await userRegistrationHandler(req, res);
 
             expect(statusSpy).toBeCalledWith(409);
             expect(sendSpy).toBeCalledWith(Constants.USERNAME_ALREADY_EXIST);
+        })
+        test('given an existing email should fail and send an error', async () => {
+            saveSpy.mockRejectedValue({
+                detail: 'Key (email)=(email) already exists.',
+            });
+            const { userRegistrationHandler } = require('./usersController');
+
+            await userRegistrationHandler(req, res);
+
+            expect(statusSpy).toBeCalledWith(409);
+            expect(sendSpy).toBeCalledWith(Constants.EMAIL_ALREADY_EXIST);
         })
     })
 })
