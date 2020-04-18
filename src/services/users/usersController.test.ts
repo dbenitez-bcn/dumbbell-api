@@ -4,16 +4,19 @@ import { UserRegistrationBody } from "../../models/bodies/userRegistrationBody";
 import { UserRegistrationRequest } from '../../models/requests/userRegistrationRequest';
 import { User } from '../../models/entities/user';
 import { FakeResponse, FakeResponseBuilder } from '../../test/testutils';
+import { Constants } from '../../config/constants';
 
 const bycryptMock = bycrypt as jest.Mocked<typeof bycrypt>;
 describe('Users controller', () => {
     describe('Registration', () => {
         const parseSpy = jest.fn();
-        jest.mock('./validations', () => ({
-            parseUserRegistrationBody: parseSpy
-        }));
+        const hashSpy = jest.fn().mockReturnValue('cryptedPassword');
         const statusSpy = jest.fn().mockReturnThis();
         const sendSpy = jest.fn().mockReturnThis();
+        const saveSpy = jest.fn();
+        const repoMock = jest.fn().mockReturnValue({
+            save: saveSpy
+        })
         const body: UserRegistrationBody = {
             email: "email",
             username: "username",
@@ -23,6 +26,23 @@ describe('Users controller', () => {
         const req = {
             body
         }
+        bycryptMock.hash = hashSpy;
+        jest.mock('./validations', () => ({
+            parseUserRegistrationBody: parseSpy
+        }));
+        jest.mock('typeorm', () => ({
+            getRepository: repoMock,
+            PrimaryGeneratedColumn: jest.fn(),
+            Unique: jest.fn(),
+            Column: jest.fn(),
+            CreateDateColumn: jest.fn(),
+            UpdateDateColumn: jest.fn(),
+            Entity: jest.fn()
+        }));
+
+        beforeEach(() => {
+            parseSpy.mockResolvedValue(new UserRegistrationRequest(body.username, body.email, body.password));
+        })
 
         afterEach(() => {
             jest.clearAllMocks()
@@ -30,22 +50,6 @@ describe('Users controller', () => {
         })
 
         test('Given valid params should save a user in the database', async () => {
-            const hashSpy = jest.fn().mockReturnValue('cryptedPassword');
-            bycryptMock.hash = hashSpy;
-            const saveSpy = jest.fn();
-            const repoMock = jest.fn().mockReturnValue({
-                save: saveSpy
-            })
-            jest.mock('typeorm', () => ({
-                getRepository: repoMock,
-                PrimaryGeneratedColumn: jest.fn(),
-                Unique: jest.fn(),
-                Column: jest.fn(),
-                CreateDateColumn: jest.fn(),
-                UpdateDateColumn: jest.fn(),
-                Entity: jest.fn()
-            }));
-            parseSpy.mockResolvedValue(new UserRegistrationRequest(body.username, body.email, body.password));
             const { userRegistrationHandler } = require('./usersController');
             const expectedUser = new User();
             expectedUser.email = body.email;
@@ -69,6 +73,16 @@ describe('Users controller', () => {
 
             expect(statusSpy).toBeCalledWith(422);
             expect(sendSpy).toBeCalledWith('Invalid params');
+        })
+
+        test('given an existing username should fail and send an error', async () => {
+            saveSpy.mockRejectedValue(new Error());
+            const { userRegistrationHandler } = require('./usersController');
+
+            await userRegistrationHandler(req, res);
+
+            expect(statusSpy).toBeCalledWith(409);
+            expect(sendSpy).toBeCalledWith(Constants.USERNAME_ALREADY_EXIST);
         })
     })
 })
