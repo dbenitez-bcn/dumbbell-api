@@ -5,20 +5,20 @@ import { Entity, Unique, Column, PrimaryGeneratedColumn, CreateDateColumn, Updat
 @Unique(['username'])
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    id: string;
 
     @Column('varchar')
-    username!: string;
+    username: string;
 
     @Column('varchar')
-    email!: string;
+    email: string;
 
     @Column('varchar')
-    password!: string;
+    password: string;
 
     @CreateDateColumn()
-    created_at!: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updated_at!: Date;
+    updated_at: Date;
 }
