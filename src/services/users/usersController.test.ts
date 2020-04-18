@@ -75,7 +75,8 @@ describe('Users controller', () => {
             expect(sendSpy).toBeCalledWith('Invalid params');
         })
 
-        test('given an existing username should fail and send an error', async () => {
+        // TOOD: Add a test for checking email
+        test('given an existing username or email should fail and send an error', async () => {
             saveSpy.mockRejectedValue(new Error());
             const { userRegistrationHandler } = require('./usersController');
 
