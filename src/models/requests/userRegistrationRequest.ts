@@ -12,7 +12,7 @@ export class UserRegistrationRequest {
     @MinLength(4, {
         message: Constants.INVALID_USERNAME_LENGTH
     })
-    @Matches(RegExp('^[a-zA-Z0-9-_]*$'), {
+    @Matches(RegExp('^[a-zA-Z0-9\-_]*$'), {
         message: Constants.INVALID_USERNAME_CHARACTERS
     })
     readonly username: string;
@@ -23,7 +23,7 @@ export class UserRegistrationRequest {
     @MinLength(8, {
         message: Constants.INVALID_PASSWORD_LENGTH
     })
-    @Matches(RegExp('^([a-zA-Z]+[0-9]+)$'), {
+    @Matches(RegExp('^([a-zA-Z]+[0-9]+[!@#$%^&*-_]*)$'), {
         message: Constants.INVALID_PASSWORD_FORMAT
     })
     readonly password: string;
