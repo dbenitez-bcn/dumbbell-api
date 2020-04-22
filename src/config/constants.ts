@@ -1,5 +1,7 @@
 export class Constants {
     public static NO_EXERCISES_FOUND = "No exercises found";
+    public static USER_NOT_FOUND = "User not found";
+    public static LOGIN_FAILURE = "Email or password incorrect. Please try again.";
     public static MISSING_PARAMS = "Missing params";
     public static DATABASE_ACCESS_FAILED = "A problem has occurred when accessing to database";
     public static INVALID_ID = "Invalid id";
