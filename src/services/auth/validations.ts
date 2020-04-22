@@ -13,7 +13,7 @@ export const parseLoginBody = async (body: LoginBody): Promise<LoginRequest> => 
             } else {
                 throw new Error(Constants.MISSING_PASSWORD);
             }
-        } else if (errors[0].constraints['isEmail']) {
+        } else {
             throw new Error(Constants.INVALID_EMAIL_PARAM);
         }
     }
