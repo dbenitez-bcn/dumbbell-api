@@ -175,6 +175,40 @@
             }
           ]
         }
+      },
+      "/login": {
+        "post": {  
+          "tags": ["Users"],
+          "summary": "Logs in a user",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Email or password incorrect. Please try again."
+            },
+            "401": {
+              "description": "Email or password incorrect. Please try again."
+            }
+          },
+          "content": {
+            "application/json": {}
+          },
+          "parameters": [
+            {
+              "name": "email",
+              "description": "Specifies the email string",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "password",
+              "description": "Specifies the password value",
+              "required": true,
+              "type": "string"
+            }
+          ]
+        }
       }
     }
   }

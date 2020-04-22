@@ -25,4 +25,5 @@ export class Endpoints {
     public static EXERCISE = "/exercise"
     public static API_DOCS = "/api-docs";
     public static REGISTER = "/register";
+    public static LOGIN = "/login";
 }
