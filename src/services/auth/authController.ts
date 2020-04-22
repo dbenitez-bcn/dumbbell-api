@@ -6,7 +6,7 @@ import LoginRequest from '../../models/requests/loginRequest';
 import { parseLoginBody } from './validations';
 import { Constants } from '../../config/constants';
 
-export const login = async (req: Request, res: Response) => {
+export const loginHandler = async (req: Request, res: Response) => {
     let request: LoginRequest;
     let user: User;
 

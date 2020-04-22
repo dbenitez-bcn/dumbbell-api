@@ -47,16 +47,16 @@ describe('Auth controller', () => {
                 password: A_CRYPTED_PASSWORD
             });
         })
-        
+
         afterEach(() => {
             jest.clearAllMocks()
             jest.clearAllTimers()
         })
 
         test('Given a credentials should success', async () => {
-            const { login } = require('./authController');
+            const { loginHandler } = require('./authController');
 
-            await login(req, res);
+            await loginHandler(req, res);
 
             expect(parseSpy).toBeCalledWith(body);
             expect(findSpy).toBeCalledWith({ email: AN_EMAIL })
@@ -67,9 +67,9 @@ describe('Auth controller', () => {
 
         test('Given invalid credentials should fail and send an error', async () => {
             parseSpy.mockRejectedValue(new Error('Invalid params'))
-            const { login } = require('./authController')
+            const { loginHandler } = require('./authController')
 
-            await login(req, res);
+            await loginHandler(req, res);
 
             expect(statusSpy).toBeCalledWith(422);
             expect(sendSpy).toBeCalledWith('Invalid params');
@@ -77,9 +77,9 @@ describe('Auth controller', () => {
 
         test('Given that a user is not found should fail and send an error', async () => {
             findSpy.mockRejectedValue(new Error());
-            const { login } = require('./authController');
+            const { loginHandler } = require('./authController');
 
-            await login(req, res);
+            await loginHandler(req, res);
 
             expect(statusSpy).toBeCalledWith(404);
             expect(sendSpy).toBeCalledWith(Constants.LOGIN_FAILURE);
@@ -88,9 +88,9 @@ describe('Auth controller', () => {
 
         test('Given wrong password should fail and send an error', async () => {
             compareSpy.mockResolvedValue(false);
-            const { login } = require('./authController');
+            const { loginHandler } = require('./authController');
 
-            await login(req, res);
+            await loginHandler(req, res);
 
             expect(statusSpy).toBeCalledWith(401);
             expect(sendSpy).toBeCalledWith(Constants.LOGIN_FAILURE);
