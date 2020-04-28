@@ -54,6 +54,22 @@ describe('Validations', () => {
 
                 await expect(parseUserRegistrationBody(body)).rejects.toThrowError(new Error(Constants.INVALID_USERNAME_CHARACTERS))
             })
+
+            it('valid random username check', async () => {
+                const validUsernames = ['0tMctey-', '-jfUxy6K', '5dfGfECpbZ4gppg', 'k8ZK_qh4d', 'YnCt-NqDq3', '_t9aFe6nc', 'D3lt4_']
+
+                for(let index in validUsernames) {
+                    const body = {
+                        username: validUsernames[index],
+                        email: 'testerino@dumbbell.com',
+                        password: 'test1234'
+                    }
+
+                    const request = await parseUserRegistrationBody(body);
+
+                    expect(request.username).toBe(validUsernames[index]);
+                }
+            })
         })
 
         describe('email validation', () => {
