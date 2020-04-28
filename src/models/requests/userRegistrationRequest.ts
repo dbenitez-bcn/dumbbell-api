@@ -1,4 +1,3 @@
-import { UserRegistrationBody } from "../bodies/userRegistrationBody";
 import { MinLength, Matches, IsEmail } from 'class-validator';
 import { Constants } from "../../config/constants";
 
