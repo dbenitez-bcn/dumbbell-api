@@ -23,7 +23,7 @@ export class UserRegistrationRequest {
     @MinLength(8, {
         message: Constants.INVALID_PASSWORD_LENGTH
     })
-    @Matches(RegExp('^([a-zA-Z]+[0-9]+[!@#$%^&*-_]*)$'), {
+    @Matches(RegExp('^(?=.*?[a-zA-z])(?=.*?[0-9]).{1,}$'), {
         message: Constants.INVALID_PASSWORD_FORMAT
     })
     readonly password: string;

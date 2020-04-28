@@ -85,7 +85,7 @@ describe('Validations', () => {
                     password: 'Pass1234!@#$%^&*'
                 }
                 const request = await parseUserRegistrationBody(body);
-    
+
                 expect(request.username).toBe('Username_1');
                 expect(request.email).toBe('testerino@dumbbell.com');
                 expect(request.password).toBe('Pass1234!@#$%^&*');
@@ -125,6 +125,21 @@ describe('Validations', () => {
                 }
 
                 await expect(parseUserRegistrationBody(body)).rejects.toThrowError(new Error(Constants.INVALID_PASSWORD_FORMAT))
+            })
+            it('valid random passwords check', async () => {
+                const validPasswords = ['kn3a7ap9', 'fyDfDFE2', 'mJrmg6Ru', 'KVE:Zx7;#7', '/.yf43*EV&q3', 'x7X(9f2Vg]ge6ms', '2YJR8R^f^k43oXn']
+
+                for(let index in validPasswords) {
+                    const body = {
+                        username: 'Username_1',
+                        email: 'testerino@dumbbell.com',
+                        password: validPasswords[index]
+                    }
+
+                    const request = await parseUserRegistrationBody(body);
+
+                    expect(request.password).toBe(validPasswords[index]);
+                }
             })
         })
     })
