@@ -1,4 +1,4 @@
-import InvalidName from "../../errors/InvalidName";
+import InvalidName from "../errors/InvalidName";
 
 export default class Name {
     constructor(value: string) {

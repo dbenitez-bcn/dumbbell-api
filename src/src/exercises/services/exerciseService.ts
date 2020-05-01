@@ -1,5 +1,5 @@
-import ExerciseRepository from "./exerciseRepository";
-import Exercise from "../../domain/aggregates/exercise";
+import ExerciseRepository from "../domain/repositories/exerciseRepository";
+import Exercise from "../domain/aggregates/exercise";
 
 export default class ExerciseService {
     constructor(private readonly repository: ExerciseRepository) { }

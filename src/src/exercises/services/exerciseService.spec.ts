@@ -1,9 +1,9 @@
-import ExerciseRepository from "./exerciseRepository";
+import ExerciseRepository from "../domain/repositories/exerciseRepository";
 import ExerciseService from "./exerciseService";
-import Exercise from "../../domain/aggregates/exercise";
-import InvalidName from "../../errors/InvalidName";
-import InvalidDescription from "../../errors/InvalidDescription";
-import InvalidDifficulty from "../../errors/InvalidDifficulty";
+import Exercise from "../domain/aggregates/exercise";
+import InvalidName from "../domain/errors/InvalidName";
+import InvalidDescription from "../domain/errors/InvalidDescription";
+import InvalidDifficulty from "../domain/errors/InvalidDifficulty";
 
 describe('Exercise Service', () => {
     const createSpy = jest.fn();

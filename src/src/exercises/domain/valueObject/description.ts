@@ -1,4 +1,4 @@
-import InvalidDescription from "../../errors/InvalidDescription";
+import InvalidDescription from "../errors/InvalidDescription";
 
 export default class Description {
     constructor(value: string) {
