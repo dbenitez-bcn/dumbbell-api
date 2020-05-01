@@ -8,10 +8,10 @@ module.exports = {
     "synchronize": true,
     "logging": true,
     "logger": "file",
-    "entities": ["src/models/entities/**/*.ts"],
-    "migrations": ["src/database/migrations/**/*.ts"],
+    "entities": ["src/api/models/entities/**/*.ts"],
+    "migrations": ["src/api/database/migrations/**/*.ts"],
     "cli": {
-       "entitiesDir": "src/models/entities",
-       "migrationsDir": "src/database/migrations"
+       "entitiesDir": "src/api/models/entities",
+       "migrationsDir": "src/api/database/migrations"
     }
 }
