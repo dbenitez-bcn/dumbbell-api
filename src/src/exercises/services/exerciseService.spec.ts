@@ -17,11 +17,14 @@ describe('Exercise Service', () => {
         jest.clearAllTimers();
     })
     describe('create', () => {
+        const AN_ID = 1234;
         it('Should create an exercise for the given values', async () => {
             const expectedExercise = new Exercise('A name', 'A description', 5);
+            createSpy.mockResolvedValue(AN_ID)
 
-            await sut.create('A name', 'A description', 5);
+            const result = await sut.create('A name', 'A description', 5);
 
+            expect(result).toBe(AN_ID);
             expect(createSpy).toBeCalledWith(expectedExercise)
         })
 
@@ -32,9 +35,11 @@ describe('Exercise Service', () => {
 
             test('Given a shot name should call the repository', async () => {
                 const expectedExercise = new Exercise('A name', 'A description', 5);
+                createSpy.mockResolvedValue(AN_ID)
 
-                await sut.create('A name', 'A description', 5);
+                const result = await sut.create('A name', 'A description', 5);
 
+                expect(result).toBe(AN_ID);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
         })
@@ -46,9 +51,11 @@ describe('Exercise Service', () => {
 
             test('Given a shot description should call the repository', async () => {
                 const expectedExercise = new Exercise('A name', 'A', 5);
+                createSpy.mockResolvedValue(AN_ID)
 
-                await sut.create('A name', 'A', 5);
+                const result = await sut.create('A name', 'A', 5);
 
+                expect(result).toBe(AN_ID);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
         })
@@ -64,17 +71,21 @@ describe('Exercise Service', () => {
 
             test('Given a difficulty with value 1 should call the repository', async () => {
                 const expectedExercise = new Exercise('A name', 'A description', 1);
+                createSpy.mockResolvedValue(AN_ID)
 
-                await sut.create('A name', 'A description', 1);
+                const result = await sut.create('A name', 'A description', 1);
 
+                expect(result).toBe(AN_ID);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
 
             test('Given a difficulty with value 10 should call the repository', async () => {
                 const expectedExercise = new Exercise('A name', 'A description', 10);
+                createSpy.mockResolvedValue(AN_ID)
 
-                await sut.create('A name', 'A description', 10);
+                const result = await sut.create('A name', 'A description', 10);
 
+                expect(result).toBe(AN_ID);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
         })
