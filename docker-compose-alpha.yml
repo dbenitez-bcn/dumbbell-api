@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     volumes:
-      - "./src/database/data:/var/lib/postgresql/data"
+      - "./src/api/database/data:/var/lib/postgresql/data"
     ports:
       - 5432:5432
   adminer:
@@ -26,4 +26,4 @@ services:
       - .env
     ports:
       - 9000:9000
-    command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/server.js"]
+    command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/api/server.js"]
