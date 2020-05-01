@@ -27,7 +27,7 @@ createConnection({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: ["dist/models/entities/**/*.js"]
+  entities: ["dist/api/models/entities/**/*.js"]
 })
   .then(async con => {
     const router = express();

@@ -105,7 +105,7 @@ dist/
 .dynamodb/
 
 # Docker volume with database data
-src/database/data/
+src/api/database/data/
 
 # Temporary folders
 tmp/
