@@ -1,4 +1,4 @@
-import InvalidDifficulty from "../../errors/InvalidDifficulty";
+import InvalidDifficulty from "../errors/InvalidDifficulty";
 
 export default class Difficulty {
     constructor(value: number) {
