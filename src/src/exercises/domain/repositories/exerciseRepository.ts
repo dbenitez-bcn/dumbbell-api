@@ -1,5 +1,5 @@
 import Exercise from "../aggregates/exercise";
 
-export default interface ExerciseRepository {
-    create(excercise: Exercise): Promise<number>
+export default interface ExerciseRepository<T> {
+    create(excercise: Exercise): Promise<T>
 }

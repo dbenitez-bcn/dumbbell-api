@@ -1,10 +1,11 @@
-import { FakeResponse, FakeResponseBuilder } from "../../test/testutils";
+import { FakeResponseBuilder } from "../../test/testutils";
 import ExerciseController from "./exerciseController";
 import ExerciseService from "../../../src/exercises/services/exerciseService";
-import { Request, Response } from "express";
+import { Request } from "express";
 import InvalidName from "../../../src/exercises/domain/errors/InvalidName";
 import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDifficulty";
 import DatabaseFailure from "../../../src/exercises/domain/errors/DatabaseFailure";
+import { Exercise } from "../../models/entities/exercise";
 
 describe('Exercise controller', () => {
     const AN_ID = 1;
@@ -21,11 +22,12 @@ describe('Exercise controller', () => {
             description: A_DESCRIPTION,
             difficulty: A_DIFFICULTY
         }
+        const exercise = new Exercise();
         const res = new FakeResponseBuilder().withStatus(statusSpy).withSend(sendSpy).build();
         const req = { body } as Request
         const service = {
             create: createSpy
-        } as unknown as ExerciseService;
+        } as unknown as ExerciseService<Exercise>;
 
         const sut = new ExerciseController(service);
 
@@ -35,12 +37,12 @@ describe('Exercise controller', () => {
         })
 
         test('Should create an exercise and return the id', async () => {
-            createSpy.mockResolvedValue(AN_ID);
+            createSpy.mockResolvedValue(exercise);
 
             await sut.create(req, res);
 
             expect(statusSpy).toBeCalledWith(201);
-            expect(sendSpy).toBeCalledWith(AN_ID);
+            expect(sendSpy).toBeCalledWith(exercise);
         })
 
         test('Given a invalid name error should fail', async () => {
