@@ -1,4 +1,5 @@
 import FakeResponse from "./fakeResponse";
+import { Response } from "express";
 
 export default class FakeResponseBuilder {
     private _status = jest.fn().mockReturnThis();
@@ -16,7 +17,7 @@ export default class FakeResponseBuilder {
         return this;
     }
 
-    build(): FakeResponse {
-        return new FakeResponse(this._status, this._send);
+    build(): Response {
+        return new FakeResponse(this._status, this._send) as Response;
     }
 }
