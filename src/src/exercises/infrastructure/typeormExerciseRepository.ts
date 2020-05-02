@@ -4,8 +4,8 @@ import { getRepository } from "typeorm";
 import { Exercise } from "../../../api/models/entities/exercise";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
 
-export default class TypeormExerciseRepository implements ExerciseRepository {
-    async create(excercise: ExerciseDomain): Promise<number> {
+export default class TypeormExerciseRepository implements ExerciseRepository<Exercise> {
+    async create(excercise: ExerciseDomain): Promise<Exercise> {
         const repo = getRepository(Exercise);
         const newExercise = await repo.save({
             name: excercise.name.value,
@@ -15,7 +15,7 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
             throw new DatabaseFailure();
         });
 
-        return newExercise.id;
+        return newExercise;
     }
 
 }

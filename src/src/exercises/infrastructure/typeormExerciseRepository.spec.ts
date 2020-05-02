@@ -16,6 +16,7 @@ jest.mock('typeorm', () => ({
 
 import TypeormExerciseRepository from "./typeormExerciseRepository";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
+import { Exercise } from "../../../api/models/entities/exercise";
 
 describe('Typeorm repository', () => {
     const sut = new TypeormExerciseRepository();
@@ -33,14 +34,13 @@ describe('Typeorm repository', () => {
                 description: 'A description',
                 difficulty: 5
             }
-            saveSpy.mockResolvedValue({
-                id: 1
-            });
+            const expected: Exercise = new Exercise();
+            saveSpy.mockResolvedValue(expected);
 
-            const id = await sut.create(exercise);
+            const actual = await sut.create(exercise);
 
             expect(saveSpy).toBeCalledWith(params);
-            expect(id).toBe(1);
+            expect(actual).toBe(expected);
         })
 
         test('Given an error when accesing repository hould throw an exeception', async () => {
