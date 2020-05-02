@@ -1,4 +1,4 @@
-import ExerciseDomain from "../../src/exercises/domain/aggregates/exercise";
+import ExerciseDomain from "../domain/aggregates/exercise";
 
 const saveSpy = jest.fn();
 const repoMock = jest.fn().mockReturnValue({
@@ -15,6 +15,7 @@ jest.mock('typeorm', () => ({
 }));
 
 import TypeormExerciseRepository from "./typeormExerciseRepository";
+import DatabaseFailure from "../domain/errors/DatabaseFailure";
 
 describe('Typeorm repository', () => {
     const sut = new TypeormExerciseRepository();
@@ -26,20 +27,27 @@ describe('Typeorm repository', () => {
 
     describe('create', () => {
         test('Should create an exercise and return the id', async () => {
-            const exerciseDomain = new ExerciseDomain('A name', 'A description', 5);
+            const exercise = new ExerciseDomain('A name', 'A description', 5);
             const params = {
                 name: 'A name',
                 description: 'A description',
                 difficulty: 5
             }
-            saveSpy.mockReturnValue({
+            saveSpy.mockResolvedValue({
                 id: 1
-            })
+            });
 
-            const id = await sut.create(exerciseDomain)
+            const id = await sut.create(exercise);
 
             expect(saveSpy).toBeCalledWith(params);
             expect(id).toBe(1);
+        })
+
+        test('Given an error when accesing repository hould throw an exeception', async () => {
+            const exercise = new ExerciseDomain('A name', 'A description', 5);
+            saveSpy.mockRejectedValue(new Error());
+
+            await expect(sut.create(exercise)).rejects.toThrowError(new DatabaseFailure());
         })
     })
 })
