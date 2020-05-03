@@ -4,6 +4,7 @@ import ExerciseDomain from "../domain/aggregates/exercise";
 import { Exercise } from "../../../api/models/entities/exercise";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
 import ExerciseId from "../domain/valueObject/exerciseId";
+import ExerciseParams from "../domain/aggregates/exerciseParams";
 
 export default class TypeormExerciseRepository implements ExerciseRepository<Exercise> {
     private exerciseRepository = getRepository(Exercise);
@@ -35,5 +36,13 @@ export default class TypeormExerciseRepository implements ExerciseRepository<Exe
                 throw new DatabaseFailure();
             })
         return res;
+    }
+
+    async update(id: ExerciseId, params: ExerciseParams): Promise<void> {
+        await this.exerciseRepository.update(id.value, {
+            name: params.name?.value,
+            description: params.description?.value,
+            difficulty: params.difficutly?.value
+        })
     }
 }
