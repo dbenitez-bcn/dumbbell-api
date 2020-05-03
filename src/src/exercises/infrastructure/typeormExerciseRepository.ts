@@ -49,4 +49,12 @@ export default class TypeormExerciseRepository implements ExerciseRepository<Exe
             throw new DatabaseFailure();
         }
     }
+
+    async delete(id: ExerciseId): Promise<void> {
+        try {
+            await this.exerciseRepository.delete(id.value);
+        } catch (e) {
+            throw new DatabaseFailure();
+        }
+    }
 }

@@ -10,11 +10,13 @@ describe('Exercise Service', () => {
     const getAllSpy = jest.fn();
     const getByIdlSpy = jest.fn();
     const updateSpy = jest.fn();
+    const deleteSpy = jest.fn();
     const repository: ExerciseRepository<number> = {
         create: createSpy,
         getAll: getAllSpy,
         getById: getByIdlSpy,
-        update: updateSpy
+        update: updateSpy,
+        delete: deleteSpy
     }
     const sut = new ExerciseService(repository);
 

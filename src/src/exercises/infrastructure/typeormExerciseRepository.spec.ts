@@ -10,11 +10,13 @@ const saveSpy = jest.fn();
 const findSpy = jest.fn();
 const findOneOrFailSpy = jest.fn();
 const updateSpy = jest.fn();
+const deleteSpy = jest.fn();
 const repoMock = jest.fn().mockReturnValue({
     save: saveSpy,
     find: findSpy,
     findOneOrFail: findOneOrFailSpy,
-    update: updateSpy
+    update: updateSpy,
+    delete: deleteSpy
 })
 jest.mock('typeorm', () => ({
     getRepository: repoMock,
@@ -33,7 +35,7 @@ describe('Typeorm repository', () => {
     const AN_ID = new ExerciseId(1);
     const sut = new TypeormExerciseRepository();
     const dbExercise: Exercise = new Exercise();
-    
+
     afterEach(() => {
         jest.clearAllMocks()
         jest.clearAllTimers()
@@ -167,6 +169,20 @@ describe('Typeorm repository', () => {
             updateSpy.mockRejectedValue(new Error());
 
             await expect(sut.update(AN_ID, params)).rejects.toThrowError(new DatabaseFailure());
+        })
+    })
+
+    describe('delete', () => {
+        test('Should delete the exercise for the given id', async () => {
+            await sut.delete(AN_ID);
+
+            expect(deleteSpy).toBeCalledWith(AN_ID.value);
+        })
+
+        test('Given an error when accessing the repository should fail', async () => {
+            deleteSpy.mockRejectedValue(new Error());
+
+            await expect(sut.delete(AN_ID)).rejects.toThrowError(new DatabaseFailure());
         })
     })
 })
