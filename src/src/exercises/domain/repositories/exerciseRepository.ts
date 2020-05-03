@@ -7,4 +7,5 @@ export default interface ExerciseRepository<T> {
     getAll(): Promise<T[]>
     getById(id: ExerciseId): Promise<T>
     update(id: ExerciseId, params: ExerciseParams): Promise<void>
+    delete(id: ExerciseId): Promise<void>
 }
