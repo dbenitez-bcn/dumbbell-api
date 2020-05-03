@@ -1,14 +1,20 @@
 import ExerciseDomain from "../domain/aggregates/exercise";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
 import ExerciseId from "../domain/valueObject/exerciseId";
+import ExerciseParams from "../domain/aggregates/exerciseParams";
+import Difficulty from "../domain/valueObject/difficulty";
+import Description from "../domain/valueObject/description";
+import Name from "../domain/valueObject/name";
 
 const saveSpy = jest.fn();
 const findSpy = jest.fn();
 const findOneOrFailSpy = jest.fn();
+const updateSpy = jest.fn();
 const repoMock = jest.fn().mockReturnValue({
     save: saveSpy,
     find: findSpy,
-    findOneOrFail: findOneOrFailSpy
+    findOneOrFail: findOneOrFailSpy,
+    update: updateSpy
 })
 jest.mock('typeorm', () => ({
     getRepository: repoMock,
@@ -81,7 +87,7 @@ describe('Typeorm repository', () => {
             const expected = dbExercise;
             findOneOrFailSpy.mockResolvedValue(expected);
 
-            const actual = await sut.getById(AN_ID)
+            const actual = await sut.getById(AN_ID);
 
             expect(actual).toBe(expected);
             expect(findOneOrFailSpy).toBeCalledWith(AN_ID.value);
@@ -91,6 +97,66 @@ describe('Typeorm repository', () => {
             findOneOrFailSpy.mockRejectedValue(new Error());
 
             await expect(sut.getById(AN_ID)).rejects.toThrowError(new DatabaseFailure());
+        })
+    })
+
+    describe('update', () => {
+        test('Should update an exercise', async () => {
+            const params: ExerciseParams = {
+                name: new Name('A name'),
+                description: new Description('A description'),
+                difficutly: new Difficulty(5)
+            }
+
+            await sut.update(AN_ID, params);
+
+            expect(updateSpy).toBeCalledWith(AN_ID.value, {
+                name: 'A name',
+                description: 'A description',
+                difficulty: 5
+            })
+        })
+
+        test('Given no name should update an exercise', async () => {
+            const params: ExerciseParams = {
+                description: new Description('A description'),
+                difficutly: new Difficulty(5)
+            }
+
+            await sut.update(AN_ID, params);
+
+            expect(updateSpy).toBeCalledWith(AN_ID.value, {
+                description: 'A description',
+                difficulty: 5
+            })
+        })
+
+        test('Given no description should update an exercise', async () => {
+            const params: ExerciseParams = {
+                name: new Name('A name'),
+                difficutly: new Difficulty(5)
+            }
+
+            await sut.update(AN_ID, params);
+
+            expect(updateSpy).toBeCalledWith(AN_ID.value, {
+                name: 'A name',
+                difficulty: 5
+            })
+        })
+
+        test('Given no difficulty should update an exercise', async () => {
+            const params: ExerciseParams = {
+                name: new Name('A name'),
+                description: new Description('A description')
+            }
+
+            await sut.update(AN_ID, params);
+
+            expect(updateSpy).toBeCalledWith(AN_ID.value, {
+                name: 'A name',
+                description: 'A description'
+            })
         })
     })
 })
