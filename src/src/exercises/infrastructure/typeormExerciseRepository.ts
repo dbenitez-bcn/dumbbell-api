@@ -39,10 +39,14 @@ export default class TypeormExerciseRepository implements ExerciseRepository<Exe
     }
 
     async update(id: ExerciseId, params: ExerciseParams): Promise<void> {
-        await this.exerciseRepository.update(id.value, {
-            name: params.name?.value,
-            description: params.description?.value,
-            difficulty: params.difficutly?.value
-        })
+        try {
+            await this.exerciseRepository.update(id.value, {
+                name: params.name?.value,
+                description: params.description?.value,
+                difficulty: params.difficutly?.value
+            })
+        } catch (e) {
+            throw new DatabaseFailure();
+        }
     }
 }

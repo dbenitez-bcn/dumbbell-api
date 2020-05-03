@@ -158,5 +158,15 @@ describe('Typeorm repository', () => {
                 description: 'A description'
             })
         })
+
+        test('Given an error when accesing repositroy should fail', async () => {
+            const params: ExerciseParams = {
+                name: new Name('A name'),
+                description: new Description('A description')
+            }
+            updateSpy.mockRejectedValue(new Error());
+
+            await expect(sut.update(AN_ID, params)).rejects.toThrowError(new DatabaseFailure());
+        })
     })
 })
