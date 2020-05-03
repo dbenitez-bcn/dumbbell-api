@@ -7,8 +7,10 @@ import InvalidDifficulty from "../domain/errors/InvalidDifficulty";
 
 describe('Exercise Service', () => {
     const createSpy = jest.fn();
-    const repository = {
-        create: createSpy
+    const getAllSpy = jest.fn();
+    const repository: ExerciseRepository<number> = {
+        create: createSpy,
+        getAll: getAllSpy
     }
     const sut = new ExerciseService(repository);
 
