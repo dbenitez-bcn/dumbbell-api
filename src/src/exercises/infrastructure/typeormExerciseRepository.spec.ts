@@ -1,10 +1,14 @@
 import ExerciseDomain from "../domain/aggregates/exercise";
+import DatabaseFailure from "../domain/errors/DatabaseFailure";
+import ExerciseId from "../domain/valueObject/exerciseId";
 
 const saveSpy = jest.fn();
 const findSpy = jest.fn();
+const findOneOrFailSpy = jest.fn();
 const repoMock = jest.fn().mockReturnValue({
     save: saveSpy,
-    find: findSpy
+    find: findSpy,
+    findOneOrFail: findOneOrFailSpy
 })
 jest.mock('typeorm', () => ({
     getRepository: repoMock,
@@ -17,12 +21,13 @@ jest.mock('typeorm', () => ({
 }));
 
 import TypeormExerciseRepository from "./typeormExerciseRepository";
-import DatabaseFailure from "../domain/errors/DatabaseFailure";
 import { Exercise } from "../../../api/models/entities/exercise";
 
 describe('Typeorm repository', () => {
+    const AN_ID = new ExerciseId(1);
     const sut = new TypeormExerciseRepository();
     const dbExercise: Exercise = new Exercise();
+    
     afterEach(() => {
         jest.clearAllMocks()
         jest.clearAllTimers()
@@ -61,12 +66,31 @@ describe('Typeorm repository', () => {
             const actual = await sut.getAll();
 
             expect(actual).toBe(expected);
+            expect(findSpy).toBeCalledTimes(1);
         })
 
         test('Given an error when accesing repository should throw an exeception', async () => {
             findSpy.mockRejectedValue(new Error());
 
             await expect(sut.getAll()).rejects.toThrowError(new DatabaseFailure());
+        })
+    })
+
+    describe('get by id', () => {
+        test('Given an id should find a single exercise', async () => {
+            const expected = dbExercise;
+            findOneOrFailSpy.mockResolvedValue(expected);
+
+            const actual = await sut.getById(AN_ID)
+
+            expect(actual).toBe(expected);
+            expect(findOneOrFailSpy).toBeCalledWith(AN_ID.value);
+        })
+
+        test('Given an error when accesing repositroy should fail', async () => {
+            findOneOrFailSpy.mockRejectedValue(new Error());
+
+            await expect(sut.getById(AN_ID)).rejects.toThrowError(new DatabaseFailure());
         })
     })
 })
