@@ -5,6 +5,8 @@ import InvalidName from "../domain/errors/InvalidName";
 import InvalidDescription from "../domain/errors/InvalidDescription";
 import InvalidDifficulty from "../domain/errors/InvalidDifficulty";
 import { getFakeExercise } from "../test/testUtils";
+import ExerciseId from "../domain/valueObject/exerciseId";
+import InvalidExerciseId from "../domain/errors/InvalidExerciseId";
 
 describe('Exercise Service', () => {
     const fakeExercise = getFakeExercise();
@@ -109,6 +111,30 @@ describe('Exercise Service', () => {
 
             expect(getAllSpy).toBeCalledTimes(1);
             expect(result).toBe(expected);
+        })
+    })
+
+    describe('Get by id', () => {
+        test('Given an id should return a single exercise', async () => {
+            const id = new ExerciseId(1234);
+            getByIdlSpy.mockResolvedValue(fakeExercise);
+
+            const result = await sut.getById(1234);
+
+            expect(getByIdlSpy).lastCalledWith(id);
+            expect(result).toBe(fakeExercise);
+        })
+
+        test('Given a zero as id should fail', async () => {
+            await expect(sut.getById(0)).rejects.toThrowError(new InvalidExerciseId());
+        })
+
+        test('Given a negative number as id should fail', async () => {
+            await expect(sut.getById(-1234)).rejects.toThrowError(new InvalidExerciseId());
+        })
+
+        test('Given a decimal number as id should fail', async () => {
+            await expect(sut.getById(0.3)).rejects.toThrowError(new InvalidExerciseId());
         })
     })
 })
