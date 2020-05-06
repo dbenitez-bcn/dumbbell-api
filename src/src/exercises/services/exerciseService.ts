@@ -18,4 +18,9 @@ export default class ExerciseService<T> {
         const exerciseId = new ExerciseId(id);
         return await this.repository.getById(exerciseId);
     }
+
+    async delete(id: number) {
+        const exerciseId = new ExerciseId(id);
+        await this.repository.delete(exerciseId);
+    }
 }

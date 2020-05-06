@@ -10,6 +10,7 @@ import InvalidExerciseId from "../domain/errors/InvalidExerciseId";
 
 describe('Exercise Service', () => {
     const fakeExercise = getFakeExercise();
+    const AN_ID = 1234;
     const createSpy = jest.fn();
     const getAllSpy = jest.fn();
     const getByIdlSpy = jest.fn();
@@ -116,10 +117,10 @@ describe('Exercise Service', () => {
 
     describe('Get by id', () => {
         test('Given an id should return a single exercise', async () => {
-            const id = new ExerciseId(1234);
+            const id = new ExerciseId(AN_ID);
             getByIdlSpy.mockResolvedValue(fakeExercise);
 
-            const result = await sut.getById(1234);
+            const result = await sut.getById(AN_ID);
 
             expect(getByIdlSpy).lastCalledWith(id);
             expect(result).toBe(fakeExercise);
@@ -135,6 +136,20 @@ describe('Exercise Service', () => {
 
         test('Given a decimal number as id should fail', async () => {
             await expect(sut.getById(0.3)).rejects.toThrowError(new InvalidExerciseId());
+        })
+    })
+
+    describe('Delete', () => {
+        test('Given an id should delete an exercise', async () => {
+            const expectedId = new ExerciseId(AN_ID);
+
+            await sut.delete(AN_ID);
+
+            expect(deleteSpy).toBeCalledWith(expectedId);
+        })
+
+        test('Given an invalid id should fail', async () => {
+            await expect(sut.getById(0)).rejects.toThrowError(new InvalidExerciseId());
         })
     })
 })
