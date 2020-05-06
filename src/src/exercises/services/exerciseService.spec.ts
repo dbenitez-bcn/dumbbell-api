@@ -4,14 +4,16 @@ import Exercise from "../domain/aggregates/exercise";
 import InvalidName from "../domain/errors/InvalidName";
 import InvalidDescription from "../domain/errors/InvalidDescription";
 import InvalidDifficulty from "../domain/errors/InvalidDifficulty";
+import { getFakeExercise } from "../test/testUtils";
 
 describe('Exercise Service', () => {
+    const fakeExercise = getFakeExercise();
     const createSpy = jest.fn();
     const getAllSpy = jest.fn();
     const getByIdlSpy = jest.fn();
     const updateSpy = jest.fn();
     const deleteSpy = jest.fn();
-    const repository: ExerciseRepository<number> = {
+    const repository: ExerciseRepository<Exercise> = {
         create: createSpy,
         getAll: getAllSpy,
         getById: getByIdlSpy,
@@ -25,14 +27,13 @@ describe('Exercise Service', () => {
         jest.clearAllTimers();
     })
     describe('create', () => {
-        const AN_ID = 1234;
         it('Should create an exercise for the given values', async () => {
             const expectedExercise = new Exercise('A name', 'A description', 5);
-            createSpy.mockResolvedValue(AN_ID)
+            createSpy.mockResolvedValue(fakeExercise)
 
             const result = await sut.create('A name', 'A description', 5);
 
-            expect(result).toBe(AN_ID);
+            expect(result).toBe(fakeExercise);
             expect(createSpy).toBeCalledWith(expectedExercise)
         })
 
@@ -43,11 +44,11 @@ describe('Exercise Service', () => {
 
             test('Given a shot name should call the repository', async () => {
                 const expectedExercise = new Exercise('A name', 'A description', 5);
-                createSpy.mockResolvedValue(AN_ID)
+                createSpy.mockResolvedValue(fakeExercise)
 
                 const result = await sut.create('A name', 'A description', 5);
 
-                expect(result).toBe(AN_ID);
+                expect(result).toBe(fakeExercise);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
         })
@@ -59,11 +60,11 @@ describe('Exercise Service', () => {
 
             test('Given a shot description should call the repository', async () => {
                 const expectedExercise = new Exercise('A name', 'A', 5);
-                createSpy.mockResolvedValue(AN_ID)
+                createSpy.mockResolvedValue(fakeExercise)
 
                 const result = await sut.create('A name', 'A', 5);
 
-                expect(result).toBe(AN_ID);
+                expect(result).toBe(fakeExercise);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
         })
@@ -79,23 +80,35 @@ describe('Exercise Service', () => {
 
             test('Given a difficulty with value 1 should call the repository', async () => {
                 const expectedExercise = new Exercise('A name', 'A description', 1);
-                createSpy.mockResolvedValue(AN_ID)
+                createSpy.mockResolvedValue(fakeExercise)
 
                 const result = await sut.create('A name', 'A description', 1);
 
-                expect(result).toBe(AN_ID);
+                expect(result).toBe(fakeExercise);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
 
             test('Given a difficulty with value 10 should call the repository', async () => {
                 const expectedExercise = new Exercise('A name', 'A description', 10);
-                createSpy.mockResolvedValue(AN_ID)
+                createSpy.mockResolvedValue(fakeExercise)
 
                 const result = await sut.create('A name', 'A description', 10);
 
-                expect(result).toBe(AN_ID);
+                expect(result).toBe(fakeExercise);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
+        })
+    })
+
+    describe('Get all', () => {
+        test('Should return all exercises', async () => {
+            const expected = [fakeExercise, fakeExercise, fakeExercise];
+            getAllSpy.mockResolvedValue(expected);
+
+            const result = await sut.getAll();
+
+            expect(getAllSpy).toBeCalledTimes(1);
+            expect(result).toBe(expected);
         })
     })
 })

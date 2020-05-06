@@ -8,4 +8,8 @@ export default class ExerciseService<T> {
         const exercise = new Exercise(name, description, difficulty);
         return await this.repository.create(exercise);
     }
+
+    async getAll() {
+        return await this.repository.getAll();
+    }
 }
