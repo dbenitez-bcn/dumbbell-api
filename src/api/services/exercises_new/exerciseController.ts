@@ -3,7 +3,6 @@ import ExerciseService from "../../../src/exercises/services/exerciseService";
 import InvalidName from "../../../src/exercises/domain/errors/InvalidName";
 import InvalidDescription from "../../../src/exercises/domain/errors/InvalidDescription";
 import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDifficulty";
-import { Exercise } from "../../models/entities/exercise";
 
 export default class ExerciseController<T> {
     constructor(private service: ExerciseService<T>) { }

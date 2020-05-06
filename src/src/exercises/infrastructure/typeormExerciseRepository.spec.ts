@@ -29,12 +29,12 @@ jest.mock('typeorm', () => ({
 }));
 
 import TypeormExerciseRepository from "./typeormExerciseRepository";
-import { Exercise } from "../../../api/models/entities/exercise";
+import ExerciseDB from "../../../api/models/entities/exercise";
 
 describe('Typeorm repository', () => {
     const AN_ID = new ExerciseId(1);
     const sut = new TypeormExerciseRepository();
-    const dbExercise: Exercise = new Exercise();
+    const dbExercise: ExerciseDB = new ExerciseDB();
 
     afterEach(() => {
         jest.clearAllMocks()
