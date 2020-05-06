@@ -1,15 +1,15 @@
 import { getRepository } from "typeorm";
 import ExerciseRepository from "../domain/repositories/exerciseRepository";
 import ExerciseDomain from "../domain/aggregates/exercise";
-import { Exercise } from "../../../api/models/entities/exercise";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
 import ExerciseId from "../domain/valueObject/exerciseId";
 import ExerciseParams from "../domain/aggregates/exerciseParams";
+import ExerciseDB from "../../../api/models/entities/exercise";
 
-export default class TypeormExerciseRepository implements ExerciseRepository<Exercise> {
-    private exerciseRepository = getRepository(Exercise);
+export default class TypeormExerciseRepository implements ExerciseRepository<ExerciseDB> {
+    private exerciseRepository = getRepository(ExerciseDB);
 
-    async create(excercise: ExerciseDomain): Promise<Exercise> {
+    async create(excercise: ExerciseDomain): Promise<ExerciseDB> {
         const newExercise = await this.exerciseRepository.save({
             name: excercise.name.value,
             description: excercise.description.value,
@@ -21,7 +21,7 @@ export default class TypeormExerciseRepository implements ExerciseRepository<Exe
         return newExercise;
     }
 
-    async getAll(): Promise<Exercise[]> {
+    async getAll(): Promise<ExerciseDB[]> {
         const exercises = await this.exerciseRepository.find()
             .catch(() => {
                 throw new DatabaseFailure();
@@ -30,7 +30,7 @@ export default class TypeormExerciseRepository implements ExerciseRepository<Exe
         return exercises
     }
 
-    async getById(id: ExerciseId): Promise<Exercise> {
+    async getById(id: ExerciseId): Promise<ExerciseDB> {
         const res = await this.exerciseRepository.findOneOrFail(id.value)
             .catch(() => {
                 throw new DatabaseFailure();

@@ -5,7 +5,7 @@ import { Request } from "express";
 import InvalidName from "../../../src/exercises/domain/errors/InvalidName";
 import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDifficulty";
 import DatabaseFailure from "../../../src/exercises/domain/errors/DatabaseFailure";
-import { Exercise } from "../../models/entities/exercise";
+import ExerciseDB from "../../models/entities/exercise";
 
 describe('Exercise controller', () => {
     const AN_ID = 1;
@@ -22,12 +22,12 @@ describe('Exercise controller', () => {
             description: A_DESCRIPTION,
             difficulty: A_DIFFICULTY
         }
-        const exercise = new Exercise();
+        const exercise = new ExerciseDB();
         const res = new FakeResponseBuilder().withStatus(statusSpy).withSend(sendSpy).build();
         const req = { body } as Request
         const service = {
             create: createSpy
-        } as unknown as ExerciseService<Exercise>;
+        } as unknown as ExerciseService<ExerciseDB>;
 
         const sut = new ExerciseController(service);
 
