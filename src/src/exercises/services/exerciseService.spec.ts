@@ -7,10 +7,17 @@ import InvalidDifficulty from "../domain/errors/InvalidDifficulty";
 import { getFakeExercise } from "../test/testUtils";
 import ExerciseId from "../domain/valueObject/exerciseId";
 import InvalidExerciseId from "../domain/errors/InvalidExerciseId";
+import ExerciseParams from "../domain/aggregates/exerciseParams";
+import Name from "../domain/valueObject/name";
+import Description from "../domain/valueObject/description";
+import Difficulty from "../domain/valueObject/difficulty";
 
 describe('Exercise Service', () => {
     const fakeExercise = getFakeExercise();
     const AN_ID = 1234;
+    const A_NAME = 'A name';
+    const A_DESCRIPTION = 'A description';
+    const A_DIFFICULTY = 5;
     const createSpy = jest.fn();
     const getAllSpy = jest.fn();
     const getByIdlSpy = jest.fn();
@@ -137,6 +144,69 @@ describe('Exercise Service', () => {
         test('Given a decimal number as id should fail', async () => {
             await expect(sut.getById(0.3)).rejects.toThrowError(new InvalidExerciseId());
         })
+    })
+
+    describe('update', () => {
+        test('Should update an exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const params: ExerciseParams = {
+                name: new Name(A_NAME),
+                description: new Description(A_DESCRIPTION),
+                difficutly: new Difficulty(A_DIFFICULTY)
+            }
+            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY);
+
+            expect(updateSpy).toBeCalledWith(id, params);
+        })
+
+        test('Given no name should update an exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const params: ExerciseParams = {
+                description: new Description(A_DESCRIPTION),
+                difficutly: new Difficulty(A_DIFFICULTY)
+            }
+            await sut.update(AN_ID, null!, A_DESCRIPTION, A_DIFFICULTY);
+
+            expect(updateSpy).toBeCalledWith(id, params);
+        })
+
+        test('Given no description should update an exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const params: ExerciseParams = {
+                name: new Name(A_NAME),
+                difficutly: new Difficulty(A_DIFFICULTY)
+            }
+            await sut.update(AN_ID, A_NAME, null!, A_DIFFICULTY);
+
+            expect(updateSpy).toBeCalledWith(id, params);
+        })
+
+        test('Given no difficutly should update an exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const params: ExerciseParams = {
+                name: new Name(A_NAME),
+                description: new Description(A_DESCRIPTION)
+            }
+            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, null!);
+
+            expect(updateSpy).toBeCalledWith(id, params);
+        })
+        
+        test('Given empty name should fail', async () => {
+            await expect(sut.update(AN_ID, '', A_DESCRIPTION, A_DIFFICULTY)).rejects.toThrowError(new InvalidName());
+        })
+        
+        test('Given empty description should fail', async () => {
+            await expect(sut.update(AN_ID, A_NAME, '', A_DIFFICULTY)).rejects.toThrowError(new InvalidDescription());
+        })
+        
+        test('Given invalid difficutly should fail', async () => {
+            await expect(sut.update(AN_ID, A_NAME, A_DESCRIPTION, 0)).rejects.toThrowError(new InvalidDifficulty());
+        })  
+        
+        test('Given no id should fail', async () => {
+            await expect(sut.update(null!, A_NAME, A_DESCRIPTION, A_DIFFICULTY)).rejects.toThrowError(new InvalidExerciseId());
+        })        
     })
 
     describe('Delete', () => {
