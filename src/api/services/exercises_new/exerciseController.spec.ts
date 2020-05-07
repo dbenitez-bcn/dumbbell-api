@@ -6,30 +6,41 @@ import InvalidName from "../../../src/exercises/domain/errors/InvalidName";
 import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDifficulty";
 import DatabaseFailure from "../../../src/exercises/domain/errors/DatabaseFailure";
 import ExerciseDB from "../../models/entities/exercise";
+import ExercisesNotFound from "../../../src/exercises/domain/errors/ExercisesNotFound";
 
 describe('Exercise controller', () => {
     const AN_ID = 1;
     const A_NAME = 'A name';
     const A_DESCRIPTION = 'A description';
     const A_DIFFICULTY = 5;
+    const AN_EXERCISE_DB = new ExerciseDB();
+
+    const statusSpy = jest.fn().mockReturnThis();
+    const sendSpy = jest.fn().mockReturnThis();
+    const createSpy = jest.fn();
+    const getAllSpy = jest.fn();
+    const getByIdSpy = jest.fn();
+    const updateSpy = jest.fn();
+    const deleteSpy = jest.fn();
+
+    const res = new FakeResponseBuilder().withStatus(statusSpy).withSend(sendSpy).build();
+    const service = {
+        create: createSpy,
+        getAll: getAllSpy,
+        getById: getByIdSpy,
+        update: updateSpy,
+        delete: deleteSpy
+    } as unknown as ExerciseService<ExerciseDB>;
+
+    const sut = new ExerciseController(service);
 
     describe('create', () => {
-        const statusSpy = jest.fn().mockReturnThis();
-        const sendSpy = jest.fn().mockReturnThis();
-        const createSpy = jest.fn();
         const body = {
             name: A_NAME,
             description: A_DESCRIPTION,
             difficulty: A_DIFFICULTY
         }
-        const exercise = new ExerciseDB();
-        const res = new FakeResponseBuilder().withStatus(statusSpy).withSend(sendSpy).build();
-        const req = { body } as Request
-        const service = {
-            create: createSpy
-        } as unknown as ExerciseService<ExerciseDB>;
-
-        const sut = new ExerciseController(service);
+        const req = { body } as Request;
 
         afterEach(() => {
             jest.clearAllMocks()
@@ -37,12 +48,13 @@ describe('Exercise controller', () => {
         })
 
         test('Should create an exercise and return the id', async () => {
-            createSpy.mockResolvedValue(exercise);
+            createSpy.mockResolvedValue(AN_EXERCISE_DB);
 
             await sut.create(req, res);
-
+            
+            expect(createSpy).toBeCalledTimes(1);
             expect(statusSpy).toBeCalledWith(201);
-            expect(sendSpy).toBeCalledWith(exercise);
+            expect(sendSpy).toBeCalledWith(AN_EXERCISE_DB);
         })
 
         test('Given a invalid name error should fail', async () => {
@@ -81,6 +93,48 @@ describe('Exercise controller', () => {
 
             await sut.create(req, res);
 
+            expect(statusSpy).toBeCalledWith(500);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+    })
+
+    describe('get all', () => {
+        const req = { } as Request;
+
+        afterEach(() => {
+            jest.clearAllMocks()
+            jest.clearAllTimers()
+        })
+
+        test('should return a list of exercises', async () => {
+            const exercisesList = [AN_EXERCISE_DB, AN_EXERCISE_DB, AN_EXERCISE_DB];
+            getAllSpy.mockResolvedValue(exercisesList);
+
+            await sut.getAll(req, res);
+
+            expect(getAllSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(200);
+            expect(sendSpy).toBeCalledWith(exercisesList);
+        })
+
+        test('Given no exercises found should return a list of exercises', async () => {
+            const error = new ExercisesNotFound();
+            getAllSpy.mockRejectedValue(error);
+
+            await sut.getAll(req, res);
+
+            expect(getAllSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(404);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given a failure should fail', async () => {
+            const error = new DatabaseFailure();
+            getAllSpy.mockRejectedValue(error);
+
+            await sut.getAll(req, res);
+
+            expect(getAllSpy).toBeCalledTimes(1);
             expect(statusSpy).toBeCalledWith(500);
             expect(sendSpy).toBeCalledWith(error.message);
         })
