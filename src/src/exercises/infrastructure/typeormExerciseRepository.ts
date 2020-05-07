@@ -5,6 +5,7 @@ import DatabaseFailure from "../domain/errors/DatabaseFailure";
 import ExerciseId from "../domain/valueObject/exerciseId";
 import ExerciseParams from "../domain/aggregates/exerciseParams";
 import ExerciseDB from "../../../api/models/entities/exercise";
+import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
 
 export default class TypeormExerciseRepository implements ExerciseRepository<ExerciseDB> {
     private exerciseRepository = getRepository(ExerciseDB);
@@ -26,8 +27,10 @@ export default class TypeormExerciseRepository implements ExerciseRepository<Exe
             .catch(() => {
                 throw new DatabaseFailure();
             });
-
-        return exercises
+        if (exercises.length <= 0) {
+            throw new ExercisesNotFound();
+        }
+        return exercises;
     }
 
     async getById(id: ExerciseId): Promise<ExerciseDB> {
