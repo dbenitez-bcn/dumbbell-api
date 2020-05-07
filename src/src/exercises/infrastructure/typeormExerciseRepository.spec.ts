@@ -5,6 +5,7 @@ import ExerciseParams from "../domain/aggregates/exerciseParams";
 import Difficulty from "../domain/valueObject/difficulty";
 import Description from "../domain/valueObject/description";
 import Name from "../domain/valueObject/name";
+import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
 
 const saveSpy = jest.fn();
 const findSpy = jest.fn();
@@ -75,6 +76,13 @@ describe('Typeorm repository', () => {
 
             expect(actual).toBe(expected);
             expect(findSpy).toBeCalledTimes(1);
+        })
+
+        test('Given no exercises found should throw an exception', async () => {
+            const expected: ExerciseDB[] = [];
+            findSpy.mockResolvedValue(expected);
+
+            await expect(sut.getAll()).rejects.toThrowError(new ExercisesNotFound());
         })
 
         test('Given an error when accesing repository should throw an exeception', async () => {
