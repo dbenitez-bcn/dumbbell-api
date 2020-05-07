@@ -4,6 +4,8 @@ import InvalidName from "../../../src/exercises/domain/errors/InvalidName";
 import InvalidDescription from "../../../src/exercises/domain/errors/InvalidDescription";
 import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDifficulty";
 import ExercisesNotFound from "../../../src/exercises/domain/errors/ExercisesNotFound";
+import InvalidExerciseId from "../../../src/exercises/domain/errors/InvalidExerciseId";
+import ExerciseNotFound from "../../../src/exercises/domain/errors/ExerciseNotFound";
 
 export default class ExerciseController<T> {
     constructor(private service: ExerciseService<T>) { }
@@ -31,6 +33,21 @@ export default class ExerciseController<T> {
                 }
             });
         res.status(200).send(exercises);
+    }
+
+    async getById(req: Request, res: Response) {
+        const id = parseInt(req.params.id);
+        const exercise = await this.service.getById(id)
+            .catch((e) => {
+                if (e instanceof InvalidExerciseId) {
+                    res.status(422).send(e.message);
+                } else if (e instanceof ExerciseNotFound) {
+                    res.status(404).send(e.message);
+                } else {
+                    res.status(500).send(e.message);
+                }
+            });
+        res.status(200).send(exercise);
     }
 
     private isParamError(e: Error): boolean {

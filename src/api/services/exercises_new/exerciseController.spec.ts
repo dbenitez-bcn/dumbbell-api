@@ -7,6 +7,8 @@ import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDiffi
 import DatabaseFailure from "../../../src/exercises/domain/errors/DatabaseFailure";
 import ExerciseDB from "../../models/entities/exercise";
 import ExercisesNotFound from "../../../src/exercises/domain/errors/ExercisesNotFound";
+import ExerciseNotFound from "../../../src/exercises/domain/errors/ExerciseNotFound";
+import InvalidExerciseId from "../../../src/exercises/domain/errors/InvalidExerciseId";
 
 describe('Exercise controller', () => {
     const AN_ID = 1;
@@ -117,7 +119,7 @@ describe('Exercise controller', () => {
             expect(sendSpy).toBeCalledWith(exercisesList);
         })
 
-        test('Given no exercises found should return a list of exercises', async () => {
+        test('Given no exercises found should fail', async () => {
             const error = new ExercisesNotFound();
             getAllSpy.mockRejectedValue(error);
 
@@ -135,6 +137,61 @@ describe('Exercise controller', () => {
             await sut.getAll(req, res);
 
             expect(getAllSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(500);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+    })
+
+    describe('get by id', () => {
+        const params = {
+            id: AN_ID
+        }
+        const req = { params } as unknown as Request;
+
+        afterEach(() => {
+            jest.clearAllMocks()
+            jest.clearAllTimers()
+        })
+
+        test('Should return a single exercise', async () => {
+            getByIdSpy.mockResolvedValue(AN_EXERCISE_DB);
+
+            await sut.getById(req, res);
+
+            expect(getByIdSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(200);
+            expect(sendSpy).toBeCalledWith(AN_EXERCISE_DB)
+        })
+
+        test('Given no exercises found should fail', async () => {
+            const error = new ExerciseNotFound();
+            getByIdSpy.mockRejectedValue(error);
+
+            await sut.getById(req, res);
+
+            expect(getByIdSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(404);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given invalid id should fail', async () => {
+            const error = new InvalidExerciseId();
+            getByIdSpy.mockRejectedValue(error);
+
+            await sut.getById(req, res);
+
+            expect(getByIdSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(422);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given a failure should fail', async () => {
+            const error = new DatabaseFailure();
+            getByIdSpy.mockRejectedValue(error);
+
+            await sut.getById(req, res);
+
+            expect(getByIdSpy).toBeCalledTimes(1);
             expect(statusSpy).toBeCalledWith(500);
             expect(sendSpy).toBeCalledWith(error.message);
         })
