@@ -273,4 +273,47 @@ describe('Exercise controller', () => {
             expect(sendSpy).toBeCalledWith(error.message);
         })
     })
+
+
+    describe('delete', () => {
+        const params = {
+            id: AN_ID
+        }
+        const req = { params } as unknown as Request;
+
+        afterEach(() => {
+            jest.clearAllMocks()
+            jest.clearAllTimers()
+        })
+
+        test('Should delete a single exercise', async () => {
+            await sut.delete(req, res);
+
+            expect(deleteSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(204);
+            expect(sendSpy).toBeCalledWith();
+        })
+
+        test('Given invalid id should fail', async () => {
+            const error = new InvalidExerciseId();
+            deleteSpy.mockRejectedValue(error);
+
+            await sut.delete(req, res);
+
+            expect(deleteSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(422);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given a failure should fail', async () => {
+            const error = new DatabaseFailure();
+            deleteSpy.mockRejectedValue(error);
+
+            await sut.delete(req, res);
+
+            expect(deleteSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(500);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+    })
 })

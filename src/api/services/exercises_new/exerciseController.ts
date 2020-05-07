@@ -61,8 +61,23 @@ export default class ExerciseController<T> {
                 res.status(500).send(e.message);
             }
         }
-        
+
         res.status(204).send();
+    }
+
+    async delete(req: Request, res: Response) {
+        const id = parseInt(req.params.id);
+        try {
+            await this.service.delete(id)
+            res.status(204).send();
+        }
+        catch (e) {
+            if (e instanceof InvalidExerciseId) {
+                res.status(422).send(e.message);
+            } else {
+                res.status(500).send(e.message);
+            }
+        }
     }
 
     private isParamError(e: Error): boolean {
