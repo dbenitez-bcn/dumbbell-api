@@ -6,16 +6,17 @@ import Difficulty from "../domain/valueObject/difficulty";
 import Description from "../domain/valueObject/description";
 import Name from "../domain/valueObject/name";
 import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
+import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
 
 const saveSpy = jest.fn();
 const findSpy = jest.fn();
-const findOneOrFailSpy = jest.fn();
+const findOneSpy = jest.fn();
 const updateSpy = jest.fn();
 const deleteSpy = jest.fn();
 const repoMock = jest.fn().mockReturnValue({
     save: saveSpy,
     find: findSpy,
-    findOneOrFail: findOneOrFailSpy,
+    findOne: findOneSpy,
     update: updateSpy,
     delete: deleteSpy
 })
@@ -95,16 +96,22 @@ describe('Typeorm repository', () => {
     describe('get by id', () => {
         test('Given an id should find a single exercise', async () => {
             const expected = dbExercise;
-            findOneOrFailSpy.mockResolvedValue(expected);
+            findOneSpy.mockResolvedValue(expected);
 
             const actual = await sut.getById(AN_ID);
 
             expect(actual).toBe(expected);
-            expect(findOneOrFailSpy).toBeCalledWith(AN_ID.value);
+            expect(findOneSpy).toBeCalledWith(AN_ID.value);
+        })
+
+        test('Given an id should fail when no exercise is found', async () => {
+            findOneSpy.mockResolvedValue(undefined);
+
+            await expect(sut.getById(AN_ID)).rejects.toThrowError(new ExerciseNotFound());
         })
 
         test('Given an error when accesing repositroy should fail', async () => {
-            findOneOrFailSpy.mockRejectedValue(new Error());
+            findOneSpy.mockRejectedValue(new Error());
 
             await expect(sut.getById(AN_ID)).rejects.toThrowError(new DatabaseFailure());
         })
