@@ -6,6 +6,7 @@ import ExerciseId from "../domain/valueObject/exerciseId";
 import ExerciseParams from "../domain/aggregates/exerciseParams";
 import ExerciseDB from "../../../api/models/entities/exercise";
 import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
+import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
 
 export default class TypeormExerciseRepository implements ExerciseRepository<ExerciseDB> {
     private exerciseRepository = getRepository(ExerciseDB);
@@ -34,11 +35,15 @@ export default class TypeormExerciseRepository implements ExerciseRepository<Exe
     }
 
     async getById(id: ExerciseId): Promise<ExerciseDB> {
-        const res = await this.exerciseRepository.findOneOrFail(id.value)
+        const exercise = await this.exerciseRepository.findOne(id.value)
             .catch(() => {
                 throw new DatabaseFailure();
             })
-        return res;
+        if (!exercise) {
+            throw new ExerciseNotFound();
+        } else {
+            return exercise;
+        }
     }
 
     async update(id: ExerciseId, params: ExerciseParams): Promise<void> {
