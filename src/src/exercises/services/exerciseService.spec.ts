@@ -137,6 +137,10 @@ describe('Exercise Service', () => {
             await expect(sut.getById(0)).rejects.toThrowError(new InvalidExerciseId());
         })
 
+        test('Given a NaN as id should fail', async () => {
+            await expect(sut.getById(NaN)).rejects.toThrowError(new InvalidExerciseId());
+        })
+
         test('Given a negative number as id should fail', async () => {
             await expect(sut.getById(-1234)).rejects.toThrowError(new InvalidExerciseId());
         })
