@@ -196,4 +196,81 @@ describe('Exercise controller', () => {
             expect(sendSpy).toBeCalledWith(error.message);
         })
     })
+
+    describe('update', () => {
+        const params = {
+            id: AN_ID
+        }
+        const body = {
+            name: A_NAME,
+            description: A_DESCRIPTION,
+            difficulty: A_DIFFICULTY
+        }
+        const req = { params, body } as unknown as Request;
+
+        afterEach(() => {
+            jest.clearAllMocks()
+            jest.clearAllTimers()
+        })
+
+        test('Given an id should update the exercise', async () => {
+            await sut.update(req, res);
+
+            expect(updateSpy).toBeCalledWith(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY);
+            expect(statusSpy).toBeCalledWith(204);
+            expect(sendSpy).toBeCalledTimes(1);
+        })
+
+        test('Given invalid id should fail', async () => {
+            const error = new InvalidExerciseId();
+            updateSpy.mockRejectedValue(error);
+
+            await sut.update(req, res);
+
+            expect(updateSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(422);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given a failure should fail', async () => {
+            const error = new DatabaseFailure();
+            updateSpy.mockRejectedValue(error);
+
+            await sut.update(req, res);
+
+            expect(updateSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(500);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given a invalid name error should fail', async () => {
+            const error = new InvalidName();
+            updateSpy.mockRejectedValue(error);
+
+            await sut.update(req, res);
+
+            expect(statusSpy).toBeCalledWith(422);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given a invalid description error should fail', async () => {
+            const error = new InvalidDifficulty();
+            updateSpy.mockRejectedValue(error);
+
+            await sut.update(req, res);
+
+            expect(statusSpy).toBeCalledWith(422);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given a invalid difficulty error should fail', async () => {
+            const error = new InvalidDifficulty();
+            updateSpy.mockRejectedValue(error);
+
+            await sut.update(req, res);
+
+            expect(statusSpy).toBeCalledWith(422);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+    })
 })
