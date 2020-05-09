@@ -5,17 +5,17 @@ import { Request } from "express";
 import InvalidName from "../../../src/exercises/domain/errors/InvalidName";
 import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDifficulty";
 import DatabaseFailure from "../../../src/exercises/domain/errors/DatabaseFailure";
-import ExerciseDB from "../../models/entities/exercise";
 import ExercisesNotFound from "../../../src/exercises/domain/errors/ExercisesNotFound";
 import ExerciseNotFound from "../../../src/exercises/domain/errors/ExerciseNotFound";
 import InvalidExerciseId from "../../../src/exercises/domain/errors/InvalidExerciseId";
+import { getFakeExerciseDTO } from "../../../src/exercises/test/testUtils";
 
 describe('Exercise controller', () => {
     const AN_ID = 1;
     const A_NAME = 'A name';
     const A_DESCRIPTION = 'A description';
     const A_DIFFICULTY = 5;
-    const AN_EXERCISE_DB = new ExerciseDB();
+    const AN_EXERCISE_DTO = getFakeExerciseDTO();
 
     const statusSpy = jest.fn().mockReturnThis();
     const sendSpy = jest.fn().mockReturnThis();
@@ -32,7 +32,7 @@ describe('Exercise controller', () => {
         getById: getByIdSpy,
         update: updateSpy,
         delete: deleteSpy
-    } as unknown as ExerciseService<ExerciseDB>;
+    } as unknown as ExerciseService;
 
     const sut = new ExerciseController(service);
 
@@ -50,13 +50,13 @@ describe('Exercise controller', () => {
         })
 
         test('Should create an exercise and return the id', async () => {
-            createSpy.mockResolvedValue(AN_EXERCISE_DB);
+            createSpy.mockResolvedValue(AN_EXERCISE_DTO);
 
             await sut.create(req, res);
             
             expect(createSpy).toBeCalledTimes(1);
             expect(statusSpy).toBeCalledWith(201);
-            expect(sendSpy).toBeCalledWith(AN_EXERCISE_DB);
+            expect(sendSpy).toBeCalledWith(AN_EXERCISE_DTO);
         })
 
         test('Given a invalid name error should fail', async () => {
@@ -109,7 +109,7 @@ describe('Exercise controller', () => {
         })
 
         test('should return a list of exercises', async () => {
-            const exercisesList = [AN_EXERCISE_DB, AN_EXERCISE_DB, AN_EXERCISE_DB];
+            const exercisesList = [AN_EXERCISE_DTO, AN_EXERCISE_DTO, AN_EXERCISE_DTO];
             getAllSpy.mockResolvedValue(exercisesList);
 
             await sut.getAll(req, res);
@@ -154,13 +154,13 @@ describe('Exercise controller', () => {
         })
 
         test('Should return a single exercise', async () => {
-            getByIdSpy.mockResolvedValue(AN_EXERCISE_DB);
+            getByIdSpy.mockResolvedValue(AN_EXERCISE_DTO);
 
             await sut.getById(req, res);
 
             expect(getByIdSpy).toBeCalledTimes(1);
             expect(statusSpy).toBeCalledWith(200);
-            expect(sendSpy).toBeCalledWith(AN_EXERCISE_DB)
+            expect(sendSpy).toBeCalledWith(AN_EXERCISE_DTO)
         })
 
         test('Given no exercises found should fail', async () => {

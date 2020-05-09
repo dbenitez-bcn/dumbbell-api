@@ -8,9 +8,10 @@ import ExerciseDB from "../../../api/models/entities/exercise";
 import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
 import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import ExerciseDTO from "../domain/dtos/exerciseDTO";
 
-export default class TypeormExerciseRepository implements ExerciseRepository<ExerciseDB> {
-    async create(excercise: ExerciseDomain): Promise<ExerciseDB> {
+export default class TypeormExerciseRepository implements ExerciseRepository {
+    async create(excercise: ExerciseDomain): Promise<ExerciseDTO> {
         const newExercise = await getRepository(ExerciseDB).save({
             name: excercise.name.value,
             description: excercise.description.value,
@@ -19,31 +20,31 @@ export default class TypeormExerciseRepository implements ExerciseRepository<Exe
             throw new DatabaseFailure();
         });
 
-        return newExercise;
+        return ExerciseDTO.fromDB(newExercise);
     }
 
-    async getAll(): Promise<ExerciseDB[]> {
+    async getAll(): Promise<ExerciseDTO[]> {
         const exercises = await getRepository(ExerciseDB).find()
             .catch((e) => {
-                console.log(e);
                 throw new DatabaseFailure();
             });
         if (exercises.length <= 0) {
             throw new ExercisesNotFound();
         }
-        return exercises;
+        
+        return exercises.map((exercise: ExerciseDB) => ExerciseDTO.fromDB(exercise));
     }
 
-    async getById(id: ExerciseId): Promise<ExerciseDB> {
+    async getById(id: ExerciseId): Promise<ExerciseDTO> {
         const exercise = await getRepository(ExerciseDB).findOne(id.value)
             .catch(() => {
                 throw new DatabaseFailure();
             })
         if (!exercise) {
             throw new ExerciseNotFound();
-        } else {
-            return exercise;
-        }
+        } 
+
+        return ExerciseDTO.fromDB(exercise);
     }
 
     async update(id: ExerciseId, params: ExerciseParams): Promise<void> {

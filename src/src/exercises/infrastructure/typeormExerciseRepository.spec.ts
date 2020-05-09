@@ -1,4 +1,4 @@
-import ExerciseDomain from "../domain/aggregates/exercise";
+import ExerciseDTO from "../domain/dtos/exerciseDTO";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
 import ExerciseId from "../domain/valueObject/exerciseId";
 import ExerciseParams from "../domain/aggregates/exerciseParams";
@@ -32,11 +32,13 @@ jest.mock('typeorm', () => ({
 
 import TypeormExerciseRepository from "./typeormExerciseRepository";
 import ExerciseDB from "../../../api/models/entities/exercise";
+import { getFakeExerciseDB, getFakeExercise } from "../test/testUtils";
 
 describe('Typeorm repository', () => {
-    const AN_ID = new ExerciseId(1);
+    const ID_VALUE = 1
+    const AN_ID = new ExerciseId(ID_VALUE);
     const sut = new TypeormExerciseRepository();
-    const dbExercise: ExerciseDB = new ExerciseDB();
+    const dbExercise: ExerciseDB = getFakeExerciseDB();
 
     afterEach(() => {
         jest.clearAllMocks()
@@ -44,24 +46,23 @@ describe('Typeorm repository', () => {
     })
 
     describe('create', () => {
+        const exercise = getFakeExercise();
         test('Should create an exercise and return the id', async () => {
-            const exercise = new ExerciseDomain('A name', 'A description', 5);
             const params = {
                 name: 'A name',
                 description: 'A description',
                 difficulty: 5
             }
-            const expected = dbExercise;
-            saveSpy.mockResolvedValue(expected);
+            const expected = new ExerciseDTO(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
+            saveSpy.mockResolvedValue(dbExercise);
 
             const actual = await sut.create(exercise);
 
             expect(saveSpy).toBeCalledWith(params);
-            expect(actual).toBe(expected);
+            expect(actual).toStrictEqual(expected);
         })
 
         test('Given an error when accesing repository should throw an exeception', async () => {
-            const exercise = new ExerciseDomain('A name', 'A description', 5);
             saveSpy.mockRejectedValue(new Error());
 
             await expect(sut.create(exercise)).rejects.toThrowError(new DatabaseFailure());
@@ -70,12 +71,14 @@ describe('Typeorm repository', () => {
 
     describe('get all', () => {
         test('Should get all exercises', async () => {
-            const expected = [dbExercise, dbExercise, dbExercise];
-            findSpy.mockResolvedValue(expected);
+            const exerciseDTO = new ExerciseDTO(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
+            const exerciseDBList = [dbExercise, dbExercise, dbExercise];
+            const expected = [exerciseDTO, exerciseDTO, exerciseDTO];
+            findSpy.mockResolvedValue(exerciseDBList);
 
             const actual = await sut.getAll();
 
-            expect(actual).toBe(expected);
+            expect(actual).toStrictEqual(expected);
             expect(findSpy).toBeCalledTimes(1);
         })
 
@@ -95,12 +98,12 @@ describe('Typeorm repository', () => {
 
     describe('get by id', () => {
         test('Given an id should find a single exercise', async () => {
-            const expected = dbExercise;
-            findOneSpy.mockResolvedValue(expected);
+            const expected = ExerciseDTO.fromDB(dbExercise);
+            findOneSpy.mockResolvedValue(dbExercise);
 
             const actual = await sut.getById(AN_ID);
 
-            expect(actual).toBe(expected);
+            expect(actual).toStrictEqual(expected);
             expect(findOneSpy).toBeCalledWith(AN_ID.value);
         })
 
