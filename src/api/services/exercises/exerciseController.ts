@@ -7,8 +7,8 @@ import ExercisesNotFound from "../../../src/exercises/domain/errors/ExercisesNot
 import InvalidExerciseId from "../../../src/exercises/domain/errors/InvalidExerciseId";
 import ExerciseNotFound from "../../../src/exercises/domain/errors/ExerciseNotFound";
 
-export default class ExerciseController<T> {
-    constructor(private service: ExerciseService<T>) { }
+export default class ExerciseController {
+    constructor(private service: ExerciseService) { }
 
     async create(req: Request, res: Response) {
         try {
@@ -25,7 +25,7 @@ export default class ExerciseController<T> {
 
     async getAll(req: Request, res: Response) {
         const exercises = await this.service.getAll()
-            .catch((e) => {
+            .catch((e: Error) => {
                 if (e instanceof ExercisesNotFound) {
                     res.status(404).send(e.message);
                 } else {
@@ -38,7 +38,7 @@ export default class ExerciseController<T> {
     async getById(req: Request, res: Response) {
         const id = parseInt(req.params.id);
         const exercise = await this.service.getById(id)
-            .catch((e) => {
+            .catch((e: Error) => {
                 if (e instanceof InvalidExerciseId) {
                     res.status(422).send(e.message);
                 } else if (e instanceof ExerciseNotFound) {

@@ -6,10 +6,10 @@ import Name from "../domain/valueObject/name";
 import Description from "../domain/valueObject/description";
 import Difficulty from "../domain/valueObject/difficulty";
 
-export default class ExerciseService<T> {
-    constructor(private readonly repository: ExerciseRepository<T>) { }
+export default class ExerciseService {
+    constructor(private readonly repository: ExerciseRepository) { }
 
-    async create(name: string, description: string, difficulty: number): Promise<T> {
+    async create(name: string, description: string, difficulty: number) {
         const exercise = new Exercise(name, description, difficulty);
         return await this.repository.create(exercise);
     }
