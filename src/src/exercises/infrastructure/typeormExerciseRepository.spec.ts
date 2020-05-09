@@ -151,6 +151,7 @@ describe('Typeorm repository', () => {
         test('Given no description should update an exercise', async () => {
             const params: ExerciseParams = {
                 name: new Name('A name'),
+                description: undefined,
                 difficutly: new Difficulty(5)
             }
 
@@ -165,7 +166,8 @@ describe('Typeorm repository', () => {
         test('Given no difficulty should update an exercise', async () => {
             const params: ExerciseParams = {
                 name: new Name('A name'),
-                description: new Description('A description')
+                description: new Description('A description'),
+                difficutly: undefined
             }
 
             await sut.update(AN_ID, params);

@@ -1,14 +1,14 @@
 import http from "http";
 import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import { createConnection } from "typeorm";
 import { applyMiddleware, applyRoutes } from "./utils";
 import routes from "./services";
 import middleware from "./middleware";
 import errorHandlers from "./middleware/errorHandlers";
-import dotenv from "dotenv";
-import { createConnection } from "typeorm";
 import { getDatabaseHost } from "./utils/getDatabaseHost";
 
-dotenv.config();
 
 process.on("uncaughtException", e => {
   console.log(e);
@@ -34,7 +34,6 @@ createConnection({
     applyMiddleware(middleware, router);
     applyRoutes(routes, router);
     applyMiddleware(errorHandlers, router);
-
     const { PORT = 9000 } = process.env;
     const server = http.createServer(router);
 

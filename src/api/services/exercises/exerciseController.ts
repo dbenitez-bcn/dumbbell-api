@@ -53,7 +53,7 @@ export default class ExerciseController<T> {
     async update(req: Request, res: Response) {
         const id = parseInt(req.params.id);
         try {
-            await this.service.update(id, req.body.name, req.body.description, req.body.difficulty)
+            await this.service.update(id, req.body.name, req.body.description, parseInt(req.body.difficulty))
         } catch (e) {
             if (e instanceof InvalidExerciseId || this.isParamError(e)) {
                 res.status(422).send(e.message);
