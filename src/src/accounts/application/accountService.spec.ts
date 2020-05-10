@@ -1,6 +1,8 @@
-import AccountService from "./accountService";
+import bycrypt from 'bcryptjs';
+const bycryptMock = bycrypt as jest.Mocked<typeof bycrypt>;
 import UserRepository from "../domain/repositories/userRepository";
 import User from "../domain/aggregates/user";
+import AccountService from "./accountService";
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';
@@ -10,6 +12,11 @@ describe('Account service', () => {
     const repository: UserRepository = {
         register
     }
+
+    bycryptMock.hashSync = jest.fn().mockImplementation((value: string) => {
+        return value;
+    })
+
     const sut = new AccountService(repository);
     describe('Register', () => {
         test('Should register a new user', async () => {
