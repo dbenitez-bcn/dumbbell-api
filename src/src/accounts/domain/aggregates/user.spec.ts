@@ -11,4 +11,15 @@ describe('User', () => {
         
         expect(sut.password).toBeInstanceOf(HashedPassword);
     })
+
+    test('Should hash just one time', () => {
+        const hashSpy = jest.spyOn(PlainPassword.prototype, 'hash');
+        const sut = new User('username', 'test@dumbbell.com', 'password1234');
+
+        sut.hashPassword();
+        sut.hashPassword();
+        sut.hashPassword();
+
+        expect(hashSpy).toReturnTimes(1);
+    })
 })
