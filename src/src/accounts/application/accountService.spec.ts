@@ -3,8 +3,8 @@ const usertMock = User.prototype as jest.Mocked<typeof User.prototype>;
 import UserRepository from "../domain/repositories/userRepository";
 import AccountService from "./accountService";
 import Email from '../domain/valueObjects/email';
-import Password from '../domain/valueObjects/password';
 import LoginFailure from '../domain/errors/loginFailure';
+import HashedPassword from '../domain/valueObjects/hashedPassword';
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';
@@ -36,7 +36,7 @@ describe('Account service', () => {
             const expectedEmail = new Email(AN_EMAIL);
             const passwordDB = {
                 compare: jest.fn().mockReturnValue(true)
-            } as unknown as Password;
+            } as unknown as HashedPassword;
             login.mockResolvedValue(passwordDB);
 
             const result = await sut.login(AN_EMAIL, A_PASSWORD);
@@ -49,7 +49,7 @@ describe('Account service', () => {
         test('Given wrong credentials should fail', async () => {
             const passwordDB = {
                 compare: jest.fn().mockReturnValue(false)
-            } as unknown as Password;
+            } as unknown as HashedPassword;
             login.mockResolvedValue(passwordDB);
 
             await expect(sut.login(AN_EMAIL, A_PASSWORD)).rejects.toThrowError(LoginFailure);
