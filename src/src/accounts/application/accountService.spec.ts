@@ -1,21 +1,25 @@
-import bycrypt from 'bcryptjs';
-const bycryptMock = bycrypt as jest.Mocked<typeof bycrypt>;
+import User from '../domain/aggregates/user';
+const usertMock = User.prototype as jest.Mocked<typeof User.prototype>;
 import UserRepository from "../domain/repositories/userRepository";
-import User from "../domain/aggregates/user";
 import AccountService from "./accountService";
+import Email from '../domain/valueObjects/email';
+import Password from '../domain/valueObjects/password';
+import LoginFailure from '../domain/errors/loginFailure';
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';
     const AN_EMAIL = 'testerino@dumbbell.com';
     const A_PASSWORD = 'password1234';
     const register = jest.fn();
+    const login = jest.fn();
     const repository: UserRepository = {
-        register
+        register,
+        login
     }
-
-    bycryptMock.hashSync = jest.fn().mockReturnValue(A_PASSWORD);
-
+    usertMock.hashPassword = jest.fn().mockReturnValue(A_PASSWORD);
+    
     const sut = new AccountService(repository);
+
     describe('Register', () => {
         test('Should register a new user', async () => {
             const expected = new User(A_USERNAME, AN_EMAIL, A_PASSWORD);
@@ -23,7 +27,32 @@ describe('Account service', () => {
             await sut.register(A_USERNAME, AN_EMAIL, A_PASSWORD);
 
             expect(register).toBeCalledWith(expected);
-            expect(bycryptMock.hashSync).toBeCalledTimes(1);
+            expect(usertMock.hashPassword).toBeCalledTimes(1);
+        })
+    })
+
+    describe('Login', () => {
+        test('Given right credentials should login the user', async () => {
+            const expectedEmail = new Email(AN_EMAIL);
+            const passwordDB = {
+                compare: jest.fn().mockReturnValue(true)
+            } as unknown as Password;
+            login.mockResolvedValue(passwordDB);
+
+            const result = await sut.login(AN_EMAIL, A_PASSWORD);
+
+            expect(login).toBeCalledWith(expectedEmail);
+            expect(passwordDB.compare).toBeCalledWith(A_PASSWORD);
+            expect(result).toBe('token');
+        })
+
+        test('Given wrong credentials should fail', async () => {
+            const passwordDB = {
+                compare: jest.fn().mockReturnValue(false)
+            } as unknown as Password;
+            login.mockResolvedValue(passwordDB);
+
+            await expect(sut.login(AN_EMAIL, A_PASSWORD)).rejects.toThrowError(LoginFailure);
         })
     })
 })
