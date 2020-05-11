@@ -6,6 +6,7 @@ import InvalidPasswordFormat from "../errors/invalidPasswordFormat";
 
 describe('Password', () => {
     const A_PASSWORD = 'Passw0rd';
+    const HASHED_PASSWORD = 'hashedPassw0rd';
     const hashSpy = jest.fn();
     const compareSpy = jest.fn();
 
@@ -20,13 +21,10 @@ describe('Password', () => {
             jest.clearAllTimers();
         })
 
-        test('Given a password should encript it', async () => {
-            hashSpy.mockReturnValue('hashedPassw0rd');
-
+        test('Given a password should build a password', async () => {
             const sut = new Password(A_PASSWORD);
 
-            expect(sut.value).toBe('hashedPassw0rd');
-            expect(hashSpy).toBeCalledWith(A_PASSWORD, 10);
+            expect(sut.value).toBe(A_PASSWORD);
         })
 
         test('Given a password with less than 8 charactes should fail', () => {
@@ -61,7 +59,6 @@ describe('Password', () => {
             const validPasswords = ['kn3a7ap9', 'fyDfDFE2', 'mJrmg6Ru', 'KVE:Zx7;#7', '/.yf43*EV&q3', 'x7X(9f2Vg]ge6ms', '2YJR8R^f^k43oXn', 'Passw0rd']
     
             for(let index in validPasswords) {
-                hashSpy.mockReturnValueOnce(validPasswords[index]);
                 const sut = new Password(validPasswords[index]);
                 
                 expect(sut.value).toBe(validPasswords[index]);
@@ -77,11 +74,12 @@ describe('Password', () => {
         })
         
         test('Given the same password when comparing should success', async () => {
-            const hashedPass = 'hashedPassw0rd';
+            const hashedPass = HASHED_PASSWORD;
             hashSpy.mockReturnValue(hashedPass);
             compareSpy.mockReturnValueOnce(true);
             const sut = new Password(A_PASSWORD);
 
+            sut.hash();
             const actual = sut.compare(A_PASSWORD);
 
             expect(actual).toBe(true);
@@ -89,16 +87,35 @@ describe('Password', () => {
         })
 
         test('Given a different password when comparing should fail', async () => {
-            const hashedPass = 'hashedPassw0rd';
+            const hashedPass = HASHED_PASSWORD;
             const newPass = 'different';
             hashSpy.mockReturnValue(hashedPass);
             compareSpy.mockReturnValueOnce(false);
             const sut = new Password(A_PASSWORD);
 
+            sut.hash();
             const actual = sut.compare(newPass);
 
             expect(actual).toBe(false);
             expect(compareSpy).toBeCalledWith(newPass, hashedPass);
+        })
+    })
+
+    describe('hash', () => {
+
+        afterEach(() => {
+            jest.clearAllMocks();
+            jest.clearAllTimers();
+        })
+        
+        test('Given a password should encript it', async () => {
+            hashSpy.mockReturnValue(HASHED_PASSWORD);
+            const sut = new Password(A_PASSWORD);
+            
+            sut.hash();
+
+            expect(sut.value).toBe(HASHED_PASSWORD);
+            expect(hashSpy).toBeCalledWith(A_PASSWORD, 10);
         })
     })
 })

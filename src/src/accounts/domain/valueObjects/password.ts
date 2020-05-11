@@ -10,12 +10,20 @@ export default class Password {
         if (!/^(?=.*?[a-zA-z])(?=.*?[0-9]).{1,}$/.test(value)) {
             throw new InvalidPasswordFormat();
         }
-        this.value = bycrypt.hashSync(value, 10);
+        this._value = value;
     }
 
-    readonly value: string;
+    private _value: string;
+
+    get value(): string {
+        return this._value;
+    }
+
+    hash() {
+        this._value = bycrypt.hashSync(this._value, 10);
+    }
 
     compare(password: string) {
-        return bycrypt.compareSync(password, this.value);
+        return bycrypt.compareSync(password, this._value);
     }
 }
