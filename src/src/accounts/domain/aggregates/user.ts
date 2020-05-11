@@ -12,4 +12,8 @@ export default class User {
     readonly username: Username;
     readonly email: Email;
     readonly password: Password;
+
+    hashPassword() {
+        this.password.hash();
+    }
 }

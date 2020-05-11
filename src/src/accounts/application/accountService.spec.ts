@@ -13,9 +13,7 @@ describe('Account service', () => {
         register
     }
 
-    bycryptMock.hashSync = jest.fn().mockImplementation((value: string) => {
-        return value;
-    })
+    bycryptMock.hashSync = jest.fn().mockReturnValue(A_PASSWORD);
 
     const sut = new AccountService(repository);
     describe('Register', () => {
@@ -25,6 +23,7 @@ describe('Account service', () => {
             await sut.register(A_USERNAME, AN_EMAIL, A_PASSWORD);
 
             expect(register).toBeCalledWith(expected);
+            expect(bycryptMock.hashSync).toBeCalledTimes(1);
         })
     })
 })
