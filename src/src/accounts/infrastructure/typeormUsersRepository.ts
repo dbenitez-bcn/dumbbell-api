@@ -1,12 +1,12 @@
-import UserRepository from "../repositories/userRepository";
-import HashedPassword from "../valueObjects/hashedPassword";
-import User from "../aggregates/user";
-import Email from "../valueObjects/email";
+import UserRepository from "../domain/repositories/userRepository";
+import HashedPassword from "../domain/valueObjects/hashedPassword";
+import User from "../domain/aggregates/user";
+import Email from "../domain/valueObjects/email";
 import { getRepository } from "typeorm";
-import UserDB from "../../../../api/models/entities/user";
-import DatabaseFailure from "../../../exercises/domain/errors/DatabaseFailure";
-import ExistingUsername from "../errors/existingUsername";
-import ExistingEmail from "../errors/existingEmail";
+import UserDB from "../../../api/models/entities/user";
+import DatabaseFailure from "../../exercises/domain/errors/DatabaseFailure";
+import ExistingUsername from "../domain/errors/existingUsername";
+import ExistingEmail from "../domain/errors/existingEmail";
 
 export default class TypeormUsersRepository implements UserRepository {
 

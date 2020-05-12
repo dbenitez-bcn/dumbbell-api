@@ -1,5 +1,5 @@
-import DatabaseFailure from "../../../exercises/domain/errors/DatabaseFailure";
-import { getFakeUser } from "../../test/testUtils";
+import DatabaseFailure from "../../exercises/domain/errors/DatabaseFailure";
+import { getFakeUser } from "../test/testUtils";
 
 const insertSpy = jest.fn();
 const findOneSpy = jest.fn();
@@ -18,8 +18,8 @@ jest.mock('typeorm', () => ({
 }));
 
 import TypeormUsersRepository from "./typeormUsersRepository";
-import ExistingEmail from "../errors/existingEmail";
-import ExistingUsername from "../errors/existingUsername";
+import ExistingEmail from "../domain/errors/existingEmail";
+import ExistingUsername from "../domain/errors/existingUsername";
 
 describe('typeormUsersRepository', () => {
     const sut = new TypeormUsersRepository();
