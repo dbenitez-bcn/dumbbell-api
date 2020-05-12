@@ -1,12 +1,13 @@
+import { getRepository } from "typeorm";
 import UserRepository from "../domain/repositories/userRepository";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import User from "../domain/aggregates/user";
 import Email from "../domain/valueObjects/email";
-import { getRepository } from "typeorm";
 import UserDB from "../../../api/models/entities/user";
 import DatabaseFailure from "../../exercises/domain/errors/DatabaseFailure";
 import ExistingUsername from "../domain/errors/existingUsername";
 import ExistingEmail from "../domain/errors/existingEmail";
+import UserNotFound from "../domain/errors/userNotFound";
 
 export default class TypeormUsersRepository implements UserRepository {
 
@@ -30,8 +31,15 @@ export default class TypeormUsersRepository implements UserRepository {
         }
     }
 
-    login(email: Email): Promise<HashedPassword> {
-        throw new Error("Method not implemented.");
+    async login(email: Email): Promise<HashedPassword> {
+        const user = await getRepository(UserDB).findOne({ email: email.value })
+            .catch(() => {
+                throw new DatabaseFailure();
+            });
+        if (user === undefined) {
+            throw new UserNotFound();
+        }
+        return new HashedPassword(user.password);
     }
 
 }
