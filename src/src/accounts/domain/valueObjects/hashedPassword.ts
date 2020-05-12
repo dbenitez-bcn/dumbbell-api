@@ -6,7 +6,7 @@ export default class HashedPassword extends Password {
         super(value);
     }
 
-    compare(password: string) {
+    isEqualTo(password: string) {
         return bycrypt.compareSync(password, this.value);
     }
 }

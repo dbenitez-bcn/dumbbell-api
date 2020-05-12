@@ -14,8 +14,7 @@ export default class AccountService {
 
     async login(email: string, password: string) {
         const hashedPassword = await this.repository.login(new Email(email));
-        const isRightPassword = hashedPassword.compare(password);
-        if (!isRightPassword){
+        if (!hashedPassword.isEqualTo(password)){
             throw new LoginFailure();
         }
         // TODO: Implement JWT here

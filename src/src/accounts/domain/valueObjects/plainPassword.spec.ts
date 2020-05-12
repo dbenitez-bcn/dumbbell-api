@@ -5,7 +5,7 @@ import InvalidPasswordLength from "../errors/invalidPasswordLength";
 import InvalidPasswordFormat from "../errors/invalidPasswordFormat";
 import HashedPassword from './hashedPassword';
 
-describe('Password', () => {
+describe('Plain Password', () => {
     const A_PASSWORD = 'Passw0rd';
     const HASHED_PASSWORD = 'hashedPassw0rd';
     const hashSpy = jest.fn();

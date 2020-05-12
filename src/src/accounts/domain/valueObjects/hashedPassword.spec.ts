@@ -2,7 +2,7 @@ import bycrypt from 'bcryptjs';
 const bycryptMock = bycrypt as jest.Mocked<typeof bycrypt>;
 import HashedPassword from './hashedPassword';
 
-describe('Password', () => {
+describe('Hashed Password', () => {
     const A_PASSWORD = 'Passw0rd';
     const HASHED_PASSWORD = 'hashedPassw0rd';
     const compareSpy = jest.fn();
@@ -10,7 +10,7 @@ describe('Password', () => {
     beforeAll(() => {
         bycryptMock.compareSync = compareSpy;
     })
-    describe('Compare', () => {
+    describe('isEqualTo', () => {
 
         afterEach(() => {
             jest.clearAllMocks();
@@ -21,7 +21,7 @@ describe('Password', () => {
             compareSpy.mockReturnValueOnce(true);
             const sut = new HashedPassword(HASHED_PASSWORD);
 
-            const actual = sut.compare(A_PASSWORD);
+            const actual = sut.isEqualTo(A_PASSWORD);
 
             expect(actual).toBe(true);
             expect(compareSpy).toBeCalledWith(A_PASSWORD, HASHED_PASSWORD);
@@ -32,7 +32,7 @@ describe('Password', () => {
             compareSpy.mockReturnValueOnce(false);
             const sut = new HashedPassword(HASHED_PASSWORD);
 
-            const actual = sut.compare(newPass);
+            const actual = sut.isEqualTo(newPass);
 
             expect(actual).toBe(false);
             expect(compareSpy).toBeCalledWith(newPass, HASHED_PASSWORD);

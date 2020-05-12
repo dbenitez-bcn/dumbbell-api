@@ -35,20 +35,20 @@ describe('Account service', () => {
         test('Given right credentials should login the user', async () => {
             const expectedEmail = new Email(AN_EMAIL);
             const passwordDB = {
-                compare: jest.fn().mockReturnValue(true)
+                isEqualTo: jest.fn().mockReturnValue(true)
             } as unknown as HashedPassword;
             login.mockResolvedValue(passwordDB);
 
             const result = await sut.login(AN_EMAIL, A_PASSWORD);
 
             expect(login).toBeCalledWith(expectedEmail);
-            expect(passwordDB.compare).toBeCalledWith(A_PASSWORD);
+            expect(passwordDB.isEqualTo).toBeCalledWith(A_PASSWORD);
             expect(result).toBe('token');
         })
 
         test('Given wrong credentials should fail', async () => {
             const passwordDB = {
-                compare: jest.fn().mockReturnValue(false)
+                isEqualTo: jest.fn().mockReturnValue(false)
             } as unknown as HashedPassword;
             login.mockResolvedValue(passwordDB);
 
