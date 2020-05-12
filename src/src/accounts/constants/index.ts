@@ -7,4 +7,5 @@ export default class Constants {
     public static USERNAME_ALREADY_EXIST = "Username already exist";
     public static EMAIL_ALREADY_EXIST = "Email already exist";
     public static LOGIN_FAILURE = "Email or password incorrect. Please try again.";
+    public static USER_NOT_FOUND = "User not found";
 }
