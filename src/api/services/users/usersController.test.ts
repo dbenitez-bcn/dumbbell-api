@@ -2,7 +2,7 @@
 import bycrypt from 'bcryptjs';
 import { UserRegistrationBody } from "../../models/bodies/userRegistrationBody";
 import { UserRegistrationRequest } from '../../models/requests/userRegistrationRequest';
-import { User } from '../../models/entities/user';
+import UserDB from '../../models/entities/user';
 import { FakeResponse, FakeResponseBuilder } from '../../test/testutils';
 import { Constants } from '../../config/constants';
 
@@ -51,7 +51,7 @@ describe('Users controller', () => {
 
         test('Given valid params should save a user in the database', async () => {
             const { userRegistrationHandler } = require('./usersController');
-            const expectedUser = new User();
+            const expectedUser = new UserDB();
             expectedUser.email = body.email;
             expectedUser.password = 'cryptedPassword';
             expectedUser.username = body.username;

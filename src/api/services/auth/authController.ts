@@ -1,14 +1,14 @@
 import bycrypt from 'bcryptjs';
 import { Request, Response } from "express";
 import { getRepository } from 'typeorm';
-import { User } from '../../models/entities/user';
+import UserDB from '../../models/entities/user';
 import LoginRequest from '../../models/requests/loginRequest';
 import { parseLoginBody } from './validations';
 import { Constants } from '../../config/constants';
 
 export const loginHandler = async (req: Request, res: Response) => {
     let request: LoginRequest;
-    let user: User;
+    let user: UserDB;
 
     try {
         request = await parseLoginBody(req.body);
@@ -18,7 +18,7 @@ export const loginHandler = async (req: Request, res: Response) => {
     }
 
     try {
-        user = await getRepository(User)
+        user = await getRepository(UserDB)
             .findOneOrFail({
                 email: request.email
             })

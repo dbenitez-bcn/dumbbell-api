@@ -2,7 +2,7 @@ import bycrypt from 'bcryptjs';
 import { Request, Response } from "express";
 import { parseUserRegistrationBody } from "./validations";
 import { getRepository } from 'typeorm';
-import { User } from '../../models/entities/user';
+import UserDB from '../../models/entities/user';
 import { Constants } from '../../config/constants';
 
 export const userRegistrationHandler = async (req: Request, res: Response) => {
@@ -14,8 +14,8 @@ export const userRegistrationHandler = async (req: Request, res: Response) => {
         return;
     }
     const hashedPassword = await bycrypt.hash(request.password, 10);
-    const repo = getRepository(User);
-    const user = new User();
+    const repo = getRepository(UserDB);
+    const user = new UserDB();
     user.username = request.username;
     user.email = request.email;
     user.password = hashedPassword;

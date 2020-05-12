@@ -3,7 +3,7 @@ import { Entity, Unique, Column, PrimaryGeneratedColumn, CreateDateColumn, Updat
 @Entity(process.env.DB_TB_USERS)
 @Unique(['email'])
 @Unique(['username'])
-export class User {
+export default class UserDB {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
