@@ -22,7 +22,7 @@ export default class TypeormUsersRepository implements UserRepository {
             if (e.detail) {
                 if (e.detail.includes('username')) {
                     throw new ExistingUsername();
-                } else if (e.detail.includes('email')) {
+                } else {
                     throw new ExistingEmail();
                 }
             } else {
