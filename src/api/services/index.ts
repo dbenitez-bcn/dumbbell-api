@@ -1,5 +1,5 @@
 import exercisesRoutes from "./exercises/routes";
-import usersRoutes from "./users_old/routes";
-import authRoutes from "./auth_old/routes";
+import usersRoutes from "./users/routes";
+import authRoutes from "./auth/routes";
 
 export default [...exercisesRoutes, ...usersRoutes, ...authRoutes];
