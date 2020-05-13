@@ -1,37 +1,33 @@
-import bycrypt from 'bcryptjs';
 import { Request, Response } from "express";
-import { getRepository } from 'typeorm';
-import { User } from '../../models/entities/user';
-import LoginRequest from '../../models/requests/loginRequest';
-import { parseLoginBody } from './validations';
-import { Constants } from '../../config/constants';
+import AccountService from "../../../src/accounts/application/accountService";
+import LoginFailure from "../../../src/accounts/domain/errors/loginFailure";
+import { Constants } from "../../config/constants";
+import UserNotFound from "../../../src/accounts/domain/errors/userNotFound";
+import InvalidEmail from "../../../src/accounts/domain/errors/invalidEmail";
+import InvalidPasswordFormat from "../../../src/accounts/domain/errors/invalidPasswordFormat";
+import InvalidPasswordLength from "../../../src/accounts/domain/errors/invalidPasswordLength";
 
-export const loginHandler = async (req: Request, res: Response) => {
-    let request: LoginRequest;
-    let user: User;
+export default class AuthController {
+    constructor(private service: AccountService) { }
 
-    try {
-        request = await parseLoginBody(req.body);
-    } catch (error) {
-        res.status(422).send(error.message);
-        return;
+    async login(req: Request, res: Response) {
+        try {
+            const token = await this.service.login(req.body.email, req.body.password);
+            res.status(200).send(token);
+        } catch (e) {
+            if (e instanceof LoginFailure) {
+                res.status(401).send(Constants.LOGIN_FAILURE);
+            } else if (e instanceof UserNotFound) {
+                res.status(404).send(Constants.LOGIN_FAILURE);
+            } else if (this.isParamError(e)) {
+                res.status(422).send(Constants.LOGIN_FAILURE);
+            } else {
+                res.status(500).send(e.message);
+            }
+        }
     }
 
-    try {
-        user = await getRepository(User)
-            .findOneOrFail({
-                email: request.email
-            })
-    } catch (error) {
-        res.status(404).send(Constants.LOGIN_FAILURE);
-        return;
-    }
-
-    const isRightPassword = await bycrypt.compare(request.password, user.password);
-    if (isRightPassword) {
-        res.status(200).send();
-    }
-    else {
-        res.status(401).send(Constants.LOGIN_FAILURE);
+    private isParamError(e: Error): boolean {
+        return e instanceof InvalidEmail || e instanceof InvalidPasswordFormat || e instanceof InvalidPasswordLength;
     }
 }

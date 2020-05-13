@@ -1,4 +1,4 @@
-import { Constants } from "../../../../api/config/constants";
+import { Constants } from "../../config/constants";
 
 export default class InvalidExerciseId extends Error {
     constructor() {
