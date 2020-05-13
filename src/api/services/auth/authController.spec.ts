@@ -70,6 +70,7 @@ describe('Auth controller', () => {
             expect(sendSpy).toBeCalledWith(error.message);
             expect(statusSpy).toBeCalledWith(500);
         })
+        
         describe('params failures', () => {
             test('Given invalid email when login should send a failure', async () => {
                 login.mockRejectedValue(new InvalidEmail());
