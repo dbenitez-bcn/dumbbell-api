@@ -1,36 +1,38 @@
-import { Endpoints } from "../../config/constants";
-import ExerciceController from "./exerciseController";
-import ExerciseService from "../../../src/exercises/services/exerciseService";
+import { Router } from "express";
+import ExerciseController from "./exerciseController";
 import TypeormExerciseRepository from "../../../src/exercises/infrastructure/typeormExerciseRepository";
+import ExerciseService from "../../../src/exercises/services/exerciseService";
+import { Endpoints } from "../../config/constants";
 
-const repository = new TypeormExerciseRepository()
-const serivce = new ExerciseService(repository);
-const controller = new ExerciceController(serivce);
+const repo = new TypeormExerciseRepository();
+const service = new ExerciseService(repo);
+const controller = new ExerciseController(service);
 
-export default [
-  {
-    path: Endpoints.EXERCISES,
-    method: "get",
-    handler: controller.getAll.bind(controller)
-  },
-  {
-    path: Endpoints.EXERCISE,
-    method: "post",
-    handler: controller.create.bind(controller)
-  },
-  {
-    path: Endpoints.EXERCISE + "/:id",
-    method: "get",
-    handler: controller.getById.bind(controller)
-  },
-  {
-    path: Endpoints.EXERCISE + "/:id",
-    method: "delete",
-    handler: controller.delete.bind(controller)
-  },
-  {
-    path: Endpoints.EXERCISE + "/:id",
-    method: "put",
-    handler: controller.update.bind(controller)
-  }
-];
+const router = Router();
+
+router.get(
+    Endpoints.EXERCISES,
+    controller.getAll.bind(controller)
+);
+
+router.post(
+    Endpoints.EXERCISE,
+    controller.create.bind(controller)
+);
+
+router.get(
+    Endpoints.EXERCISE + "/:id",
+    controller.getById.bind(controller)
+);
+
+router.delete(
+    Endpoints.EXERCISE + "/:id",
+    controller.delete.bind(controller)
+);
+
+router.put(
+    Endpoints.EXERCISE + "/:id",
+    controller.update.bind(controller)
+);
+
+export default router;

@@ -1,5 +1,10 @@
+import { Router } from "express";
 import exercisesRoutes from "./exercises/routes";
 import usersRoutes from "./users/routes";
 import authRoutes from "./auth/routes";
 
-export default [...exercisesRoutes, ...usersRoutes, ...authRoutes];
+const router = Router();
+
+router.use(exercisesRoutes, usersRoutes, authRoutes);
+
+export default router;
