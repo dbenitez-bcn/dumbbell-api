@@ -32,7 +32,7 @@ createConnection({
   .then(async con => {
     const router = express();
     applyMiddleware(middleware, router);
-    router.use("/", routes);
+    router.use(routes);
     applyMiddleware(errorHandlers, router);
     const { PORT = 9000 } = process.env;
     const server = http.createServer(router);
