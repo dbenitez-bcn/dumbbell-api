@@ -1,14 +1,11 @@
 import http from "http";
 import express from "express";
-import cors from "cors";
-import parser from "body-parser";
-import compression from "compression";
 import dotenv from "dotenv";
 dotenv.config();
 import { createConnection } from "typeorm";
-import routes from "./services";
-import { methodNotFound } from "./middleware/errorHandlers";
+import { routesLoader } from "./loaders/routesLoader";
 import { getDatabaseHost } from "./utils/getDatabaseHost";
+import { expressAppLoader } from "./loaders/expressAppLoader";
 
 
 process.on("uncaughtException", e => {
@@ -31,15 +28,11 @@ createConnection({
   entities: ["dist/api/models/entities/**/*.js"]
 })
   .then(async con => {
-    const router = express();
-    router.use(parser.urlencoded({ extended: true }));
-    router.use(cors({ credentials: true, origin: true }));
-    router.use(parser.json());
-    router.use(compression());
-    router.use(routes);
-    router.use(methodNotFound);
+    const app = express();
+    expressAppLoader(app);
+    routesLoader(app);
     const { PORT = 9000 } = process.env;
-    const server = http.createServer(router);
+    const server = http.createServer(app);
 
     server.listen(PORT, () =>
       console.log(`Server is running in ${process.env.APP_ENV} mode => http://localhost:${PORT}...`)
