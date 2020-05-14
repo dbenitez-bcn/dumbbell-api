@@ -184,10 +184,13 @@
             "200": {
               "description": "OK"
             },
+            "401": {
+              "description": "Email or password incorrect. Please try again."
+            },
             "404": {
               "description": "Email or password incorrect. Please try again."
             },
-            "401": {
+            "422": {
               "description": "Email or password incorrect. Please try again."
             }
           },
