@@ -1,12 +1,13 @@
 import http from "http";
 import express from "express";
+import cors from "cors";
+import parser from "body-parser";
+import compression from "compression";
 import dotenv from "dotenv";
 dotenv.config();
 import { createConnection } from "typeorm";
-import { applyMiddleware } from "./utils";
 import routes from "./services";
-import middleware from "./middleware";
-import errorHandlers from "./middleware/errorHandlers";
+import { methodNotFound } from "./middleware/errorHandlers";
 import { getDatabaseHost } from "./utils/getDatabaseHost";
 
 
@@ -31,9 +32,12 @@ createConnection({
 })
   .then(async con => {
     const router = express();
-    applyMiddleware(middleware, router);
+    router.use(parser.urlencoded({ extended: true }));
+    router.use(cors({ credentials: true, origin: true }));
+    router.use(parser.json());
+    router.use(compression());
     router.use(routes);
-    applyMiddleware(errorHandlers, router);
+    router.use(methodNotFound);
     const { PORT = 9000 } = process.env;
     const server = http.createServer(router);
 
