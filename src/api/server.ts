@@ -3,7 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import { createConnection } from "typeorm";
-import { applyMiddleware, applyRoutes } from "./utils";
+import { applyMiddleware } from "./utils";
 import routes from "./services";
 import middleware from "./middleware";
 import errorHandlers from "./middleware/errorHandlers";
@@ -32,7 +32,6 @@ createConnection({
   .then(async con => {
     const router = express();
     applyMiddleware(middleware, router);
-    // applyRoutes(routes, router);
     router.use("/", routes);
     applyMiddleware(errorHandlers, router);
     const { PORT = 9000 } = process.env;
