@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { connectionLoader } from "./loaders/connectionLoader";
 
-export const startServer = () => {
+export const startServer = async () => {
   process.on("uncaughtException", e => {
     console.log(e);
     process.exit(1);
@@ -13,16 +13,15 @@ export const startServer = () => {
     process.exit(1);
   });
 
-  connectionLoader()
-    .then(async con => {
-      const app = express();
-      const loader = require('./loaders');
-      loader.init(app);
-      const { PORT = 9000 } = process.env;
+  const connection = await connectionLoader();
+  const app = express();
+  const loader = require('./loaders');
+  loader.init(app);
+  const { PORT = 9000 } = process.env;
 
-      app.listen(PORT, () =>
-        console.log(`Server is running in ${process.env.APP_ENV} mode => http://localhost:${PORT}...`)
-      );
-    })
-    .catch(error => console.log(error));
+  app.listen(PORT, () =>
+    console.log(`Server is running in ${process.env.APP_ENV} mode => http://localhost:${PORT}...`)
+  );
+
+  return app;
 }

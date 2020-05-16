@@ -1,3 +1,4 @@
 import { startServer } from "./server";
 
-startServer();
+startServer()
+    .catch(error => console.log(error));
