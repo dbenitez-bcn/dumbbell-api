@@ -1,7 +1,8 @@
 import { Entity, Column } from 'typeorm';
 import { BaseTableEntity } from './baseTableEntity';
+import Secrets from '../../config/secrets';
 
-@Entity(process.env.DB_TB_EXERCISES)
+@Entity(Secrets.DB_TB_EXERCISES)
 export default class ExerciseDB extends BaseTableEntity{
 
     @Column('varchar')

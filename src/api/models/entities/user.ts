@@ -1,6 +1,7 @@
 import { Entity, Unique, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import Secrets from "../../config/secrets";
 
-@Entity(process.env.DB_TB_USERS)
+@Entity(Secrets.DB_TB_USERS)
 @Unique(['email'])
 @Unique(['username'])
 export default class UserDB {

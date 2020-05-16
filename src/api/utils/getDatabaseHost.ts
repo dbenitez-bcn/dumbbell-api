@@ -1,10 +1,12 @@
+import Secrets from "../config/secrets";
+
 export const getDatabaseHost = () => {
-    switch (process.env.APP_ENV) {
+    switch (Secrets.APP_ENV) {
         case 'dev':
-            return process.env.DB_HOST_DEV;
+            return Secrets.DB_HOST_DEV;
         case 'alpha':
-            return process.env.DB_HOST_ALPHA;
+            return Secrets.DB_HOST_ALPHA;
         default:
-            return process.env.DB_HOST_DEV;
+            return Secrets.DB_HOST_DEV;
     }
 }

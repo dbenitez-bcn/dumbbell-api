@@ -1,5 +1,6 @@
 import { createConnection } from "typeorm"
 import { getDatabaseHost } from "../utils/getDatabaseHost";
+import Secrets from "../config/secrets";
 
 const dbHost = getDatabaseHost();
 
@@ -8,9 +9,9 @@ export const connectionLoader = async () => {
         type: "postgres",
         host: dbHost,
         port: 5432,
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_DATABASE,
+        username: Secrets.DB_USER,
+        password: Secrets.DB_PASSWORD,
+        database: Secrets.DB_DATABASE,
         entities: ["dist/api/models/entities/**/*.js"]
       })
 }

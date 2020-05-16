@@ -1,6 +1,5 @@
 import express from "express";
-import dotenv from "dotenv";
-dotenv.config();
+import Secrets from "./config/secrets";
 import { connectionLoader } from "./loaders/connectionLoader";
 
 export const startServer = async () => {
@@ -17,10 +16,9 @@ export const startServer = async () => {
   const app = express();
   const loader = require('./loaders');
   loader.init(app);
-  const { PORT = 9000 } = process.env;
 
-  app.listen(PORT, () =>
-    console.log(`Server is running in ${process.env.APP_ENV} mode => http://localhost:${PORT}...`)
+  app.listen(Secrets.PORT, () =>
+    console.log(`Server is running in ${Secrets.APP_ENV} mode => http://localhost:${Secrets.PORT}...`)
   );
 
   return app;
