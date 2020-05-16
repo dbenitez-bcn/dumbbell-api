@@ -5,4 +5,4 @@ COPY package.json .
 RUN npm install
 COPY . .
 RUN npm run build
-CMD APP_ENV=alpha node dist/api/server.js
+CMD APP_ENV=alpha node dist/api/index.js

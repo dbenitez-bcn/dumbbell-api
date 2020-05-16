@@ -26,4 +26,4 @@ services:
       - .env
     ports:
       - 9000:9000
-    command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/api/server.js"]
+    command: ["./wait-for-it.sh", "db:5432", "--", "node", "dist/api/index.js"]

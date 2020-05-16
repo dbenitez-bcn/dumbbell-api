@@ -2,9 +2,9 @@
   "name": "dumbbell",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/api/server.js",
+  "main": "dist/api/index.js",
   "scripts": {
-    "dev": "APP_ENV=dev tsc-watch --onSuccess \"node ./dist/api/server.js\"",
+    "dev": "APP_ENV=dev tsc-watch --onSuccess \"node ./dist/api/index.js\"",
     "build": "tsc",
     "docker": "docker build -t api-dumbbell .",
     "test:unit": "jest --coverage --verbose",
