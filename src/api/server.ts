@@ -1,8 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import { createConnection } from "typeorm";
-import { getDatabaseHost } from "./utils/getDatabaseHost";
+import { connectionLoader } from "./loaders/connectionLoader";
 
 
 process.on("uncaughtException", e => {
@@ -13,17 +12,8 @@ process.on("unhandledRejection", e => {
   console.log(e);
   process.exit(1);
 });
-const dbHost = getDatabaseHost();
 
-createConnection({
-  type: "postgres",
-  host: dbHost,
-  port: 5432,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-  entities: ["dist/api/models/entities/**/*.js"]
-})
+connectionLoader()
   .then(async con => {
     const app = express();
     const loader = require('./loaders');
