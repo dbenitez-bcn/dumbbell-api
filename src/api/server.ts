@@ -1,11 +1,8 @@
-import http from "http";
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import { createConnection } from "typeorm";
-import { routesLoader } from "./loaders/routesLoader";
 import { getDatabaseHost } from "./utils/getDatabaseHost";
-import { expressAppLoader } from "./loaders/expressAppLoader";
 
 
 process.on("uncaughtException", e => {
@@ -29,12 +26,11 @@ createConnection({
 })
   .then(async con => {
     const app = express();
-    expressAppLoader(app);
-    routesLoader(app);
+    const loader = require('./loaders');
+    loader.init(app);
     const { PORT = 9000 } = process.env;
-    const server = http.createServer(app);
 
-    server.listen(PORT, () =>
+    app.listen(PORT, () =>
       console.log(`Server is running in ${process.env.APP_ENV} mode => http://localhost:${PORT}...`)
     );
   })
