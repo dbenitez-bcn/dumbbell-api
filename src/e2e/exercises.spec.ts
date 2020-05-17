@@ -9,11 +9,6 @@ describe('Exercises e2e', () => {
     beforeAll(async () => {
         app = await startServer();
     })
-
-    test('Should success', () => {
-        expect(true).toBeTruthy();
-    })
-
     describe('Exercise creation', () => {
         test('Happy path', async () => {
             const params = {
@@ -31,6 +26,49 @@ describe('Exercises e2e', () => {
             expect(response.body.description).toBe('Test description');
             expect(response.body.difficulty).toBe(5);
             expect(isNumber(response.body.id)).toBe(true);
+        })
+
+        describe('Sad path', () => {
+            test('Given an invalid name should send a 422 status', async () => {
+                const params = {
+                    name: '',
+                    description: 'Test description',
+                    difficulty: 5
+                };
+    
+                const response = await request(app)
+                    .post(Endpoints.EXERCISE)
+                    .send(params);
+    
+                expect(response.status).toBe(422);
+            })
+
+            test('Given an invalid description should send a 422 status', async () => {
+                const params = {
+                    name: 'Test name',
+                    difficulty: 5
+                };
+    
+                const response = await request(app)
+                    .post(Endpoints.EXERCISE)
+                    .send(params);
+    
+                expect(response.status).toBe(422);
+            })
+
+            test('Given an invalid difficulty should send a 422 status', async () => {
+                const params = {
+                    name: 'Test name',
+                    description: 'Test description',
+                    difficulty: 100
+                };
+    
+                const response = await request(app)
+                    .post(Endpoints.EXERCISE)
+                    .send(params);
+    
+                expect(response.status).toBe(422);
+            })
         })
     })
 })
