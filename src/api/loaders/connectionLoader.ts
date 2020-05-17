@@ -1,17 +1,14 @@
-import { createConnection } from "typeorm"
-import { getDatabaseHost } from "../utils/getDatabaseHost";
-import Secrets from "../config/secrets";
+import { createConnection, ConnectionOptions } from "typeorm";
+import { testConnection } from "../utils/testConnection";
+import { defaultConnection } from "../utils/defaultConnection";
 
-const dbHost = getDatabaseHost();
+export const connectionLoader = async (appEnv: string | undefined) => {
+  let connection: ConnectionOptions;
+  if (appEnv === 'test' || appEnv === undefined) {
+    connection = testConnection;
+  } else {
+    connection = defaultConnection
+  }
 
-export const connectionLoader = async () => {
-    return await createConnection({
-        type: "postgres",
-        host: dbHost,
-        port: 5432,
-        username: Secrets.DB_USER,
-        password: Secrets.DB_PASSWORD,
-        database: Secrets.DB_DATABASE,
-        entities: ["dist/api/models/entities/**/*.js"]
-      })
+  return await createConnection(connection);
 }

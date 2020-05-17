@@ -12,7 +12,7 @@ export const startServer = async () => {
     process.exit(1);
   });
 
-  const connection = await connectionLoader();
+  const connection = await connectionLoader(Secrets.APP_ENV);
   const app = express();
   const loader = require('./loaders');
   loader.init(app);
