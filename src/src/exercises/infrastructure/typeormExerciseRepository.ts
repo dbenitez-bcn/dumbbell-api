@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import ExerciseRepository from "../domain/repositories/exerciseRepository";
 import ExerciseDomain from "../domain/aggregates/exercise";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
@@ -11,8 +11,14 @@ import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity
 import ExerciseDTO from "../domain/dtos/exerciseDTO";
 
 export default class TypeormExerciseRepository implements ExerciseRepository {
+    private repository: Repository<ExerciseDB>
+
+    constructor() {
+        this.repository = getRepository(ExerciseDB);
+    }
+
     async create(excercise: ExerciseDomain): Promise<ExerciseDTO> {
-        const newExercise = await getRepository(ExerciseDB).save({
+        const newExercise = await this.repository.save({
             name: excercise.name.value,
             description: excercise.description.value,
             difficulty: excercise.difficulty.value
@@ -24,25 +30,25 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
     }
 
     async getAll(): Promise<ExerciseDTO[]> {
-        const exercises = await getRepository(ExerciseDB).find()
+        const exercises = await this.repository.find()
             .catch((e) => {
                 throw new DatabaseFailure();
             });
         if (exercises.length <= 0) {
             throw new ExercisesNotFound();
         }
-        
+
         return exercises.map((exercise: ExerciseDB) => ExerciseDTO.fromDB(exercise));
     }
 
     async getById(id: ExerciseId): Promise<ExerciseDTO> {
-        const exercise = await getRepository(ExerciseDB).findOne(id.value)
+        const exercise = await this.repository.findOne(id.value)
             .catch(() => {
                 throw new DatabaseFailure();
             })
         if (!exercise) {
             throw new ExerciseNotFound();
-        } 
+        }
 
         return ExerciseDTO.fromDB(exercise);
     }
@@ -53,7 +59,7 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
             if (params.name) foo.name = params.name.value;
             if (params.description) foo.description = params.description.value;
             if (params.difficutly) foo.difficulty = params.difficutly.value;
-            await getRepository(ExerciseDB).update(id.value, foo)
+            await this.repository.update(id.value, foo)
         } catch (e) {
             throw new DatabaseFailure();
         }
@@ -61,7 +67,7 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
 
     async delete(id: ExerciseId): Promise<void> {
         try {
-            await getRepository(ExerciseDB).delete(id.value);
+            await this.repository.delete(id.value);
         } catch (e) {
             throw new DatabaseFailure();
         }
