@@ -2,7 +2,7 @@ import { ConnectionOptions } from "typeorm";
 import { getDatabaseHost } from "../utils/getDatabaseHost";
 import Secrets from "../config/secrets";
 
-const dbHost = getDatabaseHost();
+const dbHost = getDatabaseHost(Secrets.APP_ENV);
 
 export const testConnection: ConnectionOptions = {
     type: "postgres",

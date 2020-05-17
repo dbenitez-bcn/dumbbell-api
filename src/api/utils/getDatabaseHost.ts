@@ -1,7 +1,7 @@
 import Secrets from "../config/secrets";
 
-export const getDatabaseHost = () => {
-    switch (Secrets.APP_ENV) {
+export const getDatabaseHost = (appEnv: string | undefined) => {
+    switch (appEnv) {
         case 'dev':
             return Secrets.DB_HOST_DEV;
         case 'alpha':
