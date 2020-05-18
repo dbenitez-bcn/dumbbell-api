@@ -41,12 +41,12 @@ workflows:
   foo:
     jobs:
       - build
-      - unit_1
+      - unit_1:
         requires:
           - build
-      - unit_2
-      requires:
-        - build
+      - unit_2:
+        requires:
+          - build
 # version: 2.1
 # jobs:
 #   build:
