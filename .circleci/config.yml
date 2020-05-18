@@ -19,12 +19,12 @@ jobs:
       - restore_cache:
           key: code-cache-{{ codecache }}
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Install dependencies
           command: npm install
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/dumbbell-api/node_modules
       - run:
@@ -37,7 +37,7 @@ jobs:
       - restore_cache:
           key: code-cache-{{ codecache }}
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: run unit test
           command: npm run test:unit
