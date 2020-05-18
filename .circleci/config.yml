@@ -34,5 +34,5 @@ workflows:
     jobs:
       - build
       - unit:
-        requires:
-          - build
+          requires:
+            - build
