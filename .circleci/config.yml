@@ -1,7 +1,7 @@
 
 version: 2.1
 jobs:
-  checkout_code:
+  "checkout code":
     docker:
       - image: circleci/node:13.5.0
     working_directory: ~/dumbbell-api
@@ -12,7 +12,7 @@ jobs:
           paths:
             - ~/dumbbell-api
 
-  install_dependencies:
+  "install dependencies":
     docker:
       - image: circleci/node:13.5.0
     working_directory: ~/dumbbell-api
@@ -45,7 +45,7 @@ jobs:
           name: build
           command: npm run build
 
-  unit:
+  "unit test":
     docker:
       - image: circleci/node:13.5.0
     working_directory: ~/dumbbell-api
@@ -65,13 +65,13 @@ workflows:
   version: 2
   workflow:
     jobs:
-      - checkout_code
-      - install_dependencies:
+      - "checkout code"
+      - "install dependencies":
           requires:
-            - checkout_code
+            - "checkout code"
       - build:
           requires:
-            - install_dependencies
-      - unit:
+            - "install dependencies"
+      - "unit test":
           requires:
             - build
