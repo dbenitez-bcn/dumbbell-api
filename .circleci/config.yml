@@ -8,7 +8,7 @@ jobs:
     steps:
       - checkout
       - save_cache:
-          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: code-cache-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/dumbbell-api
   build:
@@ -17,7 +17,7 @@ jobs:
     working_directory: ~/dumbbell-api
     steps:
       - restore_cache:
-          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: code-cache-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -33,9 +33,10 @@ jobs:
   unit:
     docker:
       - image: circleci/node:13.5.0
+    working_directory: ~/dumbbell-api
     steps:
       - restore_cache:
-          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: code-cache-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
