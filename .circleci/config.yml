@@ -33,6 +33,6 @@ workflows:
   build:
     jobs:
       - build
-      - unit
+      - unit:
         requires:
           - build
