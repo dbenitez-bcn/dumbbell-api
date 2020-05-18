@@ -10,7 +10,7 @@ export const testConnection: ConnectionOptions = {
     port: 5432,
     username: Secrets.DB_USER,
     password: Secrets.DB_PASSWORD,
-    database: 'dumbbell-test',
+    database: 'template1',
     entities: ["dist/api/models/entities/**/*.js"],
     migrations: ["src/api/database/migrations/**/*.ts"],
     dropSchema: true,
