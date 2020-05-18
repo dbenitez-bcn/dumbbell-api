@@ -42,7 +42,7 @@ jobs:
           name: Install dependencies
           command: npm install
       - run:
-          name: Install dependencies
+          name: build
           command: npm run build
 
   unit:
@@ -58,7 +58,7 @@ jobs:
           name: Install dependencies
           command: npm install
       - run:
-          name: Install dependencies
+          name: Run unit test
           command: npm run test:unit
   
 workflows:
