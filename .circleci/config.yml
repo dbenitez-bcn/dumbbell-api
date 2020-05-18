@@ -28,9 +28,9 @@ jobs:
           paths:
             - ~/dumbbell-api/node_modules
       - save_cache:
-        key: code-cache-{{ .Environment.CIRCLE_SHA1 }}
-        paths:
-          - ~/dumbbell-api
+          key: code-cache-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/dumbbell-api
       - run:
           name: build project
           command: npm run build
