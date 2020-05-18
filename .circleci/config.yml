@@ -12,66 +12,8 @@ jobs:
           paths:
             - ~/dumbbell-api
 
-  # install_dependencies:
-  #   docker:
-  #     - image: circleci/node:13.5.0
-  #   working_directory: ~/dumbbell-api
-  #   steps:
-  #     - restore_cache:
-  #         key: 
-  #           - code-cache-{{ .Environment.CIRCLE_SHA1 }}
-  #     - restore_cache:
-  #         key: 
-  #           - dependency-cache-{{ checksum "package-lock.json" }}
-  #     - run:
-  #         name: Install dependencies
-  #         command: npm install
-  #     - save_cache:
-  #         key: dependency-cache-{{ checksum "package-lock.json" }}
-  #         paths:
-  #           - ~/dumbbell-api/node_modules
-  
-  # build:
-  #   docker:
-  #     - image: circleci/node:13.5.0
-  #   working_directory: ~/dumbbell-api
-  #   steps:
-  #     - restore_cache:
-  #         key: 
-  #           - code-cache-{{ .Environment.CIRCLE_SHA1 }}
-  #     - restore_cache:
-  #         key: 
-  #           - dependency-cache-{{ checksum "package-lock.json" }}
-  #     - run:
-  #         name: build project
-  #         command: npm run build
- 
-  # unit:
-  #   docker:
-  #     - image: circleci/node:13.5.0
-  #   working_directory: ~/dumbbell-api
-  #   steps:
-  #     - restore_cache:
-  #         key: 
-  #           - code-cache-{{ .Environment.CIRCLE_SHA1 }}
-  #     - restore_cache:
-  #         key: 
-  #           - dependency-cache-{{ checksum "package-lock.json" }}
-  #     - run:
-  #         name: build project
-  #         command: npm run build
-
 workflows:
   version: 2
   workflow:
     jobs:
       - checkout_code
-      # - install_dependencies:
-      #     requires:
-      #       - checkout_code
-      # # - build:
-      #     requires:
-      #       - install_dependencies
-      # - unit:
-      #     requires:
-      #       - build
