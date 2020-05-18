@@ -31,35 +31,35 @@ jobs:
           paths:
             - ~/dumbbell-api/node_modules
   
-  build:
-    docker:
-      - image: circleci/node:13.5.0
-    working_directory: ~/dumbbell-api
-    steps:
-      - restore_cache:
-          key: 
-            - code-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: 
-            - dependency-cache-{{ checksum "package-lock.json" }}
-      - run:
-          name: build project
-          command: npm run build
+  # build:
+  #   docker:
+  #     - image: circleci/node:13.5.0
+  #   working_directory: ~/dumbbell-api
+  #   steps:
+  #     - restore_cache:
+  #         key: 
+  #           - code-cache-{{ .Environment.CIRCLE_SHA1 }}
+  #     - restore_cache:
+  #         key: 
+  #           - dependency-cache-{{ checksum "package-lock.json" }}
+  #     - run:
+  #         name: build project
+  #         command: npm run build
  
-  unit:
-    docker:
-      - image: circleci/node:13.5.0
-    working_directory: ~/dumbbell-api
-    steps:
-      - restore_cache:
-          key: 
-            - code-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: 
-            - dependency-cache-{{ checksum "package-lock.json" }}
-      - run:
-          name: build project
-          command: npm run build
+  # unit:
+  #   docker:
+  #     - image: circleci/node:13.5.0
+  #   working_directory: ~/dumbbell-api
+  #   steps:
+  #     - restore_cache:
+  #         key: 
+  #           - code-cache-{{ .Environment.CIRCLE_SHA1 }}
+  #     - restore_cache:
+  #         key: 
+  #           - dependency-cache-{{ checksum "package-lock.json" }}
+  #     - run:
+  #         name: build project
+  #         command: npm run build
 
 workflows:
   version: 2
@@ -69,9 +69,9 @@ workflows:
       - install_dependencies:
           requires:
             - checkout_code
-      - build:
-          requires:
-            - install_dependencies
-      - unit:
-          requires:
-            - build
+      # - build:
+      #     requires:
+      #       - install_dependencies
+      # - unit:
+      #     requires:
+      #       - build
