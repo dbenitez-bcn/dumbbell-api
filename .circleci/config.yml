@@ -40,7 +40,26 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install dependencies
+          command: npm install
+      - run:
+          name: Install dependencies
           command: npm run build
+
+  unit:
+    docker:
+      - image: circleci/node:13.5.0
+    working_directory: ~/dumbbell-api
+    steps:
+      - restore_cache:
+          key: code-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Install dependencies
+          command: npm run test:unit
   
 workflows:
   version: 2
@@ -53,3 +72,6 @@ workflows:
       - build:
           requires:
             - install_dependencies
+      - unit:
+          requires:
+            - build
