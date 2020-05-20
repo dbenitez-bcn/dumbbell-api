@@ -29,8 +29,8 @@ jobs:
           paths:
             - ~/dumbbell-api/node_modules
       - run:
-        name: build
-        command: npm run build
+          name: Build
+          command: npm run build
 
   "unit test":
     docker:
