@@ -74,12 +74,9 @@ workflows:
   workflow:
     jobs:
       - "checkout code"
-      - "install dependencies":
-          requires:
-            - "checkout code"
       - "set up":
           requires:
-            - "install dependencies"
+            - "checkout code"
       - "unit test":
           requires:
             - "set up"
