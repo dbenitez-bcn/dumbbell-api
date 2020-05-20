@@ -11,7 +11,7 @@ export const ciConnection: ConnectionOptions = {
     username: "circleci",
     password: "Passw0rd",
     database: 'circleci',
-    entities: ["dist/api/models/entities/**/*.js"],
+    entities: ["src/api/models/entities/**/*.ts"],
     migrations: ["src/api/database/migrations/**/*.ts"],
     dropSchema: true,
     synchronize: true,
