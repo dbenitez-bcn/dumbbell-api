@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import ExerciseRepository from "../domain/repositories/exerciseRepository";
 import ExerciseService from "./exerciseService";
 import Exercise from "../domain/aggregates/exercise";

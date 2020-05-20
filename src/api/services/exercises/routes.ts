@@ -1,12 +1,9 @@
 import { Router } from "express";
 import ExerciseController from "./exerciseController";
-import TypeormExerciseRepository from "../../../src/exercises/infrastructure/typeormExerciseRepository";
-import ExerciseService from "../../../src/exercises/services/exerciseService";
 import { Endpoints } from "../../config/constants";
+import DIContainer from "../../config/inversify.config";
 
-const repo = new TypeormExerciseRepository();
-const service = new ExerciseService(repo);
-const controller = new ExerciseController(service);
+const controller = DIContainer.get<ExerciseController>(ExerciseController);
 
 const router = Router();
 

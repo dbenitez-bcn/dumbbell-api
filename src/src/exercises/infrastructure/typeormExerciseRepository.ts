@@ -9,7 +9,9 @@ import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
 import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import ExerciseDTO from "../domain/dtos/exerciseDTO";
+import { injectable } from "inversify";
 
+@injectable()
 export default class TypeormExerciseRepository implements ExerciseRepository {
     private repository: Repository<ExerciseDB>
 

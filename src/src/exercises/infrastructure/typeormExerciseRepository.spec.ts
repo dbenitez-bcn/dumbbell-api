@@ -30,6 +30,10 @@ jest.mock('typeorm', () => ({
     Entity: jest.fn()
 }));
 
+jest.mock('inversify', () => ({
+    injectable: jest.fn()
+}));
+
 import TypeormExerciseRepository from "./typeormExerciseRepository";
 import ExerciseDB from "../../../api/models/entities/exercise";
 import { getFakeExerciseDB, getFakeExercise } from "../test/testUtils";

@@ -6,9 +6,11 @@ import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDiffi
 import ExercisesNotFound from "../../../src/exercises/domain/errors/ExercisesNotFound";
 import InvalidExerciseId from "../../../src/exercises/domain/errors/InvalidExerciseId";
 import ExerciseNotFound from "../../../src/exercises/domain/errors/ExerciseNotFound";
+import { injectable, inject } from "inversify";
 
+@injectable()
 export default class ExerciseController {
-    constructor(private service: ExerciseService) { }
+    constructor(@inject(ExerciseService) private service: ExerciseService) { }
 
     async create(req: Request, res: Response) {
         try {

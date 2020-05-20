@@ -5,9 +5,12 @@ import ExerciseParams from "../domain/aggregates/exerciseParams";
 import Name from "../domain/valueObject/name";
 import Description from "../domain/valueObject/description";
 import Difficulty from "../domain/valueObject/difficulty";
+import { injectable, inject } from "inversify";
+import DITypes from "../../../api/config/diTypes";
 
+@injectable()
 export default class ExerciseService {
-    constructor(private readonly repository: ExerciseRepository) { }
+    constructor(@inject(DITypes.ExerciseRepository) private readonly repository: ExerciseRepository) { }
 
     async create(name: string, description: string, difficulty: number) {
         const exercise = new Exercise(name, description, difficulty);

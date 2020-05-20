@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { FakeResponseBuilder } from "../../test/testutils";
 import ExerciseController from "./exerciseController";
 import ExerciseService from "../../../src/exercises/services/exerciseService";
