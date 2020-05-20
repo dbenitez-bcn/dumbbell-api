@@ -12,7 +12,6 @@ export const ciConnection: ConnectionOptions = {
     password: "Passw0rd",
     database: 'circleci',
     entities: ["src/api/models/entities/**/*.ts"],
-    migrations: ["src/api/database/migrations/**/*.ts"],
     dropSchema: true,
     synchronize: true,
     logging: false

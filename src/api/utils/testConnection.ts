@@ -12,7 +12,6 @@ export const testConnection: ConnectionOptions = {
     password: Secrets.DB_PASSWORD,
     database: 'template1',
     entities: ["dist/api/models/entities/**/*.js"],
-    migrations: ["src/api/database/migrations/**/*.ts"],
     dropSchema: true,
     synchronize: true,
     logging: false
