@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import { injectable } from "inversify";
 import UserRepository from "../domain/repositories/userRepository";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
@@ -12,10 +12,15 @@ import UserNotFound from "../domain/errors/userNotFound";
 
 @injectable()
 export default class TypeormUsersRepository implements UserRepository {
+    private repository: Repository<UserDB>;
+
+    constructor() {
+        this.repository = getRepository(UserDB);
+    }
 
     async register(user: User): Promise<void> {
         try {
-            await getRepository(UserDB).insert({
+            await this.repository.insert({
                 username: user.username.value,
                 email: user.email.value,
                 password: user.password.value
@@ -34,7 +39,7 @@ export default class TypeormUsersRepository implements UserRepository {
     }
 
     async login(email: Email): Promise<HashedPassword> {
-        const user = await getRepository(UserDB).findOne({ email: email.value })
+        const user = await this.repository.findOne({ email: email.value })
             .catch(() => {
                 throw new DatabaseFailure();
             });
