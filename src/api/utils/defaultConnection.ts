@@ -11,5 +11,5 @@ export const defaultConnection: ConnectionOptions = {
     username: Secrets.DB_USER,
     password: Secrets.DB_PASSWORD,
     database: Secrets.DB_DATABASE,
-    entities: ["dist/api/models/entities/**/*.js"]
+    entities: ["dist/src/exercises/domain/typeormEntities/exercise.js", "dist/src/accounts/domain/typeormEntities/user.js"]
 }

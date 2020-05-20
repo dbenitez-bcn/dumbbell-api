@@ -1,8 +1,4 @@
 import { ConnectionOptions } from "typeorm";
-import { getDatabaseHost } from "./getDatabaseHost";
-import Secrets from "../config/secrets";
-
-const dbHost = getDatabaseHost(Secrets.APP_ENV);
 
 export const ciConnection: ConnectionOptions = {
     type: "postgres",
@@ -11,7 +7,7 @@ export const ciConnection: ConnectionOptions = {
     username: "circleci",
     password: "Passw0rd",
     database: 'circleci',
-    entities: ["src/api/models/entities/**/*.ts"],
+    entities: ["src/src/exercises/domain/typeormEntities/exercise.ts", "src/src/accounts/domain/typeormEntities/user.ts"],
     dropSchema: true,
     synchronize: true,
     logging: false

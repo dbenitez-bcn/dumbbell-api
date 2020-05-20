@@ -11,7 +11,7 @@ export const testConnection: ConnectionOptions = {
     username: Secrets.DB_USER,
     password: Secrets.DB_PASSWORD,
     database: 'template1',
-    entities: ["dist/api/models/entities/**/*.js"],
+    entities: ["dist/src/exercises/domain/typeormEntities/exercise.js", "dist/src/accounts/domain/typeormEntities/user.js"],
     dropSchema: true,
     synchronize: true,
     logging: false

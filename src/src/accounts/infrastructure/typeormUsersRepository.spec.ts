@@ -27,7 +27,7 @@ jest.mock('inversify', () => ({
 }));
 
 import TypeormUsersRepository from "./typeormUsersRepository";
-import UserDB from "../../../api/models/entities/user";
+import UserDB from "../domain/typeormEntities/user";
 
 describe('typeormUsersRepository', () => {
     const sut = new TypeormUsersRepository();

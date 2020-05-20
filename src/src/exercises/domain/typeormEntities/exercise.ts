@@ -1,6 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { BaseTableEntity } from './baseTableEntity';
-import Secrets from '../../config/secrets';
+import Secrets from '../../../../api/config/secrets';
 
 @Entity(Secrets.DB_TB_EXERCISES)
 export default class ExerciseDB extends BaseTableEntity{

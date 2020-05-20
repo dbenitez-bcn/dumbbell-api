@@ -1,4 +1,4 @@
-import ExerciseDB from "../../../api/models/entities/exercise"
+import ExerciseDB from "../domain/typeormEntities/exercise"
 
 export const getFakeExerciseDB = () => {
     const exercise = new ExerciseDB();

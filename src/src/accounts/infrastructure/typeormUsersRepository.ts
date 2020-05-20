@@ -4,7 +4,7 @@ import UserRepository from "../domain/repositories/userRepository";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import User from "../domain/aggregates/user";
 import Email from "../domain/valueObjects/email";
-import UserDB from "../../../api/models/entities/user";
+import UserDB from "../domain/typeormEntities/user";
 import DatabaseFailure from "../../exercises/domain/errors/DatabaseFailure";
 import ExistingUsername from "../domain/errors/existingUsername";
 import ExistingEmail from "../domain/errors/existingEmail";

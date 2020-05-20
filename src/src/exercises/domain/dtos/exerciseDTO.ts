@@ -1,4 +1,4 @@
-import ExerciseDB from "../../../../api/models/entities/exercise";
+import ExerciseDB from "../typeormEntities/exercise";
 
 export default class ExerciseDTO {
     constructor(

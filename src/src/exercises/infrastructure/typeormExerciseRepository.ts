@@ -4,7 +4,7 @@ import ExerciseDomain from "../domain/aggregates/exercise";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
 import ExerciseId from "../domain/valueObject/exerciseId";
 import ExerciseParams from "../domain/aggregates/exerciseParams";
-import ExerciseDB from "../../../api/models/entities/exercise";
+import ExerciseDB from "../domain/typeormEntities/exercise";
 import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
 import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
