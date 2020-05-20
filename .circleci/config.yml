@@ -80,7 +80,7 @@ jobs:
           command: npm install
       - run:
           name: Run 2e2 test
-          command: APP_ENV=ci jest --coverage --testPathPattern=e2e --detectOpenHandles --forceExit
+          command: npm run test:e2e:ci
   
 workflows:
   version: 2
