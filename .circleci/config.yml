@@ -60,6 +60,26 @@ jobs:
       - run:
           name: Run unit test
           command: npm run test:unit
+
+  "e2e test":
+    docker:
+      - image: circleci/node:13.5.0
+      - image: postgres
+          POSTGRES_USER: circleci
+          POSTGRES_PASSWORD: Passw0rd
+          POSTGRES_DB: circleci
+    working_directory: ~/dumbbell-api
+    steps:
+      - restore_cache:
+          key: code-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Run 2e2 test
+          command: APP_ENV=ci jest --coverage --testPathPattern=e2e --detectOpenHandles --forceExit
   
 workflows:
   version: 2
@@ -73,5 +93,8 @@ workflows:
           requires:
             - "install dependencies"
       - "unit test":
+          requires:
+            - build
+      - "e2e test":
           requires:
             - build
