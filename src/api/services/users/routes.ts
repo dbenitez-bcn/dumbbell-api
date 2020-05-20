@@ -1,12 +1,10 @@
 import { Router } from "express";
 import { Endpoints } from "../../config/constants";
-import TypeormUsersRepository from "../../../src/accounts/infrastructure/typeormUsersRepository";
-import AccountService from "../../../src/accounts/application/accountService";
 import UsersController from "./usersController";
+import DIContainer from "../../config/inversify.config";
 
-const repository = new TypeormUsersRepository();
-const service = new AccountService(repository);
-const controller = new UsersController(service);
+const controller = DIContainer.get<UsersController>(UsersController);
+
 
 const router = Router();
 

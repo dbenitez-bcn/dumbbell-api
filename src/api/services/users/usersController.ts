@@ -7,9 +7,11 @@ import InvalidPasswordFormat from "../../../src/accounts/domain/errors/invalidPa
 import InvalidUsernameLength from "../../../src/accounts/domain/errors/invalidUsername";
 import InvalidPasswordLength from "../../../src/accounts/domain/errors/invalidPasswordLength";
 import InvalidUsernameFormat from "../../../src/accounts/domain/errors/invalidUsernameFormat";
+import { injectable, inject } from "inversify";
 
+@injectable()
 export default class UsersController {
-    constructor(private service: AccountService) { }
+    constructor(@inject(AccountService) private service: AccountService) { }
 
     async registration(req: Request, res: Response) {
         try {

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Request } from "express";
 import UsersController from "./usersController";
 import AccountService from "../../../src/accounts/application/accountService";
