@@ -5,6 +5,7 @@ jest.mock('typeorm', () => ({
 import { connectionLoader } from "./connectionLoader";
 import { testConnection } from "../utils/testConnection";
 import { defaultConnection } from "../utils/defaultConnection";
+import { ciConnection } from "../utils/ciConnection";
 
 describe('Connection loader', () => {
     afterEach(() => {
@@ -27,5 +28,11 @@ describe('Connection loader', () => {
         await connectionLoader('dev');
 
         expect(connectSpy).toBeCalledWith(defaultConnection);
+    });
+
+    test('Given ci enviornment should return ci connection', async () => {
+        await connectionLoader('ci');
+
+        expect(connectSpy).toBeCalledWith(ciConnection);
     });
 })
