@@ -9,6 +9,7 @@
     "docker": "docker build -t api-dumbbell .",
     "test:unit": "APP_ENV=test jest --coverage --verbose --testPathIgnorePatterns=e2e",
     "test:e2e": "APP_ENV=test jest --coverage --testPathPattern=e2e --detectOpenHandles --forceExit",
+    "test:e2e:ci": "APP_ENV=ci jest --coverage --testPathPattern=e2e --detectOpenHandles --forceExit",
     "alpha:up": "docker-compose -f docker-compose-alpha.yml up",
     "alpha:down": "docker-compose -f docker-compose-alpha.yml down --remove-orphans",
     "db:start": "docker-compose -f docker-compose-dev.yml up",
