@@ -13,7 +13,7 @@ describe('Method not found', () => {
         .post("/fakeEndpoint")
         .send()
 
-        expect(response.status).toBe(404)
+        expect(response.status).toBe(404);
         expect(response.text).toBe("Method not found.");
     })
 })
