@@ -14,7 +14,9 @@ An API of workout exercises.
 - `npm run dev`: Runs the application
 - `npm run build`: Builds application into dist
 - `npm run docker`: Builds docker image
-- `npm run test`: Runs all test showing the coverage
+- `npm run test:unit`: Runs unit tests showing the coverage
+- `npm run test:e2e`: Runs e2e tests showing the coverage
+- `npm run test:e2e:ci`: Runs e2e tests for ci
 - `npm run alpha:up`: Runs the whole application using docker-compose
 - `npm run alpha:down`: Stops the whole application using docker-compose
 - `npm run db:start`: Runs the database using docker-compose
