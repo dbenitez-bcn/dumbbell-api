@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import User from '../domain/aggregates/user';
 const usertMock = User.prototype as jest.Mocked<typeof User.prototype>;
 import UserRepository from "../domain/repositories/userRepository";

@@ -22,6 +22,10 @@ jest.mock('typeorm', () => ({
     Entity: jest.fn()
 }));
 
+jest.mock('inversify', () => ({
+    injectable: jest.fn()
+}));
+
 import TypeormUsersRepository from "./typeormUsersRepository";
 import UserDB from "../../../api/models/entities/user";
 

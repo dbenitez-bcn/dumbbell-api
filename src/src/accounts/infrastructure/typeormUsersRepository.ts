@@ -1,4 +1,5 @@
 import { getRepository } from "typeorm";
+import { injectable } from "inversify";
 import UserRepository from "../domain/repositories/userRepository";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import User from "../domain/aggregates/user";
@@ -9,6 +10,7 @@ import ExistingUsername from "../domain/errors/existingUsername";
 import ExistingEmail from "../domain/errors/existingEmail";
 import UserNotFound from "../domain/errors/userNotFound";
 
+@injectable()
 export default class TypeormUsersRepository implements UserRepository {
 
     async register(user: User): Promise<void> {

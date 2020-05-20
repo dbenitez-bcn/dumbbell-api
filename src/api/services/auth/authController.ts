@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { injectable, inject } from "inversify";
 import AccountService from "../../../src/accounts/application/accountService";
 import LoginFailure from "../../../src/accounts/domain/errors/loginFailure";
 import { Constants } from "../../config/constants";
@@ -7,8 +8,9 @@ import InvalidEmail from "../../../src/accounts/domain/errors/invalidEmail";
 import InvalidPasswordFormat from "../../../src/accounts/domain/errors/invalidPasswordFormat";
 import InvalidPasswordLength from "../../../src/accounts/domain/errors/invalidPasswordLength";
 
+@injectable()
 export default class AuthController {
-    constructor(private service: AccountService) { }
+    constructor(@inject(AccountService) private service: AccountService) { }
 
     async login(req: Request, res: Response) {
         try {

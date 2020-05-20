@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Request } from "express";
 import AuthController from "./authController";
 import { FakeResponseBuilder } from "../../test/testutils";
