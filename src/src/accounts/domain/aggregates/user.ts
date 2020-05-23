@@ -2,16 +2,20 @@ import Username from "../valueObjects/username";
 import Email from "../valueObjects/email";
 import Password from "../valueObjects/password";
 import PlainPassword from "../valueObjects/plainPassword";
+import UserDB from "../typeormEntities/user";
+import UserRole from "../valueObjects/userRole";
 
 export default class User {
-    constructor(username: string, email: string, password: string) {
+    constructor(username: string, email: string, password: Password, role?: UserRole) {
         this.username = new Username(username);
         this.email = new Email(email);
-        this._password = new PlainPassword(password);
+        this._password = password;
+        this.role = role || UserRole.USER
     }
 
     readonly username: Username;
     readonly email: Email;
+    readonly role: UserRole;
     private _password: Password;
 
     get password() {
@@ -23,4 +27,8 @@ export default class User {
             this._password = this._password.hash();
         }
     }
+
+    // static fromDB(userDB: UserDB): User {
+    //     return new 
+    // }
 }

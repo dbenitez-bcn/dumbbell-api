@@ -6,6 +6,7 @@ import AccountService from "./accountService";
 import Email from '../domain/valueObjects/email';
 import LoginFailure from '../domain/errors/loginFailure';
 import HashedPassword from '../domain/valueObjects/hashedPassword';
+import PlainPassword from "../domain/valueObjects/plainPassword";
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';
@@ -23,7 +24,7 @@ describe('Account service', () => {
 
     describe('Register', () => {
         test('Should register a new user', async () => {
-            const expected = new User(A_USERNAME, AN_EMAIL, A_PASSWORD);
+            const expected = new User(A_USERNAME, AN_EMAIL, new PlainPassword(A_PASSWORD));
 
             await sut.register(A_USERNAME, AN_EMAIL, A_PASSWORD);
 
