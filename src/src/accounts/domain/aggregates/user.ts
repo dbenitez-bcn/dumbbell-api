@@ -4,6 +4,7 @@ import Password from "../valueObjects/password";
 import PlainPassword from "../valueObjects/plainPassword";
 import UserDB from "../typeormEntities/user";
 import UserRole from "../valueObjects/userRole";
+import HashedPassword from "../valueObjects/hashedPassword";
 
 export default class User {
     constructor(username: string, email: string, password: Password, role?: UserRole) {
@@ -28,7 +29,7 @@ export default class User {
         }
     }
 
-    // static fromDB(userDB: UserDB): User {
-    //     return new 
-    // }
+    static fromDB(userDB: UserDB): User {
+        return new User(userDB.username, userDB.email, new HashedPassword(userDB.password), userDB.role);
+    }
 }

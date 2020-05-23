@@ -28,6 +28,8 @@ jest.mock('inversify', () => ({
 
 import TypeormUsersRepository from "./typeormUsersRepository";
 import UserDB from "../domain/typeormEntities/user";
+import UserRole from "../domain/valueObjects/userRole";
+import User from "../domain/aggregates/user";
 
 describe('typeormUsersRepository', () => {
     const sut = new TypeormUsersRepository();
@@ -68,13 +70,16 @@ describe('typeormUsersRepository', () => {
         })
     })
 
-    describe('login', () => {
+    describe('findByEmail', () => {
         const email = new Email('test@dumbbell.com');
         test('Should return a hashed password', async () => {
-            const expected = new HashedPassword('hashedpassword');
             const userDB = new UserDB();
             userDB.password = 'hashedpassword';
+            userDB.email = 'test@dumbbell.com';
+            userDB.username = 'username';
+            userDB.role = UserRole.USER;
             findOneSpy.mockResolvedValue(userDB);
+            const expected = User.fromDB(userDB);
 
             const result = await sut.findByEmail(email);
 

@@ -1,7 +1,6 @@
 import { getRepository, Repository } from "typeorm";
 import { injectable } from "inversify";
 import UserRepository from "../domain/repositories/userRepository";
-import HashedPassword from "../domain/valueObjects/hashedPassword";
 import User from "../domain/aggregates/user";
 import Email from "../domain/valueObjects/email";
 import UserDB from "../domain/typeormEntities/user";
@@ -38,7 +37,7 @@ export default class TypeormUsersRepository implements UserRepository {
         }
     }
 
-    async findByEmail(email: Email): Promise<HashedPassword> {
+    async findByEmail(email: Email): Promise<User> {
         const user = await this.repository.findOne({ email: email.value })
             .catch(() => {
                 throw new DatabaseFailure();
@@ -46,7 +45,7 @@ export default class TypeormUsersRepository implements UserRepository {
         if (user === undefined) {
             throw new UserNotFound();
         }
-        return new HashedPassword(user.password);
+        return User.fromDB(user);
     }
 
 }

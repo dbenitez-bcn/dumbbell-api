@@ -5,6 +5,7 @@ import Email from "../domain/valueObjects/email";
 import LoginFailure from "../domain/errors/loginFailure";
 import DITypes from "../../../api/config/diTypes";
 import PlainPassword from "../domain/valueObjects/plainPassword";
+import HashedPassword from "../domain/valueObjects/hashedPassword";
 
 @injectable()
 export default class AccountService {
@@ -17,7 +18,8 @@ export default class AccountService {
     }
 
     async login(email: string, password: string) {
-        const hashedPassword = await this.repository.findByEmail(new Email(email));
+        const user = await this.repository.findByEmail(new Email(email));
+        const hashedPassword = user.password as HashedPassword;
         if (!hashedPassword.isEqualTo(password)){
             throw new LoginFailure();
         }
