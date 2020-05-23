@@ -11,11 +11,11 @@ describe('Account service', () => {
     const A_USERNAME = 'testerino';
     const AN_EMAIL = 'testerino@dumbbell.com';
     const A_PASSWORD = 'password1234';
-    const register = jest.fn();
-    const login = jest.fn();
+    const create = jest.fn();
+    const findByEmail = jest.fn();
     const repository: UserRepository = {
-        register,
-        login
+        create,
+        findByEmail
     }
     usertMock.hashPassword = jest.fn().mockReturnValue(A_PASSWORD);
     
@@ -27,7 +27,7 @@ describe('Account service', () => {
 
             await sut.register(A_USERNAME, AN_EMAIL, A_PASSWORD);
 
-            expect(register).toBeCalledWith(expected);
+            expect(create).toBeCalledWith(expected);
             expect(usertMock.hashPassword).toBeCalledTimes(1);
         })
     })
@@ -38,11 +38,11 @@ describe('Account service', () => {
             const passwordDB = {
                 isEqualTo: jest.fn().mockReturnValue(true)
             } as unknown as HashedPassword;
-            login.mockResolvedValue(passwordDB);
+            findByEmail.mockResolvedValue(passwordDB);
 
             const result = await sut.login(AN_EMAIL, A_PASSWORD);
 
-            expect(login).toBeCalledWith(expectedEmail);
+            expect(findByEmail).toBeCalledWith(expectedEmail);
             expect(passwordDB.isEqualTo).toBeCalledWith(A_PASSWORD);
             expect(result).toBe('token');
         })
@@ -51,7 +51,7 @@ describe('Account service', () => {
             const passwordDB = {
                 isEqualTo: jest.fn().mockReturnValue(false)
             } as unknown as HashedPassword;
-            login.mockResolvedValue(passwordDB);
+            findByEmail.mockResolvedValue(passwordDB);
 
             await expect(sut.login(AN_EMAIL, A_PASSWORD)).rejects.toThrowError(LoginFailure);
         })

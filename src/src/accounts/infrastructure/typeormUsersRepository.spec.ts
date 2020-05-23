@@ -76,7 +76,7 @@ describe('typeormUsersRepository', () => {
             userDB.password = 'hashedpassword';
             findOneSpy.mockResolvedValue(userDB);
 
-            const result = await sut.login(email);
+            const result = await sut.findByEmail(email);
 
             expect(findOneSpy).toBeCalledWith({email: email.value});
             expect(result).toStrictEqual(expected);
@@ -85,13 +85,13 @@ describe('typeormUsersRepository', () => {
         test('Given no user should fail', async () => {
             findOneSpy.mockResolvedValue(undefined);
 
-            await expect(sut.login(email)).rejects.toThrowError(UserNotFound);
+            await expect(sut.findByEmail(email)).rejects.toThrowError(UserNotFound);
         })
 
         test('Given an error when accessing to databse should fail', async () => {
             findOneSpy.mockRejectedValue(new Error());
 
-            await expect(sut.login(email)).rejects.toThrowError(DatabaseFailure);
+            await expect(sut.findByEmail(email)).rejects.toThrowError(DatabaseFailure);
         })
     })
 })

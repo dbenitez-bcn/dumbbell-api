@@ -38,7 +38,7 @@ export default class TypeormUsersRepository implements UserRepository {
         }
     }
 
-    async login(email: Email): Promise<HashedPassword> {
+    async findByEmail(email: Email): Promise<HashedPassword> {
         const user = await this.repository.findOne({ email: email.value })
             .catch(() => {
                 throw new DatabaseFailure();

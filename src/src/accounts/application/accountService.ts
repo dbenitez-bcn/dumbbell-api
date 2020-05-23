@@ -16,7 +16,7 @@ export default class AccountService {
     }
 
     async login(email: string, password: string) {
-        const hashedPassword = await this.repository.login(new Email(email));
+        const hashedPassword = await this.repository.findByEmail(new Email(email));
         if (!hashedPassword.isEqualTo(password)){
             throw new LoginFailure();
         }
