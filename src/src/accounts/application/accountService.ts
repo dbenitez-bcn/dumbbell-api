@@ -12,7 +12,7 @@ export default class AccountService {
     async register(username: string, email: string, password: string) {
         const user = new User(username, email, password);
         user.hashPassword();
-        await this.repository.register(user);
+        await this.repository.create(user);
     }
 
     async login(email: string, password: string) {

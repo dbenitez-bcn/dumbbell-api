@@ -18,7 +18,7 @@ export default class TypeormUsersRepository implements UserRepository {
         this.repository = getRepository(UserDB);
     }
 
-    async register(user: User): Promise<void> {
+    async create(user: User): Promise<void> {
         try {
             await this.repository.insert({
                 username: user.username.value,

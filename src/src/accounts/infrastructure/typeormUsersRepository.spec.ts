@@ -32,7 +32,7 @@ import UserDB from "../domain/typeormEntities/user";
 describe('typeormUsersRepository', () => {
     const sut = new TypeormUsersRepository();
 
-    describe('register', () => {
+    describe('create', () => {
         const user = getFakeUser();
         test('Should save a user', async () => {
             const expectedUser = {
@@ -41,7 +41,7 @@ describe('typeormUsersRepository', () => {
                 password: user.password.value
             }
 
-            await sut.register(user);
+            await sut.create(user);
 
             expect(insertSpy).toBeCalledWith(expectedUser);
         })
@@ -49,7 +49,7 @@ describe('typeormUsersRepository', () => {
         test('Given an error when accessing to database should fail', async () => {
             insertSpy.mockRejectedValue(new Error());
 
-            await expect(sut.register(user)).rejects.toThrowError(DatabaseFailure);
+            await expect(sut.create(user)).rejects.toThrowError(DatabaseFailure);
         })
 
         test('Given an existing email should fail', async () => {
@@ -57,14 +57,14 @@ describe('typeormUsersRepository', () => {
                 detail: 'Key (email)=(email) already exists.',
             });
 
-            await expect(sut.register(user)).rejects.toThrowError(ExistingEmail);
+            await expect(sut.create(user)).rejects.toThrowError(ExistingEmail);
         })
         test('Given an existing username should fail', async () => {
             insertSpy.mockRejectedValue({
                 detail: 'Key (username)=(username) already exists.',
             });
 
-            await expect(sut.register(user)).rejects.toThrowError(ExistingUsername);
+            await expect(sut.create(user)).rejects.toThrowError(ExistingUsername);
         })
     })
 
