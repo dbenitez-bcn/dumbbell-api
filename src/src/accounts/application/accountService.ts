@@ -6,6 +6,8 @@ import LoginFailure from "../domain/errors/loginFailure";
 import DITypes from "../../../api/config/diTypes";
 import PlainPassword from "../domain/valueObjects/plainPassword";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
+import UserRole from "../domain/valueObjects/userRole";
+import UnauthorizedAction from "../domain/errors/unauthorizedAction";
 
 @injectable()
 export default class AccountService {
@@ -23,6 +25,21 @@ export default class AccountService {
         if (!hashedPassword.isEqualTo(password)){
             throw new LoginFailure();
         }
+        // TODO: Implement JWT here
+        return 'token';
+    }
+
+    async operatorLogin(email: string, password: string) {
+        const user = await this.repository.findByEmail(new Email(email));
+        if (user.role !== UserRole.OPERATOR) {
+            throw new UnauthorizedAction();
+        }
+
+        const hashedPassword = user.password as HashedPassword;
+        if (!hashedPassword.isEqualTo(password)){
+            throw new LoginFailure();
+        }
+        
         // TODO: Implement JWT here
         return 'token';
     }

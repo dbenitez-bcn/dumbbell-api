@@ -7,6 +7,8 @@ import Email from '../domain/valueObjects/email';
 import LoginFailure from '../domain/errors/loginFailure';
 import HashedPassword from '../domain/valueObjects/hashedPassword';
 import PlainPassword from "../domain/valueObjects/plainPassword";
+import UserRole from "../domain/valueObjects/userRole";
+import UnauthorizedAction from "../domain/errors/unauthorizedAction";
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';
@@ -22,6 +24,11 @@ describe('Account service', () => {
     
     const sut = new AccountService(repository);
 
+    afterEach(() => {
+        jest.clearAllMocks();
+        jest.clearAllTimers();
+    })
+    
     describe('Register', () => {
         test('Should register a new user', async () => {
             const expected = new User(A_USERNAME, AN_EMAIL, new PlainPassword(A_PASSWORD));
@@ -57,6 +64,38 @@ describe('Account service', () => {
             findByEmail.mockResolvedValue(user);
 
             await expect(sut.login(AN_EMAIL, A_PASSWORD)).rejects.toThrowError(LoginFailure);
+        })
+    })
+
+    describe('OperatorLogin', () => {
+        test('Given credentials from an operators role user and right password should log in', async () => {
+            const passwordMock = {
+                isEqualTo: jest.fn().mockReturnValue(true)
+            } as unknown as HashedPassword;
+            const user = new User('username', AN_EMAIL, passwordMock, UserRole.OPERATOR);
+            findByEmail.mockResolvedValue(user)
+            const expectedEmail = new Email(AN_EMAIL);
+            const result = await sut.operatorLogin(AN_EMAIL, A_PASSWORD);
+
+            expect(findByEmail).toBeCalledWith(expectedEmail);
+            expect(result).toBe('token');
+        });
+
+        test('Given credentials from a user role user should fail', async () => {
+            const user = new User('username', AN_EMAIL, new HashedPassword(A_PASSWORD), UserRole.USER);
+            findByEmail.mockResolvedValue(user)
+            
+            await expect(sut.operatorLogin(AN_EMAIL, A_PASSWORD)).rejects.toThrowError(UnauthorizedAction);
+        });
+
+        test('Given wrong credentials should fail', async () => {
+            const passwordDB = {
+                isEqualTo: jest.fn().mockReturnValue(false)
+            } as unknown as HashedPassword;
+            const user = new User('username', 'test@dumbbell.com', passwordDB, UserRole.OPERATOR);
+            findByEmail.mockResolvedValue(user);
+
+            await expect(sut.operatorLogin(AN_EMAIL, A_PASSWORD)).rejects.toThrowError(LoginFailure);
         })
     })
 })
