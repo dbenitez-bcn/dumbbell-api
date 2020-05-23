@@ -57,11 +57,11 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
 
     async update(id: ExerciseId, params: ExerciseParams): Promise<void> {
         try {
-            const foo: QueryDeepPartialEntity<ExerciseDB> = {}
-            if (params.name) foo.name = params.name.value;
-            if (params.description) foo.description = params.description.value;
-            if (params.difficutly) foo.difficulty = params.difficutly.value;
-            await this.repository.update(id.value, foo)
+            const updatedParams: QueryDeepPartialEntity<ExerciseDB> = {}
+            if (params.name) updatedParams.name = params.name.value;
+            if (params.description) updatedParams.description = params.description.value;
+            if (params.difficutly) updatedParams.difficulty = params.difficutly.value;
+            await this.repository.update(id.value, updatedParams)
         } catch (e) {
             throw new DatabaseFailure();
         }
