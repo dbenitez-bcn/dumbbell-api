@@ -8,4 +8,5 @@ export class Endpoints {
     public static API_DOCS = "/api-docs";
     public static REGISTER = "/register";
     public static LOGIN = "/login";
+    public static ADMIN = "/admin";
 }
