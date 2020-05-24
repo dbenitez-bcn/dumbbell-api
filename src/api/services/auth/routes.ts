@@ -12,4 +12,9 @@ router.post(
     controller.login.bind(controller)
 );
 
+router.post(
+    Endpoints.ADMIN + Endpoints.LOGIN,
+    controller.loginInAdmin.bind(controller)
+);
+
 export default router;

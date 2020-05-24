@@ -24,11 +24,11 @@ describe('Auth e2e', () => {
 
         test('Happy path', async () => {
             const response = await request(app)
-            .post(Endpoints.LOGIN)
-            .send({
-                email: USER_EMAIL,
-                password: A_PASSWORD
-            })
+                .post(Endpoints.LOGIN)
+                .send({
+                    email: USER_EMAIL,
+                    password: A_PASSWORD
+                })
 
             expect(response.status).toBe(200);
             expect(response.body).not.toBeNull();
@@ -37,74 +37,100 @@ describe('Auth e2e', () => {
         describe('Sad path', () => {
             test('Given non existing email should fail', async () => {
                 const response = await request(app)
-                .post(Endpoints.LOGIN)
-                .send({
-                    email: 'fake@email.com',
-                    password: A_PASSWORD
-                })
-    
+                    .post(Endpoints.LOGIN)
+                    .send({
+                        email: 'fake@email.com',
+                        password: A_PASSWORD
+                    })
+
                 expect(response.status).toBe(404);
                 expect(response.body).not.toBeNull();
             })
 
             test('Given invalid password for email should fail', async () => {
                 const response = await request(app)
-                .post(Endpoints.LOGIN)
-                .send({
-                    email: USER_EMAIL,
-                    password: 'qwerty1234'
-                })
-    
+                    .post(Endpoints.LOGIN)
+                    .send({
+                        email: USER_EMAIL,
+                        password: 'qwerty1234'
+                    })
+
                 expect(response.status).toBe(401);
                 expect(response.body).not.toBeNull();
             })
         })
     })
 
-    describe.skip('Users authentication in admin panel', ()=> {
-        test('Given a user with operator role when acces to admin panel should get the token', async () => {
+    describe('Users authentication in admin panel', () => {
+        test('Given a user with operator role when access to admin panel should login sucessfully', async () => {
             const response = await request(app)
-            .post(Endpoints.ADMIN + Endpoints.LOGIN)
-            .send({
-                email: OPERATOR_EMAIL,
-                password: A_PASSWORD
-            })
+                .post(Endpoints.ADMIN + Endpoints.LOGIN)
+                .send({
+                    email: OPERATOR_EMAIL,
+                    password: A_PASSWORD
+                })
 
             expect(response.status).toBe(200);
             expect(response.body).not.toBeNull();
         })
-        
-        test('Given a user with user role when acces to admin panel should get an unauthorized error', async () => {
-            const response = await request(app)
-            .post(Endpoints.ADMIN + Endpoints.LOGIN)
-            .send({
-                email: USER_EMAIL,
-                password: A_PASSWORD
+
+        describe('Sad path', () => {
+            test('Given a user with user role when acces to admin panel should get an unauthorized error', async () => {
+                const response = await request(app)
+                    .post(Endpoints.ADMIN + Endpoints.LOGIN)
+                    .send({
+                        email: USER_EMAIL,
+                        password: A_PASSWORD
+                    })
+
+                expect(response.status).toBe(401);
+                expect(response.body).not.toBeNull();
             })
 
-            expect(response.status).toBe(401);
-            expect(response.body).not.toBeNull();
+            test('Given non existing email should fail', async () => {
+                const response = await request(app)
+                    .post(Endpoints.ADMIN + Endpoints.LOGIN)
+                    .send({
+                        email: 'fake@email.com',
+                        password: A_PASSWORD
+                    })
+
+                expect(response.status).toBe(404);
+                expect(response.body).not.toBeNull();
+            })
+
+            test('Given invalid password for email should fail', async () => {
+                const response = await request(app)
+                    .post(Endpoints.ADMIN + Endpoints.LOGIN)
+                    .send({
+                        email: USER_EMAIL,
+                        password: 'qwerty1234'
+                    })
+
+                expect(response.status).toBe(401);
+                expect(response.body).not.toBeNull();
+            })
         })
     })
 
     const registerUser = async () => {
         await request(app)
-        .post(Endpoints.REGISTER)
-        .send({
-            username: USER_USERNAME,
-            email: USER_EMAIL,
-            password: A_PASSWORD
-        })
+            .post(Endpoints.REGISTER)
+            .send({
+                username: USER_USERNAME,
+                email: USER_EMAIL,
+                password: A_PASSWORD
+            })
     }
 
     const registerOperator = async () => {
         await request(app)
-        .post(Endpoints.REGISTER)
-        .send({
-            username: OPERATOR_USERNAME,
-            email: OPERATOR_EMAIL,
-            password: A_PASSWORD
-        })
+            .post(Endpoints.REGISTER)
+            .send({
+                username: OPERATOR_USERNAME,
+                email: OPERATOR_EMAIL,
+                password: A_PASSWORD
+            })
         await updateRoleToOperator(OPERATOR_USERNAME);
     }
 
