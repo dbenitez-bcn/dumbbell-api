@@ -1,3 +1,4 @@
+import "reflect-metadata";
 const sign = jest.fn().mockReturnValue('token');
 jest.mock("jsonwebtoken", () => ({
     sign
