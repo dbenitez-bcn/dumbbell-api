@@ -7,10 +7,14 @@ import DITypes from "../../../api/config/diTypes";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../domain/errors/unauthorizedAction";
+import TokenGeneratorService from "./tokenGeneratorService";
 
 @injectable()
 export default class AccountService {
-    constructor(@inject(DITypes.UserRepository) private repository: UserRepository) { }
+    constructor(
+        @inject(DITypes.UserRepository) private repository: UserRepository,
+        @inject(TokenGeneratorService) private tokenService: TokenGeneratorService
+    ) { }
 
     async register(username: string, email: string, password: string) {
         const user = User.newUser(username, email, password);
@@ -21,11 +25,10 @@ export default class AccountService {
     async login(email: string, password: string) {
         const user = await this.repository.findByEmail(new Email(email));
         const hashedPassword = user.password as HashedPassword;
-        if (!hashedPassword.isEqualTo(password)){
+        if (!hashedPassword.isEqualTo(password)) {
             throw new LoginFailure();
         }
-        // TODO: Implement JWT here
-        return 'token';
+        return this.tokenService.generateTokenFor(user);
     }
 
     async operatorLogin(email: string, password: string) {
@@ -35,11 +38,10 @@ export default class AccountService {
         }
 
         const hashedPassword = user.password as HashedPassword;
-        if (!hashedPassword.isEqualTo(password)){
+        if (!hashedPassword.isEqualTo(password)) {
             throw new LoginFailure();
         }
-        
-        // TODO: Implement JWT here
-        return 'token';
+
+        return this.tokenService.generateTokenFor(user);
     }
 }

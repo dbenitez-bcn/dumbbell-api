@@ -6,9 +6,9 @@ import AccountService from "./accountService";
 import Email from '../domain/valueObjects/email';
 import LoginFailure from '../domain/errors/loginFailure';
 import HashedPassword from '../domain/valueObjects/hashedPassword';
-import PlainPassword from "../domain/valueObjects/plainPassword";
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../domain/errors/unauthorizedAction";
+import TokenGeneratorService from "./tokenGeneratorService";
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';
@@ -16,13 +16,17 @@ describe('Account service', () => {
     const A_PASSWORD = 'password1234';
     const create = jest.fn();
     const findByEmail = jest.fn();
+    const generateTokenFor = jest.fn().mockReturnValue('token')
     const repository: UserRepository = {
         create,
         findByEmail
     }
+    const fakeTokenService = {
+        generateTokenFor
+    } as TokenGeneratorService;
     usertMock.hashPassword = jest.fn().mockReturnValue(A_PASSWORD);
     
-    const sut = new AccountService(repository);
+    const sut = new AccountService(repository, fakeTokenService);
 
     afterEach(() => {
         jest.clearAllMocks();
@@ -53,6 +57,7 @@ describe('Account service', () => {
 
             expect(findByEmail).toBeCalledWith(expectedEmail);
             expect(passwordDB.isEqualTo).toBeCalledWith(A_PASSWORD);
+            expect(generateTokenFor).toBeCalledWith(user);
             expect(result).toBe('token');
         })
 
@@ -77,6 +82,7 @@ describe('Account service', () => {
             const expectedEmail = new Email(AN_EMAIL);
             const result = await sut.operatorLogin(AN_EMAIL, A_PASSWORD);
 
+            expect(generateTokenFor).toBeCalledWith(user);
             expect(findByEmail).toBeCalledWith(expectedEmail);
             expect(result).toBe('token');
         });
