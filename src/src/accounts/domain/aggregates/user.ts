@@ -2,9 +2,7 @@ import Username from "../valueObjects/username";
 import Email from "../valueObjects/email";
 import Password from "../valueObjects/password";
 import PlainPassword from "../valueObjects/plainPassword";
-import UserDB from "../typeormEntities/user";
 import UserRole from "../valueObjects/userRole";
-import HashedPassword from "../valueObjects/hashedPassword";
 
 export default class User {
     constructor(username: string, email: string, password: Password, role?: UserRole) {
@@ -27,9 +25,5 @@ export default class User {
         if (this._password instanceof PlainPassword) {
             this._password = this._password.hash();
         }
-    }
-
-    static fromDB(userDB: UserDB): User {
-        return new User(userDB.username, userDB.email, new HashedPassword(userDB.password), userDB.role);
     }
 }

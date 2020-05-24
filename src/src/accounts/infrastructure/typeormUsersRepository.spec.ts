@@ -79,7 +79,7 @@ describe('typeormUsersRepository', () => {
             userDB.username = 'username';
             userDB.role = UserRole.USER;
             findOneSpy.mockResolvedValue(userDB);
-            const expected = User.fromDB(userDB);
+            const expected = new User(userDB.username, userDB.email, new HashedPassword(userDB.password), userDB.role);
 
             const result = await sut.findByEmail(email);
 

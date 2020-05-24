@@ -8,6 +8,7 @@ import DatabaseFailure from "../../exercises/domain/errors/DatabaseFailure";
 import ExistingUsername from "../domain/errors/existingUsername";
 import ExistingEmail from "../domain/errors/existingEmail";
 import UserNotFound from "../domain/errors/userNotFound";
+import HashedPassword from "../domain/valueObjects/hashedPassword";
 
 @injectable()
 export default class TypeormUsersRepository implements UserRepository {
@@ -45,7 +46,7 @@ export default class TypeormUsersRepository implements UserRepository {
         if (user === undefined) {
             throw new UserNotFound();
         }
-        return User.fromDB(user);
+        return new User(user.username, user.email, new HashedPassword(user.password), user.role);
     }
 
 }
