@@ -4,7 +4,6 @@ import User from "../domain/aggregates/user";
 import Email from "../domain/valueObjects/email";
 import LoginFailure from "../domain/errors/loginFailure";
 import DITypes from "../../../api/config/diTypes";
-import PlainPassword from "../domain/valueObjects/plainPassword";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../domain/errors/unauthorizedAction";
@@ -14,7 +13,7 @@ export default class AccountService {
     constructor(@inject(DITypes.UserRepository) private repository: UserRepository) { }
 
     async register(username: string, email: string, password: string) {
-        const user = new User(username, email, new PlainPassword(password));
+        const user = User.newUser(username, email, password);
         user.hashPassword();
         await this.repository.create(user);
     }

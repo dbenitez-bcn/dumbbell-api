@@ -31,7 +31,7 @@ describe('Account service', () => {
     
     describe('Register', () => {
         test('Should register a new user', async () => {
-            const expected = new User(A_USERNAME, AN_EMAIL, new PlainPassword(A_PASSWORD));
+            const expected = User.newUser(A_USERNAME, AN_EMAIL, A_PASSWORD);
 
             await sut.register(A_USERNAME, AN_EMAIL, A_PASSWORD);
 
@@ -46,7 +46,7 @@ describe('Account service', () => {
             const passwordDB = {
                 isEqualTo: jest.fn().mockReturnValue(true)
             } as unknown as HashedPassword;
-            const user = new User('username', 'test@dumbbell.com', passwordDB);
+            const user = new User('username', 'test@dumbbell.com', passwordDB, UserRole.USER);
             findByEmail.mockResolvedValue(user);
 
             const result = await sut.login(AN_EMAIL, A_PASSWORD);
@@ -60,7 +60,7 @@ describe('Account service', () => {
             const passwordDB = {
                 isEqualTo: jest.fn().mockReturnValue(false)
             } as unknown as HashedPassword;
-            const user = new User('username', 'test@dumbbell.com', passwordDB);
+            const user = new User('username', 'test@dumbbell.com', passwordDB, UserRole.USER);
             findByEmail.mockResolvedValue(user);
 
             await expect(sut.login(AN_EMAIL, A_PASSWORD)).rejects.toThrowError(LoginFailure);

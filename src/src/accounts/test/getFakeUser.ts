@@ -1,6 +1,5 @@
-import User from "../domain/aggregates/user"
-import PlainPassword from "../domain/valueObjects/plainPassword"
+import User from "../domain/aggregates/user";
 
 export const getFakeUser = () => {
-    return new User('username', 'test@dumbbell.com', new PlainPassword('password1234'));
+    return User.newUser('username', 'test@dumbbell.com', 'password1234');
 }
