@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     volumes:
-      - "./src/api/database/data:/var/lib/postgresql/data"
+      - "./src/core/database/data:/var/lib/postgresql/data"
     ports:
       - 5432:5432
   adminer:
