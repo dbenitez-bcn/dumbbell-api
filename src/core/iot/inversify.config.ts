@@ -3,9 +3,9 @@ import UserRepository from "../../src/accounts/domain/repositories/userRepositor
 import DITypes from "./diTypes";
 import TypeormUsersRepository from "../../src/accounts/infrastructure/typeormUsersRepository";
 import AccountService from "../../src/accounts/application/accountService";
-import AuthController from "../services/auth/authController";
-import UsersController from "../services/users/usersController";
-import ExerciseController from "../services/exercises/exerciseController";
+import AuthController from "../../api/services/auth/authController";
+import UsersController from "../../api/services/users/usersController";
+import ExerciseController from "../../api/services/exercises/exerciseController";
 import ExerciseRepository from "../../src/exercises/domain/repositories/exerciseRepository";
 import TypeormExerciseRepository from "../../src/exercises/infrastructure/typeormExerciseRepository";
 import ExerciseService from "../../src/exercises/services/exerciseService";

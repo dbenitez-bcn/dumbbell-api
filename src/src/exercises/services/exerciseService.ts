@@ -6,7 +6,7 @@ import Name from "../domain/valueObject/name";
 import Description from "../domain/valueObject/description";
 import Difficulty from "../domain/valueObject/difficulty";
 import { injectable, inject } from "inversify";
-import DITypes from "../../../api/config/diTypes";
+import DITypes from "../../../core/iot/diTypes";
 
 @injectable()
 export default class ExerciseService {

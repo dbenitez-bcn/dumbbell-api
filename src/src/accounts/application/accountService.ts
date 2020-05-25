@@ -3,7 +3,7 @@ import UserRepository from "../domain/repositories/userRepository";
 import User from "../domain/aggregates/user";
 import Email from "../domain/valueObjects/email";
 import LoginFailure from "../domain/errors/loginFailure";
-import DITypes from "../../../api/config/diTypes";
+import DITypes from "../../../core/iot/diTypes";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../domain/errors/unauthorizedAction";

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Endpoints } from "../../config/constants";
 import AuthController from "./authController";
-import DIContainer from "../../config/inversify.config";
+import DIContainer from "../../../core/iot/inversify.config";
 
 const controller: AuthController = DIContainer.get<AuthController>(AuthController);
 

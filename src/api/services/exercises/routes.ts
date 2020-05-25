@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ExerciseController from "./exerciseController";
 import { Endpoints } from "../../config/constants";
-import DIContainer from "../../config/inversify.config";
+import DIContainer from "../../../core/iot/inversify.config";
 
 const controller = DIContainer.get<ExerciseController>(ExerciseController);
 
