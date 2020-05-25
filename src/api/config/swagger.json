@@ -182,7 +182,10 @@
           "summary": "Logs in a user",
           "responses": {
             "200": {
-              "description": "OK"
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/loginToken"
+              }
             },
             "401": {
               "description": "Email or password incorrect. Please try again."
@@ -219,7 +222,10 @@
           "summary": "Logs in a user just if has operator role. Used for login in the admin panel",
           "responses": {
             "200": {
-              "description": "OK"
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/loginToken"
+              }
             },
             "401": {
               "description": "Email or password incorrect. Please try again. | This action is not allowed."
@@ -248,6 +254,16 @@
               "type": "string"
             }
           ]
+        }
+      }
+    },
+    "definitions": {
+      "loginToken": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
         }
       }
     }
