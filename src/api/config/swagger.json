@@ -212,6 +212,43 @@
             }
           ]
         }
+      },
+      "/admin/login": {
+        "post": {  
+          "tags": ["Users"],
+          "summary": "Logs in a user just if has operator role. Used for login in the admin panel",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Email or password incorrect. Please try again. | This action is not allowed."
+            },
+            "404": {
+              "description": "Email or password incorrect. Please try again."
+            },
+            "422": {
+              "description": "Email or password incorrect. Please try again."
+            }
+          },
+          "content": {
+            "application/json": {}
+          },
+          "parameters": [
+            {
+              "name": "email",
+              "description": "Specifies the email string",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "password",
+              "description": "Specifies the password value",
+              "required": true,
+              "type": "string"
+            }
+          ]
+        }
       }
     }
   }
