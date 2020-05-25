@@ -20,7 +20,10 @@
         "summary": "Fetch all exercises",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
           },
           "404": {
             "description": "No exercises found"
@@ -39,7 +42,10 @@
         "summary": "Creates an exercise",
         "responses": {
           "201": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
           },
           "422": {
             "description": "Invalid params"
@@ -78,7 +84,10 @@
         "summary": "Fetch one exercise",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
           },
           "404": {
             "description": "No exercises found"
@@ -282,6 +291,23 @@
       "properties": {
         "token": {
           "type": "string"
+        }
+      }
+    },
+    "exercise": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "difficulty": {
+          "type": "integer"
         }
       }
     }
