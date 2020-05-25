@@ -1,4 +1,4 @@
-import Secrets from "./config/secrets";
+import Secrets from "../core/secrets";
 import { startServer } from "./server";
 
 startServer()

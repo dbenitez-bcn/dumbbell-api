@@ -1,5 +1,5 @@
 import { getDatabaseHost } from "./getDatabaseHost"
-import Secrets from "../config/secrets";
+import Secrets from "../../core/secrets";
 
 describe('getDatabaseHost', () => {
     test('Given dev enviornmet should return the development host', () => {

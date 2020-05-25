@@ -1,5 +1,5 @@
 import { Entity, Unique, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import Secrets from "../../../../api/config/secrets";
+import Secrets from "../../../../core/secrets";
 import UserRole from "../valueObjects/userRole";
 
 @Entity(Secrets.DB_TB_USERS)

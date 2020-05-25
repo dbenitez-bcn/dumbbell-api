@@ -1,6 +1,6 @@
 import { ConnectionOptions } from "typeorm";
 import { getDatabaseHost } from "../utils/getDatabaseHost";
-import Secrets from "../config/secrets";
+import Secrets from "../../core/secrets";
 
 const dbHost = getDatabaseHost(Secrets.APP_ENV);
 

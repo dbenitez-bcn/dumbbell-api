@@ -1,5 +1,5 @@
 import express from "express";
-import Secrets from "./config/secrets";
+import Secrets from "../core/secrets";
 import { connectionLoader } from "./loaders/connectionLoader";
 
 export const startServer = async () => {

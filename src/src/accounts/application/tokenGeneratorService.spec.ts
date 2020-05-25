@@ -4,7 +4,7 @@ jest.mock("jsonwebtoken", () => ({
     sign
 }))
 import { getFakeUser } from "../test/testUtils";
-import Secrets from "../../../api/config/secrets";
+import Secrets from "../../../core/secrets";
 import TokenService from "./tokenGeneratorService";
 
 describe('Token generator service', () => {

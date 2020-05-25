@@ -1,5 +1,5 @@
 import User from "../domain/aggregates/user";
-import Secrets from "../../../api/config/secrets";
+import Secrets from "../../../core/secrets";
 import * as jwt from "jsonwebtoken";
 import { injectable } from "inversify";
 
