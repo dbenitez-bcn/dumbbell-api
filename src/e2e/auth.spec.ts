@@ -31,7 +31,7 @@ describe('Auth e2e', () => {
                 })
 
             expect(response.status).toBe(200);
-            expect(response.body).not.toBeNull();
+            expect(response.body.token).not.toBeNull();
         })
 
         describe('Sad path', () => {
@@ -71,7 +71,7 @@ describe('Auth e2e', () => {
                 })
 
             expect(response.status).toBe(200);
-            expect(response.body).not.toBeNull();
+            expect(response.body.token).not.toBeNull();
         })
 
         describe('Sad path', () => {
