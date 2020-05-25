@@ -31,6 +31,13 @@ jobs:
       - run:
           name: Build
           command: npm run build
+      - run:
+          name: ".env file setup"
+          command: echo "JWT_SCRET=fakesecret" >> .env
+      - save_cache:
+          key: code-cache-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/dumbbell-api
 
   "unit test":
     docker:
