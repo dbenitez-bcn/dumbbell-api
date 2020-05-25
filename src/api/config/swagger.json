@@ -1,270 +1,289 @@
-
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0"
-    },
-    "host": "localhost:9000",
-    "basePath": "/",
-    "schemes": ["http"],
-    "produces": ["application/json"],
-    "paths": {
-      "/exercises": {
-        "get": {  
-          "tags": ["Exercises"],
-          "summary": "Fetch all exercises",
-          "responses": {
-            "200": {
-              "description": "OK"
-            },
-            "404": {
-              "description": "No exercises found"
-            }
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0"
+  },
+  "host": "localhost:9000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/exercises": {
+      "get": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Fetch all exercises",
+        "responses": {
+          "200": {
+            "description": "OK"
           },
-          "content": {
-            "application/json": {}
-          }
-        }
-      },
-      "/exercise": {
-        "post": {  
-          "tags": ["Exercises"],
-          "summary": "Creates an exercise",
-          "responses": {
-            "201": {
-              "description": "OK"
-            },
-            "422": {
-              "description": "Invalid params"
-            }
-          },
-          "content": {
-            "application/json": {}
-          },
-          "parameters": [
-            {
-              "name": "name",
-              "description": "Specifies the name string",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "description",
-              "description": "Specifies the description string",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "difficulty",
-              "description": "Specifies the difficulty value. Must be a number between 1 and 10",
-              "required": true,
-              "type": "Integer / String"
-            }
-          ]
-        }
-      },
-      "/exercise/:id": {
-        "get": {  
-          "tags": ["Exercises"],
-          "summary": "Fetch one exercise",
-          "responses": {
-            "200": {
-              "description": "OK"
-            },
-            "404": {
-              "description": "No exercises found"
-            },
-            "422": {
-              "description": "Invalid id"
-            }
-          },
-          "content": {
-            "application/json": {}
+          "404": {
+            "description": "No exercises found"
           }
         },
-        "put": {  
-          "tags": ["Exercises"],
-          "summary": "Updates an exercise",
-          "responses": {
-            "201": {
-              "description": "OK"
-            },
-            "404": {
-              "description": "No exercises found"
-            },
-            "422": {
-              "description": "Invalid params"
-            }
-          },
-          "content": {
-            "application/json": {}
-          },
-          "parameters": [
-            {
-              "name": "name",
-              "description": "Specifies the name string",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "description",
-              "description": "Specifies the description string",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "difficulty",
-              "description": "Specifies the difficulty value. Must be a number between 1 and 10",
-              "required": false,
-              "type": "int"
-            }
-          ]
-        },
-        "delete": {  
-          "tags": ["Exercises"],
-          "summary": "Deletes one exercise",
-          "responses": {
-            "204": {
-              "description": "OK"
-            },
-            "422": {
-              "description": "Invalid id"
-            }
-          },
-          "content": {
-            "application/json": {}
-          }
-        }
-      },
-      "/register": {
-        "post": {  
-          "tags": ["Users"],
-          "summary": "Creates a user",
-          "responses": {
-            "201": {
-              "description": "OK"
-            },
-            "409": {
-              "description": "Username or email already exist"
-            },
-            "422": {
-              "description": "Invalid params"
-            }
-          },
-          "content": {
-            "application/json": {}
-          },
-          "parameters": [
-            {
-              "name": "username",
-              "description": "Specifies the username string",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "email",
-              "description": "Specifies the email string",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "password",
-              "description": "Specifies the password value",
-              "required": true,
-              "type": "string"
-            }
-          ]
-        }
-      },
-      "/login": {
-        "post": {  
-          "tags": ["Users"],
-          "summary": "Logs in a user",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/definitions/loginToken"
-              }
-            },
-            "401": {
-              "description": "Email or password incorrect. Please try again."
-            },
-            "404": {
-              "description": "Email or password incorrect. Please try again."
-            },
-            "422": {
-              "description": "Email or password incorrect. Please try again."
-            }
-          },
-          "content": {
-            "application/json": {}
-          },
-          "parameters": [
-            {
-              "name": "email",
-              "description": "Specifies the email string",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "password",
-              "description": "Specifies the password value",
-              "required": true,
-              "type": "string"
-            }
-          ]
-        }
-      },
-      "/admin/login": {
-        "post": {  
-          "tags": ["Users"],
-          "summary": "Logs in a user just if has operator role. Used for login in the admin panel",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/definitions/loginToken"
-              }
-            },
-            "401": {
-              "description": "Email or password incorrect. Please try again. | This action is not allowed."
-            },
-            "404": {
-              "description": "Email or password incorrect. Please try again."
-            },
-            "422": {
-              "description": "Email or password incorrect. Please try again."
-            }
-          },
-          "content": {
-            "application/json": {}
-          },
-          "parameters": [
-            {
-              "name": "email",
-              "description": "Specifies the email string",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "password",
-              "description": "Specifies the password value",
-              "required": true,
-              "type": "string"
-            }
-          ]
+        "content": {
+          "application/json": {}
         }
       }
     },
-    "definitions": {
-      "loginToken": {
-        "type": "object",
-        "properties": {
-          "token": {
+    "/exercise": {
+      "post": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Creates an exercise",
+        "responses": {
+          "201": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Invalid params"
+          }
+        },
+        "content": {
+          "application/json": {}
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Specifies the name string",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "description": "Specifies the description string",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "difficulty",
+            "description": "Specifies the difficulty value. Must be a number between 1 and 10",
+            "required": true,
+            "type": "Integer / String"
+          }
+        ]
+      }
+    },
+    "/exercise/:id": {
+      "get": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Fetch one exercise",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "No exercises found"
+          },
+          "422": {
+            "description": "Invalid id"
+          }
+        },
+        "content": {
+          "application/json": {}
+        }
+      },
+      "put": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Updates an exercise",
+        "responses": {
+          "201": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "No exercises found"
+          },
+          "422": {
+            "description": "Invalid params"
+          }
+        },
+        "content": {
+          "application/json": {}
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Specifies the name string",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "description": "Specifies the description string",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "difficulty",
+            "description": "Specifies the difficulty value. Must be a number between 1 and 10",
+            "required": false,
+            "type": "int"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Deletes one exercise",
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Invalid id"
+          }
+        },
+        "content": {
+          "application/json": {}
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Creates a user",
+        "responses": {
+          "201": {
+            "description": "OK"
+          },
+          "409": {
+            "description": "Username or email already exist"
+          },
+          "422": {
+            "description": "Invalid params"
+          }
+        },
+        "content": {
+          "application/json": {}
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "description": "Specifies the username string",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": "Specifies the email string",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "description": "Specifies the password value",
+            "required": true,
             "type": "string"
           }
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Logs in a user",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/loginToken"
+            }
+          },
+          "401": {
+            "description": "Email or password incorrect. Please try again."
+          },
+          "404": {
+            "description": "Email or password incorrect. Please try again."
+          },
+          "422": {
+            "description": "Email or password incorrect. Please try again."
+          }
+        },
+        "content": {
+          "application/json": {}
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "description": "Specifies the email string",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "description": "Specifies the password value",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Logs in a user just if has operator role. Used for login in the admin panel",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/loginToken"
+            }
+          },
+          "401": {
+            "description": "Email or password incorrect. Please try again. | This action is not allowed."
+          },
+          "404": {
+            "description": "Email or password incorrect. Please try again."
+          },
+          "422": {
+            "description": "Email or password incorrect. Please try again."
+          }
+        },
+        "content": {
+          "application/json": {}
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "description": "Specifies the email string",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "description": "Specifies the password value",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "loginToken": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
         }
       }
     }
   }
+}
