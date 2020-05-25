@@ -16,7 +16,7 @@ export default class AuthController {
     async login(req: Request, res: Response) {
         try {
             const token = await this.service.login(req.body.email, req.body.password);
-            res.status(200).send(token);
+            res.status(200).send({token});
         } catch (e) {
             if (e instanceof LoginFailure) {
                 res.status(401).send(Constants.LOGIN_FAILURE);
@@ -33,7 +33,7 @@ export default class AuthController {
     async loginInAdmin(req: Request, res: Response) {
         try {
             const token = await this.service.operatorLogin(req.body.email, req.body.password);
-            res.status(200).send(token);
+            res.status(200).send({token});
         } catch (e) {
             if (e instanceof UnauthorizedAction) {
                 res.status(401).send(e.message);

@@ -43,7 +43,7 @@ describe('Auth controller', () => {
             await sut.login(req, res);
 
             expect(login).toBeCalledWith('test@dumbbell.com', 'password1234');
-            expect(sendSpy).toBeCalledWith('token');
+            expect(sendSpy).toBeCalledWith({token: 'token'});
             expect(statusSpy).toBeCalledWith(200);
         })
 
@@ -117,7 +117,7 @@ describe('Auth controller', () => {
 
             expect(operatorLogin).toBeCalledWith('test@dumbbell.com', 'password1234')
             expect(statusSpy).toBeCalledWith(200);
-            expect(sendSpy).toBeCalledWith('token');
+            expect(sendSpy).toBeCalledWith({token: 'token'});
         })
 
         test('Given a user with non operator role when acces to admin panel should fail', async () => {
