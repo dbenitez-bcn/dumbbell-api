@@ -1,6 +1,15 @@
 import Secrets from "../core/secrets";
 import { startServer } from "./server";
 
+process.on("uncaughtException", e => {
+    console.log(e);
+    process.exit(1);
+});
+process.on("unhandledRejection", e => {
+    console.log(e);
+    process.exit(1);
+});
+
 startServer()
     .then((server) => {
         server.listen(Secrets.PORT, () =>
