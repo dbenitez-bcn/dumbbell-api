@@ -50,9 +50,8 @@ jobs:
           name: Run unit test
           command: npm run test:unit
       - codecov/upload:
-          file: ~/dumbbell-api/coverage/lcov-report/index.html
+          file: ~/dumbbell-api/coverage/coverage-final.json
           flags: unit
-          token: ${CODECOV_TOKEN}
 
   "e2e test":
     docker:
@@ -78,9 +77,8 @@ jobs:
           name: Run 2e2 test
           command: npm run test:e2e:ci
       - codecov/upload:
-          file: ~/dumbbell-api/coverage/lcov-report/index.html
+          file: ~/dumbbell-api/coverage/coverage-final.json
           flags: e2e
-          token: ${CODECOV_TOKEN}
   
 workflows:
   version: 2
