@@ -15,6 +15,7 @@ module.exports = {
     collectCoverageFrom: [
       "src/**/*.ts",
       "!src/api/index.ts",
+      "!src/**/test/**",
       "!src/core/migrations/**",
       "!src/core/database/**",
       "!**/node_modules/**",
