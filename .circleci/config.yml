@@ -76,6 +76,9 @@ jobs:
       - run:
           name: Run 2e2 test
           command: npm run test:e2e:ci
+      - codecov/upload:
+          file: ~/dumbbell-api/coverage/lcov-report/index.html
+          flags: e2e
   
 workflows:
   version: 2
