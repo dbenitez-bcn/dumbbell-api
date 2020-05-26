@@ -19,6 +19,7 @@ module.exports = {
       "!src/core/migrations/**",
       "!src/core/database/**",
       "!**/node_modules/**",
-      "!**/dist/**"
+      "!**/dist/**",
+      "!**/**.{spec,test}.ts"
     ]
   }

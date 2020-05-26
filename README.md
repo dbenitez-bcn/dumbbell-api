@@ -1,6 +1,6 @@
 # DUMBBELL API
 
-[![Codecov Coverage](https://img.shields.io/codecov/c/github/dbenitez-bcn/dumbbell-api/master.svg?style=flat-square)](https://codecov.io/gh/<dbenitez-bcn/dumbbell-api/)
+[![Codecov Coverage](https://img.shields.io/codecov/c/github/dbenitez-bcn/dumbbell-api/master.svg?style=flat)](https://codecov.io/gh/<dbenitez-bcn/dumbbell-api/)
 
 ## Description
 An API of workout exercises.
