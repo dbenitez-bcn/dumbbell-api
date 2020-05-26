@@ -1,5 +1,5 @@
 # DUMBBELL API
-[![circleci](https://circleci.com/gh/dbenitez-bcn/dumbbell-api.svg?style=shield)](https://circleci.com/gh/dbenitez-bcn/dumbbell-api)
+[![CircleCI](https://circleci.com/gh/dbenitez-bcn/dumbbell-api.svg?style=shield)](https://circleci.com/gh/dbenitez-bcn/dumbbell-api)
 [![codecov](https://codecov.io/gh/dbenitez-bcn/dumbbell-api/branch/master/graph/badge.svg)](https://codecov.io/gh/dbenitez-bcn/dumbbell-api)
 
 ## Description
