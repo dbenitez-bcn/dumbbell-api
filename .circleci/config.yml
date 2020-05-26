@@ -94,8 +94,10 @@ workflows:
           requires:
             - "checkout code"
       - "unit test":
+          context: dumbbell-api
           requires:
             - "set up"
       - "e2e test":
+          context: dumbbell-api
           requires:
             - "set up"
