@@ -5,6 +5,7 @@ import { isNumber } from "util";
 
 describe('Exercises e2e', () => {
     let app: any;
+    let userToken: string;
 
     const exerciseParams = {
         name: 'Test name',
@@ -14,6 +15,7 @@ describe('Exercises e2e', () => {
 
     beforeAll(async () => {
         app = await startServer();
+        userToken = await createUser();
     })
 
     describe('Fetch exercises', () => {
@@ -59,6 +61,7 @@ describe('Exercises e2e', () => {
         test('Happy path', async () => {
             const response = await request(app)
                 .post(Endpoints.EXERCISE)
+                .set('Authorization', `Bearer ${userToken}`)
                 .send(exerciseParams);
 
             expect(response.status).toBe(201);
@@ -77,6 +80,7 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .post(Endpoints.EXERCISE)
+                    .set('Authorization', `Bearer ${userToken}`)
                     .send(params);
 
                 expect(response.status).toBe(422);
@@ -90,6 +94,7 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .post(Endpoints.EXERCISE)
+                    .set('Authorization', `Bearer ${userToken}`)
                     .send(params);
 
                 expect(response.status).toBe(422);
@@ -104,6 +109,7 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .post(Endpoints.EXERCISE)
+                    .set('Authorization', `Bearer ${userToken}`)
                     .send(params);
 
                 expect(response.status).toBe(422);
@@ -121,6 +127,7 @@ describe('Exercises e2e', () => {
         test('Happy path', async () => {
             const response = await request(app)
                 .put(Endpoints.EXERCISE + '/' + id)
+                .set('Authorization', `Bearer ${userToken}`)
                 .send(exerciseParams);
 
             expect(response.status).toBe(204);
@@ -136,6 +143,7 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .put(Endpoints.EXERCISE + '/' + id)
+                    .set('Authorization', `Bearer ${userToken}`)
                     .send(params);
 
                 expect(response.status).toBe(422);
@@ -150,6 +158,7 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .put(Endpoints.EXERCISE + '/' + id)
+                    .set('Authorization', `Bearer ${userToken}`)
                     .send(params);
 
                 expect(response.status).toBe(422);
@@ -164,6 +173,7 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .put(Endpoints.EXERCISE + '/' + id)
+                    .set('Authorization', `Bearer ${userToken}`)
                     .send(params);
 
                 expect(response.status).toBe(422);
@@ -177,6 +187,7 @@ describe('Exercises e2e', () => {
 
             const response = await request(app)
                 .delete(Endpoints.EXERCISE + '/' + id)
+                .set('Authorization', `Bearer ${userToken}`)
                 .send();
 
             expect(response.status).toBe(204);
@@ -185,6 +196,7 @@ describe('Exercises e2e', () => {
         test('Sad path', async () => {
             const response = await request(app)
                 .get(Endpoints.EXERCISE + '/1000')
+                .set('Authorization', `Bearer ${userToken}`)
                 .send();
 
             expect(response.status).toBe(404);
@@ -198,5 +210,24 @@ describe('Exercises e2e', () => {
             .send(params);
 
         return response.body.id
+    }
+
+    const createUser = async (): Promise<string> => {
+        await request(app)
+        .post(Endpoints.REGISTER)
+        .send({
+            username: 'exerciseUser',
+            email: 'exerciseUser@dumbbell.com',
+            password: 'password1234'
+        });
+
+        const response = await request(app)
+        .post(Endpoints.LOGIN)
+        .send({
+            email: 'exerciseUser@dumbbell.com',
+            password: 'password1234'
+        })
+
+        return response.body.token;
     }
 })
