@@ -71,6 +71,15 @@ describe('Exercises e2e', () => {
             expect(isNumber(response.body.id)).toBe(true);
         })
         describe('Sad path', () => {
+            test.skip('Given no token should send a 401 status', async () => {
+                const response = await request(app)
+                    .post(Endpoints.EXERCISE)
+                    .send(exerciseParams);
+
+                expect(response.status).toBe(401);
+                expect(isNumber(response.text)).toBe("Invaid or missing token");
+            })
+
             test('Given an invalid name should send a 422 status', async () => {
                 const params = {
                     name: '',
@@ -134,6 +143,15 @@ describe('Exercises e2e', () => {
         })
 
         describe('Sad path', () => {
+            test.skip('Given no token should send a 401 status', async () => {
+                const response = await request(app)
+                    .put(Endpoints.EXERCISE + '/' + id)
+                    .send(exerciseParams);
+
+                expect(response.status).toBe(401);
+                expect(isNumber(response.text)).toBe("Invaid or missing token");
+            })
+
             test('Given an invalid name should send a 422 status', async () => {
                 const params = {
                     name: '',
@@ -182,25 +200,49 @@ describe('Exercises e2e', () => {
     })
 
     describe('Delete exercise', () => {
-        test('Happy path', async () => {
-            const id = await createExerciseAndGetId(exerciseParams);
+        describe('Happy path', () => {
+            test('Given an existing id should not fail', async () => {
+                const id = await createExerciseAndGetId(exerciseParams);
 
-            const response = await request(app)
-                .delete(Endpoints.EXERCISE + '/' + id)
-                .set('Authorization', `Bearer ${userToken}`)
-                .send();
+                const response = await request(app)
+                    .delete(Endpoints.EXERCISE + '/' + id)
+                    .set('Authorization', `Bearer ${userToken}`)
+                    .send();
 
-            expect(response.status).toBe(204);
+                expect(response.status).toBe(204);
+            })
+
+            test('Given an non existing exercise id should not fail', async () => {
+                const response = await request(app)
+                    .delete(Endpoints.EXERCISE + '/10000')
+                    .set('Authorization', `Bearer ${userToken}`)
+                    .send();
+
+                expect(response.status).toBe(204);
+            })
         })
 
-        test('Sad path', async () => {
-            const response = await request(app)
-                .get(Endpoints.EXERCISE + '/1000')
-                .set('Authorization', `Bearer ${userToken}`)
-                .send();
+        describe('Sad path', () => {
+            test.skip('Given no token should send a 401 status', async () => {
+                const id = await createExerciseAndGetId(exerciseParams);
 
-            expect(response.status).toBe(404);
-            expect(response.body).not.toBeNull();
+                const response = await request(app)
+                    .delete(Endpoints.EXERCISE + '/' + id)
+                    .send(exerciseParams);
+
+                expect(response.status).toBe(401);
+                expect(isNumber(response.text)).toBe("Invaid or missing token");
+            })
+
+            test('Given an invalid exercise id should fail', async () => {
+                const response = await request(app)
+                    .delete(Endpoints.EXERCISE + '/invalidId')
+                    .set('Authorization', `Bearer ${userToken}`)
+                    .send();
+
+                expect(response.status).toBe(422);
+                expect(response.body).not.toBeNull();
+            })
         })
     })
 
@@ -214,19 +256,19 @@ describe('Exercises e2e', () => {
 
     const createUser = async (): Promise<string> => {
         await request(app)
-        .post(Endpoints.REGISTER)
-        .send({
-            username: 'exerciseUser',
-            email: 'exerciseUser@dumbbell.com',
-            password: 'password1234'
-        });
+            .post(Endpoints.REGISTER)
+            .send({
+                username: 'exerciseUser',
+                email: 'exerciseUser@dumbbell.com',
+                password: 'password1234'
+            });
 
         const response = await request(app)
-        .post(Endpoints.LOGIN)
-        .send({
-            email: 'exerciseUser@dumbbell.com',
-            password: 'password1234'
-        })
+            .post(Endpoints.LOGIN)
+            .send({
+                email: 'exerciseUser@dumbbell.com',
+                password: 'password1234'
+            })
 
         return response.body.token;
     }
