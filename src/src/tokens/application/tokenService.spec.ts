@@ -7,20 +7,24 @@ import Secrets from "../../../core/secrets";
 import InvalidToken from "../domain/errors/invalidToken";
 
 describe('Token service', () => {
-    describe('getData', () => {
+    describe('getTokenDataFromBaerer', () => {
+        afterEach(() => {
+            jest.clearAllTimers();
+            jest.clearAllMocks();
+        })
+
         test('Given a valid token should the data inside', () => {
             const expectedData = {
-                username: 'testerino',
-                role: 'user'
+                username: 'testerino'
             }
             verify.mockReturnValue(expectedData);
             const sut = new TokenService();
-            const token = 'aToken';
+            const token = 'Baerer aToken';
 
-            const result = sut.getData(token);
+            const result = sut.getTokenDataFromBaerer(token);
 
             expect(result).toBe(expectedData);
-            expect(verify).toBeCalledWith(token, Secrets.JWT_SCRET);
+            expect(verify).toBeCalledWith('aToken', Secrets.JWT_SCRET);
         });
 
         test('Given a invalid token should fail', () => {
@@ -28,12 +32,22 @@ describe('Token service', () => {
                 throw new Error();
             });
             const sut = new TokenService();
-            const token = 'aToken';
+            const token = 'Baerer aToken';
 
-            const fun = () => { sut.getData(token); }
+            const fun = () => { sut.getTokenDataFromBaerer(token); }
 
             expect(fun).toThrow(InvalidToken);
-            expect(verify).toBeCalledWith(token, Secrets.JWT_SCRET);
+            expect(verify).toBeCalledWith('aToken', Secrets.JWT_SCRET);
+        });
+
+        test('Given a invalid baerer syntax should fail', () => {
+            const sut = new TokenService();
+            const token = 'aToken';
+
+            const fun = () => { sut.getTokenDataFromBaerer(token); }
+
+            expect(fun).toThrow(InvalidToken);
+            expect(verify).not.toBeCalled();
         });
     })
 })
