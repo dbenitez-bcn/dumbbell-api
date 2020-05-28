@@ -7,8 +7,7 @@ import { injectable } from "inversify";
 export default class TokenGeneratorService {
     generateTokenFor(user: User) {
         const payload = {
-            username: user.username.value,
-            role: user.role
+            username: user.username.value
         }
         return jwt.sign(payload, Secrets.JWT_SCRET);
     }

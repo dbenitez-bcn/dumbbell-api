@@ -18,8 +18,7 @@ describe('Token generator service', () => {
             const token = sut.generateTokenFor(user);
 
             expect(sign).toBeCalledWith({
-                username: user.username.value,
-                role: user.role
+                username: user.username.value
             }, Secrets.JWT_SCRET);
             expect(token).toBe('token');
         })
