@@ -2,6 +2,7 @@ import * as jwt from "jsonwebtoken";
 import { injectable } from "inversify";
 import Secrets from "../../../core/secrets";
 import InvalidToken from "../domain/errors/invalidToken";
+import BaererToken from "../domain/valueObjects/BaererToken";
 
 @injectable()
 export default class TokenService {
@@ -12,21 +13,12 @@ export default class TokenService {
         return jwt.sign(payload, Secrets.JWT_SCRET);
     }
     
-    getTokenDataFromBaerer(tokenHeader: string) {
-        const token = this.extractTokenFromBaerer(tokenHeader);
+    getTokenDataFromBaerer(token: string) {
+        const baererToken = new BaererToken(token);
         try {
-            return jwt.verify(token, Secrets.JWT_SCRET);
+            return <any>jwt.verify(baererToken.value, Secrets.JWT_SCRET);
         } catch (e) {
             throw new InvalidToken();
         }
-    }
-
-    private extractTokenFromBaerer(tokenHeader: string) {
-        const token = tokenHeader.split(" ")[1];
-        if (!token) {
-            throw new InvalidToken();
-        }
-
-        return token;
     }
 }

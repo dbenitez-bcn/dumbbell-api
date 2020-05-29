@@ -66,5 +66,25 @@ describe('Token service', () => {
             expect(fun).toThrow(InvalidToken);
             expect(verify).not.toBeCalled();
         });
+
+        test('Given a invalid baerer format should fail', () => {
+            const sut = new TokenService();
+            const token = 'Baererino aToken';
+
+            const fun = () => { sut.getTokenDataFromBaerer(token); }
+
+            expect(fun).toThrow(InvalidToken);
+            expect(verify).not.toBeCalled();
+        });
+
+        test('Given an empty baerer should fail', () => {
+            const sut = new TokenService();
+            const token = '';
+
+            const fun = () => { sut.getTokenDataFromBaerer(token); }
+
+            expect(fun).toThrow(InvalidToken);
+            expect(verify).not.toBeCalled();
+        });
     })
 })
