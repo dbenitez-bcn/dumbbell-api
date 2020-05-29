@@ -28,7 +28,7 @@ export default class AccountService {
         if (!hashedPassword.isEqualTo(password)) {
             throw new LoginFailure();
         }
-        return this.tokenService.generateTokenFor(user);
+        return this.tokenService.generateToken(user.username.value);
     }
 
     async operatorLogin(email: string, password: string) {
@@ -42,6 +42,6 @@ export default class AccountService {
             throw new LoginFailure();
         }
 
-        return this.tokenService.generateTokenFor(user);
+        return this.tokenService.generateToken(user.username.value);
     }
 }

@@ -16,13 +16,13 @@ describe('Account service', () => {
     const A_PASSWORD = 'password1234';
     const create = jest.fn();
     const findByEmail = jest.fn();
-    const generateTokenFor = jest.fn().mockReturnValue('token')
+    const generateToken = jest.fn().mockReturnValue('token')
     const repository: UserRepository = {
         create,
         findByEmail
     }
     const fakeTokenService = {
-        generateTokenFor
+        generateToken
     } as unknown as TokenService;
     usertMock.hashPassword = jest.fn().mockReturnValue(A_PASSWORD);
     
@@ -57,7 +57,7 @@ describe('Account service', () => {
 
             expect(findByEmail).toBeCalledWith(expectedEmail);
             expect(passwordDB.isEqualTo).toBeCalledWith(A_PASSWORD);
-            expect(generateTokenFor).toBeCalledWith(user);
+            expect(generateToken).toBeCalledWith('username');
             expect(result).toBe('token');
         })
 
@@ -82,7 +82,7 @@ describe('Account service', () => {
             const expectedEmail = new Email(AN_EMAIL);
             const result = await sut.operatorLogin(AN_EMAIL, A_PASSWORD);
 
-            expect(generateTokenFor).toBeCalledWith(user);
+            expect(generateToken).toBeCalledWith('username');
             expect(findByEmail).toBeCalledWith(expectedEmail);
             expect(result).toBe('token');
         });
