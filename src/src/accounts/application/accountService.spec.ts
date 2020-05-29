@@ -8,7 +8,7 @@ import LoginFailure from '../domain/errors/loginFailure';
 import HashedPassword from '../domain/valueObjects/hashedPassword';
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../domain/errors/unauthorizedAction";
-import TokenGeneratorService from "./tokenGeneratorService";
+import TokenGeneratorService from "../../tokens/application/tokenGeneratorService";
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';

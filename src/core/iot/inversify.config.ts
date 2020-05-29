@@ -9,7 +9,7 @@ import ExerciseController from "../../api/services/exercises/exerciseController"
 import ExerciseRepository from "../../src/exercises/domain/repositories/exerciseRepository";
 import TypeormExerciseRepository from "../../src/exercises/infrastructure/typeormExerciseRepository";
 import ExerciseService from "../../src/exercises/services/exerciseService";
-import TokenGeneratorService from "../../src/accounts/application/tokenGeneratorService";
+import TokenGeneratorService from "../../src/tokens/application/tokenGeneratorService";
 
 const DIContainer = new Container();
 

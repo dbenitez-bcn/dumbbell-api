@@ -3,7 +3,7 @@ const sign = jest.fn().mockReturnValue('token');
 jest.mock("jsonwebtoken", () => ({
     sign
 }))
-import { getFakeUser } from "../test/testUtils";
+import { getFakeUser } from "../../accounts/test/testUtils";
 import Secrets from "../../../core/secrets";
 import TokenService from "./tokenGeneratorService";
 

@@ -7,7 +7,7 @@ import DITypes from "../../../core/iot/diTypes";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../domain/errors/unauthorizedAction";
-import TokenGeneratorService from "./tokenGeneratorService";
+import TokenGeneratorService from "../../tokens/application/tokenGeneratorService";
 
 @injectable()
 export default class AccountService {
