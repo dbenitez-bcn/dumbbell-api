@@ -7,13 +7,13 @@ import DITypes from "../../../core/iot/diTypes";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../domain/errors/unauthorizedAction";
-import TokenGeneratorService from "../../tokens/application/tokenGeneratorService";
+import TokenService from "../../tokens/application/tokenService";
 
 @injectable()
 export default class AccountService {
     constructor(
         @inject(DITypes.UserRepository) private repository: UserRepository,
-        @inject(TokenGeneratorService) private tokenService: TokenGeneratorService
+        @inject(TokenService) private tokenService: TokenService
     ) { }
 
     async register(username: string, email: string, password: string) {

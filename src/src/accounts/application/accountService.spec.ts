@@ -8,7 +8,7 @@ import LoginFailure from '../domain/errors/loginFailure';
 import HashedPassword from '../domain/valueObjects/hashedPassword';
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../domain/errors/unauthorizedAction";
-import TokenGeneratorService from "../../tokens/application/tokenGeneratorService";
+import TokenService from "../../tokens/application/tokenService";
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';
@@ -23,7 +23,7 @@ describe('Account service', () => {
     }
     const fakeTokenService = {
         generateTokenFor
-    } as TokenGeneratorService;
+    } as unknown as TokenService;
     usertMock.hashPassword = jest.fn().mockReturnValue(A_PASSWORD);
     
     const sut = new AccountService(repository, fakeTokenService);
