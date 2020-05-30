@@ -9,7 +9,7 @@ module.exports = {
     "logging": true,
     "logger": "file",
     "entities": ["src/src/exercises/domain/typeormEntities/exercise.ts", "src/src/accounts/domain/typeormEntities/user.ts"],
-    "migrations": ["/src/core/migrations/**/*.ts"],
+    "migrations": ["src/core/migrations/**/*.ts"],
     "cli": {
        "entitiesDir": "src/api/models/entities",
        "migrationsDir": "/src/core/migrations"
