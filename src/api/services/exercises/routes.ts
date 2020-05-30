@@ -2,8 +2,10 @@ import { Router } from "express";
 import ExerciseController from "./exerciseController";
 import { Endpoints } from "../../config/constants";
 import DIContainer from "../../../core/iot/inversify.config";
+import TokenMiddleware from "../../middlewares/tokens/tokenMiddleware";
 
 const controller = DIContainer.get<ExerciseController>(ExerciseController);
+const middleware = DIContainer.get<TokenMiddleware>(TokenMiddleware);
 
 const router = Router();
 
@@ -14,6 +16,7 @@ router.get(
 
 router.post(
     Endpoints.EXERCISE,
+    middleware.validateToken.bind(middleware),
     controller.create.bind(controller)
 );
 

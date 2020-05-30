@@ -61,23 +61,24 @@ describe('Exercises e2e', () => {
         test('Happy path', async () => {
             const response = await request(app)
                 .post(Endpoints.EXERCISE)
-                .set('Authorization', `Bearer ${userToken}`)
-                .send(exerciseParams);
+                .send(exerciseParams)
+                .set('Authorization', `Bearer ${userToken}`);
 
             expect(response.status).toBe(201);
             expect(response.body.name).toBe('Test name');
             expect(response.body.description).toBe('Test description');
+            // TODO: Check username
             expect(response.body.difficulty).toBe(5);
             expect(isNumber(response.body.id)).toBe(true);
         })
         describe('Sad path', () => {
-            test.skip('Given no token should send a 401 status', async () => {
+            test('Given no token should send a 401 status', async () => {
                 const response = await request(app)
                     .post(Endpoints.EXERCISE)
                     .send(exerciseParams);
 
                 expect(response.status).toBe(401);
-                expect(isNumber(response.text)).toBe("Invaid or missing token");
+                expect(response.text).toBe("Invalid or missing token");
             })
 
             test('Given an invalid name should send a 422 status', async () => {
@@ -249,7 +250,8 @@ describe('Exercises e2e', () => {
     const createExerciseAndGetId = async (params: any): Promise<number> => {
         const response = await request(app)
             .post(Endpoints.EXERCISE)
-            .send(params);
+            .send(params)
+            .set('Authorization', `Bearer ${userToken}`);
 
         return response.body.id
     }

@@ -10,6 +10,7 @@ import ExerciseRepository from "../../src/exercises/domain/repositories/exercise
 import TypeormExerciseRepository from "../../src/exercises/infrastructure/typeormExerciseRepository";
 import ExerciseService from "../../src/exercises/services/exerciseService";
 import TokenService from "../../src/tokens/application/tokenService";
+import TokenMiddleware from "../../api/middlewares/tokens/tokenMiddleware";
 
 const DIContainer = new Container();
 
@@ -26,5 +27,6 @@ DIContainer.bind<ExerciseService>(ExerciseService).to(ExerciseService);
 DIContainer.bind<AuthController>(AuthController).to(AuthController);
 DIContainer.bind<UsersController>(UsersController).to(UsersController);
 DIContainer.bind<ExerciseController>(ExerciseController).to(ExerciseController);
+DIContainer.bind<TokenMiddleware>(TokenMiddleware).to(TokenMiddleware);
 
 export default DIContainer;
