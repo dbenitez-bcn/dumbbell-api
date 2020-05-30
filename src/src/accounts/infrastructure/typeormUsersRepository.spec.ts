@@ -19,7 +19,9 @@ jest.mock('typeorm', () => ({
     Column: jest.fn(),
     CreateDateColumn: jest.fn(),
     UpdateDateColumn: jest.fn(),
-    Entity: jest.fn()
+    Entity: jest.fn(),
+    OneToMany: jest.fn(),
+    ManyToOne: jest.fn()
 }));
 
 jest.mock('inversify', () => ({

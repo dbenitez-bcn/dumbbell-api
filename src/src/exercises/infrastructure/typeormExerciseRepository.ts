@@ -1,4 +1,6 @@
+import { injectable } from "inversify";
 import { getRepository, Repository } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import ExerciseRepository from "../domain/repositories/exerciseRepository";
 import Exercise from "../domain/aggregates/exercise";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
@@ -7,31 +9,36 @@ import ExerciseParams from "../domain/aggregates/exerciseParams";
 import ExerciseDB from "../domain/typeormEntities/exercise";
 import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
 import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
-import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
-import { injectable } from "inversify";
+import UserDB from "../../accounts/domain/typeormEntities/user";
 
 @injectable()
 export default class TypeormExerciseRepository implements ExerciseRepository {
-    private repository: Repository<ExerciseDB>
+    private exerciseRepository: Repository<ExerciseDB>
+    private userRepository: Repository<UserDB>
 
     constructor() {
-        this.repository = getRepository(ExerciseDB);
+        this.exerciseRepository = getRepository(ExerciseDB);
+        this.userRepository = getRepository(UserDB);
     }
 
     async create(exercise: Exercise): Promise<Exercise> {
-        const newExercise = await this.repository.save({
+        const user = await this.userRepository.findOne({where: {username: exercise.createdBy.value}});
+        const newExercise = await this.exerciseRepository.save({
             name: exercise.name.value,
             description: exercise.description.value,
-            difficulty: exercise.difficulty.value
+            difficulty: exercise.difficulty.value,
+            created_by: user
         }).catch(() => {
             throw new DatabaseFailure();
         });
 
-        return new Exercise(newExercise.id, newExercise.name, newExercise.description, newExercise.difficulty);
+        return new Exercise(newExercise.id, newExercise.name, newExercise.description, newExercise.difficulty, newExercise.created_by.username);
     }
 
     async getAll(): Promise<Exercise[]> {
-        const exercises = await this.repository.find()
+        const exercises = await this.exerciseRepository.find({
+            relations: ['created_by']
+        })
             .catch((e) => {
                 throw new DatabaseFailure();
             });
@@ -39,11 +46,13 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
             throw new ExercisesNotFound();
         }
 
-        return exercises.map((exercise: ExerciseDB) =>  new Exercise(exercise.id, exercise.name, exercise.description, exercise.difficulty));
+        return exercises.map((exercise: ExerciseDB) =>  new Exercise(exercise.id, exercise.name, exercise.description, exercise.difficulty, exercise.created_by.username));
     }
 
     async getById(id: ExerciseId): Promise<Exercise> {
-        const exercise = await this.repository.findOne(id.value)
+        const exercise = await this.exerciseRepository.findOne(id.value, {
+            relations: ['created_by']
+        })
             .catch(() => {
                 throw new DatabaseFailure();
             })
@@ -51,7 +60,7 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
             throw new ExerciseNotFound();
         }
 
-        return new Exercise(exercise.id, exercise.name, exercise.description, exercise.difficulty);
+        return new Exercise(exercise.id, exercise.name, exercise.description, exercise.difficulty, exercise.created_by.username);
     }
 
     async update(id: ExerciseId, params: ExerciseParams): Promise<void> {
@@ -60,7 +69,7 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
             if (params.name) updatedParams.name = params.name.value;
             if (params.description) updatedParams.description = params.description.value;
             if (params.difficutly) updatedParams.difficulty = params.difficutly.value;
-            await this.repository.update(id.value, updatedParams)
+            await this.exerciseRepository.update(id.value, updatedParams)
         } catch (e) {
             throw new DatabaseFailure();
         }
@@ -68,7 +77,7 @@ export default class TypeormExerciseRepository implements ExerciseRepository {
 
     async delete(id: ExerciseId): Promise<void> {
         try {
-            await this.repository.delete(id.value);
+            await this.exerciseRepository.delete(id.value);
         } catch (e) {
             throw new DatabaseFailure();
         }

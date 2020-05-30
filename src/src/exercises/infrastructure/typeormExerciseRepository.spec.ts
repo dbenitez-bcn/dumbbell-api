@@ -26,7 +26,9 @@ jest.mock('typeorm', () => ({
     Column: jest.fn(),
     CreateDateColumn: jest.fn(),
     UpdateDateColumn: jest.fn(),
-    Entity: jest.fn()
+    Entity: jest.fn(),
+    OneToMany: jest.fn(),
+    ManyToOne: jest.fn()
 }));
 
 jest.mock('inversify', () => ({
@@ -52,17 +54,20 @@ describe('Typeorm repository', () => {
     describe('create', () => {
         const exercise = getFakeExercise();
         test('Should create an exercise and return the id', async () => {
+            const user = dbExercise.created_by;
             const params = {
                 name: exercise.name.value,
                 description: exercise.description.value,
                 difficulty: exercise.difficulty.value,
-                createdBy: exercise.createdBy.value
+                created_by: user
             }
-            const expected = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty, dbExercise.createdBy);
+            const expected = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty, dbExercise.created_by.username);
             saveSpy.mockResolvedValue(dbExercise);
+            findOneSpy.mockResolvedValue(user);
 
             const actual = await sut.create(exercise);
 
+            expect(findOneSpy).toBeCalledWith({ where: { username: user.username } });
             expect(saveSpy).toBeCalledWith(params);
             expect(actual).toStrictEqual(expected);
         })
@@ -76,7 +81,7 @@ describe('Typeorm repository', () => {
 
     describe('get all', () => {
         test('Should get all exercises', async () => {
-            const exercise = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
+            const exercise = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty, dbExercise.created_by.username);
             const exerciseDBList = [dbExercise, dbExercise, dbExercise];
             const expected = [exercise, exercise, exercise];
             findSpy.mockResolvedValue(exerciseDBList);
@@ -84,7 +89,9 @@ describe('Typeorm repository', () => {
             const actual = await sut.getAll();
 
             expect(actual).toStrictEqual(expected);
-            expect(findSpy).toBeCalledTimes(1);
+            expect(findSpy).toBeCalledWith({
+                relations: ['created_by']
+            });
         })
 
         test('Given no exercises found should throw an exception', async () => {
@@ -103,13 +110,16 @@ describe('Typeorm repository', () => {
 
     describe('get by id', () => {
         test('Given an id should find a single exercise', async () => {
-            const expected = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
+            const expected = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty, dbExercise.created_by.username);
             findOneSpy.mockResolvedValue(dbExercise);
 
             const actual = await sut.getById(AN_ID);
 
             expect(actual).toStrictEqual(expected);
-            expect(findOneSpy).toBeCalledWith(AN_ID.value);
+            expect(findOneSpy).toBeCalledWith(
+                AN_ID.value,
+                { relations: ['created_by'] }
+            );
         })
 
         test('Given an id should fail when no exercise is found', async () => {
