@@ -7,23 +7,27 @@ import Description from "../domain/valueObject/description";
 import Difficulty from "../domain/valueObject/difficulty";
 import { injectable, inject } from "inversify";
 import DITypes from "../../../core/iot/diTypes";
+import ExerciseDTO from "../domain/dtos/exerciseDTO";
 
 @injectable()
 export default class ExerciseService {
     constructor(@inject(DITypes.ExerciseRepository) private readonly repository: ExerciseRepository) { }
 
-    async create(name: string, description: string, difficulty: number) {
-        const exercise = new Exercise(name, description, difficulty);
-        return await this.repository.create(exercise);
+    async create(name: string, description: string, difficulty: number): Promise<ExerciseDTO> {
+        const exercise = new Exercise(0, name, description, difficulty);
+        const newExercise = await this.repository.create(exercise);
+        return new ExerciseDTO(newExercise.id, newExercise.name.value, newExercise.description.value, newExercise.difficulty.value);
     }
 
-    async getAll() {
-        return await this.repository.getAll();
+    async getAll(): Promise<ExerciseDTO[]> {
+        const exercises = await this.repository.getAll();
+        return exercises.map((exercise: Exercise) => new ExerciseDTO(exercise.id, exercise.name.value, exercise.description.value, exercise.difficulty.value));
     }
 
-    async getById(id: number) {
+    async getById(id: number): Promise<ExerciseDTO> {
         const exerciseId = new ExerciseId(id);
-        return await this.repository.getById(exerciseId);
+        const exercise = await this.repository.getById(exerciseId);
+        return new ExerciseDTO(exercise.id, exercise.name.value, exercise.description.value, exercise.difficulty.value);
     }
 
     async update(id: number, name: string, description: string, difficulty: number) {

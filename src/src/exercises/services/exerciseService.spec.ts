@@ -15,6 +15,7 @@ import Difficulty from "../domain/valueObject/difficulty";
 
 describe('Exercise Service', () => {
     const fakeExerciseDTO = getFakeExerciseDTO();
+    const receivedExercise = new Exercise(fakeExerciseDTO.id, fakeExerciseDTO.name, fakeExerciseDTO.description, fakeExerciseDTO.difficulty);
     const AN_ID = 1234;
     const A_NAME = 'A name';
     const A_DESCRIPTION = 'A description';
@@ -39,12 +40,12 @@ describe('Exercise Service', () => {
     })
     describe('create', () => {
         it('Should create an exercise for the given values', async () => {
-            const expectedExercise = new Exercise('A name', 'A description', 5);
-            createSpy.mockResolvedValue(fakeExerciseDTO)
+            const expectedExercise = new Exercise(0, 'A name', 'A description', 5);
+            createSpy.mockResolvedValue(receivedExercise)
 
             const result = await sut.create('A name', 'A description', 5);
 
-            expect(result).toBe(fakeExerciseDTO);
+            expect(result).toStrictEqual(fakeExerciseDTO);
             expect(createSpy).toBeCalledWith(expectedExercise)
         })
 
@@ -53,13 +54,13 @@ describe('Exercise Service', () => {
                 await expect(sut.create('', 'A description', 5)).rejects.toThrowError(new InvalidName());
             })
 
-            test('Given a shot name should call the repository', async () => {
-                const expectedExercise = new Exercise('A name', 'A description', 5);
-                createSpy.mockResolvedValue(fakeExerciseDTO)
+            test('Given a short name should call the repository', async () => {
+                const expectedExercise = new Exercise(0, 'A name', 'A description', 5);
+                createSpy.mockResolvedValue(receivedExercise)
 
                 const result = await sut.create('A name', 'A description', 5);
 
-                expect(result).toBe(fakeExerciseDTO);
+                expect(result).toStrictEqual(fakeExerciseDTO);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
         })
@@ -69,13 +70,13 @@ describe('Exercise Service', () => {
                 await expect(sut.create('A name', '', 5)).rejects.toThrowError(new InvalidDescription());
             })
 
-            test('Given a shot description should call the repository', async () => {
-                const expectedExercise = new Exercise('A name', 'A', 5);
-                createSpy.mockResolvedValue(fakeExerciseDTO)
+            test('Given a short description should call the repository', async () => {
+                const expectedExercise = new Exercise(0, 'A name', 'A', 5);
+                createSpy.mockResolvedValue(receivedExercise)
 
                 const result = await sut.create('A name', 'A', 5);
 
-                expect(result).toBe(fakeExerciseDTO);
+                expect(result).toStrictEqual(fakeExerciseDTO);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
         })
@@ -90,22 +91,22 @@ describe('Exercise Service', () => {
             })
 
             test('Given a difficulty with value 1 should call the repository', async () => {
-                const expectedExercise = new Exercise('A name', 'A description', 1);
-                createSpy.mockResolvedValue(fakeExerciseDTO)
+                const expectedExercise = new Exercise(0, 'A name', 'A description', 1);
+                createSpy.mockResolvedValue(receivedExercise)
 
                 const result = await sut.create('A name', 'A description', 1);
 
-                expect(result).toBe(fakeExerciseDTO);
+                expect(result).toStrictEqual(fakeExerciseDTO);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
 
             test('Given a difficulty with value 10 should call the repository', async () => {
-                const expectedExercise = new Exercise('A name', 'A description', 10);
-                createSpy.mockResolvedValue(fakeExerciseDTO)
+                const expectedExercise = new Exercise(0, 'A name', 'A description', 10);
+                createSpy.mockResolvedValue(receivedExercise)
 
                 const result = await sut.create('A name', 'A description', 10);
 
-                expect(result).toBe(fakeExerciseDTO);
+                expect(result).toStrictEqual(fakeExerciseDTO);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
         })
@@ -113,25 +114,26 @@ describe('Exercise Service', () => {
 
     describe('Get all', () => {
         test('Should return all exercises', async () => {
+            const received = [receivedExercise, receivedExercise, receivedExercise];
             const expected = [fakeExerciseDTO, fakeExerciseDTO, fakeExerciseDTO];
-            getAllSpy.mockResolvedValue(expected);
+            getAllSpy.mockResolvedValue(received);
 
             const result = await sut.getAll();
 
             expect(getAllSpy).toBeCalledTimes(1);
-            expect(result).toBe(expected);
+            expect(result).toStrictEqual(expected);
         })
     })
 
     describe('Get by id', () => {
         test('Given an id should return a single exercise', async () => {
             const id = new ExerciseId(AN_ID);
-            getByIdlSpy.mockResolvedValue(fakeExerciseDTO);
+            getByIdlSpy.mockResolvedValue(receivedExercise);
 
             const result = await sut.getById(AN_ID);
 
             expect(getByIdlSpy).lastCalledWith(id);
-            expect(result).toBe(fakeExerciseDTO);
+            expect(result).toStrictEqual(fakeExerciseDTO);
         })
 
         test('Given a zero as id should fail', async () => {

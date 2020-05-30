@@ -1,4 +1,3 @@
-import ExerciseDTO from "../domain/dtos/exerciseDTO";
 import DatabaseFailure from "../domain/errors/DatabaseFailure";
 import ExerciseId from "../domain/valueObject/exerciseId";
 import ExerciseParams from "../domain/aggregates/exerciseParams";
@@ -37,6 +36,7 @@ jest.mock('inversify', () => ({
 import TypeormExerciseRepository from "./typeormExerciseRepository";
 import ExerciseDB from "../domain/typeormEntities/exercise";
 import { getFakeExerciseDB, getFakeExercise } from "../test/testUtils";
+import Exercise from "../domain/aggregates/exercise";
 
 describe('Typeorm repository', () => {
     const ID_VALUE = 1
@@ -53,11 +53,11 @@ describe('Typeorm repository', () => {
         const exercise = getFakeExercise();
         test('Should create an exercise and return the id', async () => {
             const params = {
-                name: 'A name',
-                description: 'A description',
-                difficulty: 5
+                name: exercise.name.value,
+                description: exercise.description.value,
+                difficulty: exercise.difficulty.value
             }
-            const expected = new ExerciseDTO(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
+            const expected = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
             saveSpy.mockResolvedValue(dbExercise);
 
             const actual = await sut.create(exercise);
@@ -75,9 +75,9 @@ describe('Typeorm repository', () => {
 
     describe('get all', () => {
         test('Should get all exercises', async () => {
-            const exerciseDTO = new ExerciseDTO(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
+            const exercise = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
             const exerciseDBList = [dbExercise, dbExercise, dbExercise];
-            const expected = [exerciseDTO, exerciseDTO, exerciseDTO];
+            const expected = [exercise, exercise, exercise];
             findSpy.mockResolvedValue(exerciseDBList);
 
             const actual = await sut.getAll();
@@ -102,7 +102,7 @@ describe('Typeorm repository', () => {
 
     describe('get by id', () => {
         test('Given an id should find a single exercise', async () => {
-            const expected = ExerciseDTO.fromDB(dbExercise);
+            const expected = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
             findOneSpy.mockResolvedValue(dbExercise);
 
             const actual = await sut.getById(AN_ID);
