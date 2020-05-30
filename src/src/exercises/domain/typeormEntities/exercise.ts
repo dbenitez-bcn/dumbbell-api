@@ -1,6 +1,7 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseTableEntity } from './baseTableEntity';
 import Secrets from '../../../../core/secrets';
+import UserDB from '../../../accounts/domain/typeormEntities/user';
 
 @Entity(Secrets.DB_TB_EXERCISES)
 export default class ExerciseDB extends BaseTableEntity{
@@ -13,4 +14,7 @@ export default class ExerciseDB extends BaseTableEntity{
 
     @Column('int')
     difficulty: number;
+
+    @ManyToOne(type => UserDB, user => user.exercises)
+    created_by: UserDB
 }

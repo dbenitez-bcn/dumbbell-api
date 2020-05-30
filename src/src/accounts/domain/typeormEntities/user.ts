@@ -1,6 +1,7 @@
-import { Entity, Unique, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, Unique, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import Secrets from "../../../../core/secrets";
 import UserRole from "../valueObjects/userRole";
+import ExerciseDB from "../../../exercises/domain/typeormEntities/exercise";
 
 @Entity(Secrets.DB_TB_USERS)
 @Unique(['email'])
@@ -24,6 +25,9 @@ export default class UserDB {
         default: UserRole.USER
     })
     role: UserRole
+
+    @OneToMany(type => ExerciseDB, exercise => exercise.created_by)
+    exercises: ExerciseDB[]
 
     @CreateDateColumn()
     created_at: Date;
