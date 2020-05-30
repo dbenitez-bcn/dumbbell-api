@@ -16,6 +16,7 @@ describe('Exercise controller', () => {
     const A_NAME = 'A name';
     const A_DESCRIPTION = 'A description';
     const A_DIFFICULTY = 5;
+    const A_USERNAME = 'aUsername';
     const AN_EXERCISE_DTO = getFakeExerciseDTO();
 
     const statusSpy = jest.fn().mockReturnThis();
@@ -41,7 +42,8 @@ describe('Exercise controller', () => {
         const body = {
             name: A_NAME,
             description: A_DESCRIPTION,
-            difficulty: A_DIFFICULTY
+            difficulty: A_DIFFICULTY,
+            username: A_USERNAME
         }
         const req = { body } as Request;
 
@@ -55,7 +57,7 @@ describe('Exercise controller', () => {
 
             await sut.create(req, res);
             
-            expect(createSpy).toBeCalledTimes(1);
+            expect(createSpy).lastCalledWith(A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
             expect(statusSpy).toBeCalledWith(201);
             expect(sendSpy).toBeCalledWith(AN_EXERCISE_DTO);
         })
@@ -159,7 +161,7 @@ describe('Exercise controller', () => {
 
             await sut.getById(req, res);
 
-            expect(getByIdSpy).toBeCalledTimes(1);
+            expect(getByIdSpy).lastCalledWith(AN_ID);
             expect(statusSpy).toBeCalledWith(200);
             expect(sendSpy).toBeCalledWith(AN_EXERCISE_DTO)
         })
@@ -290,7 +292,7 @@ describe('Exercise controller', () => {
         test('Should delete a single exercise', async () => {
             await sut.delete(req, res);
 
-            expect(deleteSpy).toBeCalledTimes(1);
+            expect(deleteSpy).lastCalledWith(AN_ID);
             expect(statusSpy).toBeCalledWith(204);
             expect(sendSpy).toBeCalledWith();
         })

@@ -14,7 +14,7 @@ export default class ExerciseController {
 
     async create(req: Request, res: Response) {
         try {
-            const exercise = await this.service.create(req.body.name, req.body.description, req.body.difficulty);
+            const exercise = await this.service.create(req.body.name, req.body.description, req.body.difficulty, req.body.username);
             res.status(201).send(exercise);
         } catch (e) {
             if (this.isParamError(e)) {

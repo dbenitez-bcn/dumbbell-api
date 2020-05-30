@@ -73,7 +73,7 @@ describe('Exercises e2e', () => {
             expect(response.status).toBe(201);
             expect(response.body.name).toBe('Test name');
             expect(response.body.description).toBe('Test description');
-            // TODO: Check username
+            //expect(response.body.createdBy).toBe(USERNAME_A);
             expect(response.body.difficulty).toBe(5);
             expect(isNumber(response.body.id)).toBe(true);
         })

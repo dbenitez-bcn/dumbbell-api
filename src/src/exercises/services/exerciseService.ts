@@ -13,21 +13,21 @@ import ExerciseDTO from "../domain/dtos/exerciseDTO";
 export default class ExerciseService {
     constructor(@inject(DITypes.ExerciseRepository) private readonly repository: ExerciseRepository) { }
 
-    async create(name: string, description: string, difficulty: number): Promise<ExerciseDTO> {
-        const exercise = new Exercise(0, name, description, difficulty);
+    async create(name: string, description: string, difficulty: number, createdBy: string): Promise<ExerciseDTO> {
+        const exercise = new Exercise(0, name, description, difficulty, createdBy);
         const newExercise = await this.repository.create(exercise);
-        return new ExerciseDTO(newExercise.id, newExercise.name.value, newExercise.description.value, newExercise.difficulty.value);
+        return new ExerciseDTO(newExercise.id, newExercise.name.value, newExercise.description.value, newExercise.difficulty.value, newExercise.createdBy.value);
     }
 
     async getAll(): Promise<ExerciseDTO[]> {
         const exercises = await this.repository.getAll();
-        return exercises.map((exercise: Exercise) => new ExerciseDTO(exercise.id, exercise.name.value, exercise.description.value, exercise.difficulty.value));
+        return exercises.map((exercise: Exercise) => new ExerciseDTO(exercise.id, exercise.name.value, exercise.description.value, exercise.difficulty.value, exercise.createdBy.value));
     }
 
     async getById(id: number): Promise<ExerciseDTO> {
         const exerciseId = new ExerciseId(id);
         const exercise = await this.repository.getById(exerciseId);
-        return new ExerciseDTO(exercise.id, exercise.name.value, exercise.description.value, exercise.difficulty.value);
+        return new ExerciseDTO(exercise.id, exercise.name.value, exercise.description.value, exercise.difficulty.value, exercise.createdBy.value);
     }
 
     async update(id: number, name: string, description: string, difficulty: number) {

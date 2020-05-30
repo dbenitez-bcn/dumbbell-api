@@ -55,9 +55,10 @@ describe('Typeorm repository', () => {
             const params = {
                 name: exercise.name.value,
                 description: exercise.description.value,
-                difficulty: exercise.difficulty.value
+                difficulty: exercise.difficulty.value,
+                createdBy: exercise.createdBy.value
             }
-            const expected = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty);
+            const expected = new Exercise(dbExercise.id, dbExercise.name, dbExercise.description, dbExercise.difficulty, dbExercise.createdBy);
             saveSpy.mockResolvedValue(dbExercise);
 
             const actual = await sut.create(exercise);

@@ -12,10 +12,11 @@ import ExerciseParams from "../domain/aggregates/exerciseParams";
 import Name from "../domain/valueObject/name";
 import Description from "../domain/valueObject/description";
 import Difficulty from "../domain/valueObject/difficulty";
+import InvalidCreatedBy from "../domain/errors/InvalidCreatedBy";
 
 describe('Exercise Service', () => {
     const fakeExerciseDTO = getFakeExerciseDTO();
-    const receivedExercise = new Exercise(fakeExerciseDTO.id, fakeExerciseDTO.name, fakeExerciseDTO.description, fakeExerciseDTO.difficulty);
+    const receivedExercise = new Exercise(fakeExerciseDTO.id, fakeExerciseDTO.name, fakeExerciseDTO.description, fakeExerciseDTO.difficulty, fakeExerciseDTO.createdBy);
     const AN_ID = 1234;
     const A_NAME = 'A name';
     const A_DESCRIPTION = 'A description';
@@ -40,10 +41,10 @@ describe('Exercise Service', () => {
     })
     describe('create', () => {
         it('Should create an exercise for the given values', async () => {
-            const expectedExercise = new Exercise(0, 'A name', 'A description', 5);
+            const expectedExercise = new Exercise(0, 'A name', 'A description', 5, 'username');
             createSpy.mockResolvedValue(receivedExercise)
 
-            const result = await sut.create('A name', 'A description', 5);
+            const result = await sut.create('A name', 'A description', 5, 'username');
 
             expect(result).toStrictEqual(fakeExerciseDTO);
             expect(createSpy).toBeCalledWith(expectedExercise)
@@ -51,14 +52,14 @@ describe('Exercise Service', () => {
 
         describe('Name validations', () => {
             test('Given an empty name should fail', async () => {
-                await expect(sut.create('', 'A description', 5)).rejects.toThrowError(new InvalidName());
+                await expect(sut.create('', 'A description', 5, 'username')).rejects.toThrowError(new InvalidName());
             })
 
             test('Given a short name should call the repository', async () => {
-                const expectedExercise = new Exercise(0, 'A name', 'A description', 5);
+                const expectedExercise = new Exercise(0, 'A name', 'A description', 5, 'username');
                 createSpy.mockResolvedValue(receivedExercise)
 
-                const result = await sut.create('A name', 'A description', 5);
+                const result = await sut.create('A name', 'A description', 5, 'username');
 
                 expect(result).toStrictEqual(fakeExerciseDTO);
                 expect(createSpy).toBeCalledWith(expectedExercise)
@@ -67,14 +68,14 @@ describe('Exercise Service', () => {
 
         describe('Description validations', () => {
             test('Given an empty description should fail', async () => {
-                await expect(sut.create('A name', '', 5)).rejects.toThrowError(new InvalidDescription());
+                await expect(sut.create('A name', '', 5, 'username')).rejects.toThrowError(new InvalidDescription());
             })
 
             test('Given a short description should call the repository', async () => {
-                const expectedExercise = new Exercise(0, 'A name', 'A', 5);
+                const expectedExercise = new Exercise(0, 'A name', 'A', 5, 'username');
                 createSpy.mockResolvedValue(receivedExercise)
 
-                const result = await sut.create('A name', 'A', 5);
+                const result = await sut.create('A name', 'A', 5, 'username');
 
                 expect(result).toStrictEqual(fakeExerciseDTO);
                 expect(createSpy).toBeCalledWith(expectedExercise)
@@ -83,31 +84,37 @@ describe('Exercise Service', () => {
 
         describe('Difficulty validations', () => {
             test('Given a difficulty less than 1 should fail', async () => {
-                await expect(sut.create('A name', 'A description', 0)).rejects.toThrowError(new InvalidDifficulty());
+                await expect(sut.create('A name', 'A description', 0, 'username')).rejects.toThrowError(new InvalidDifficulty());
             })
 
             test('Given a difficulty more than 10 should fail', async () => {
-                await expect(sut.create('A name', 'A description', 11)).rejects.toThrowError(new InvalidDifficulty());
+                await expect(sut.create('A name', 'A description', 11, 'username')).rejects.toThrowError(new InvalidDifficulty());
             })
 
             test('Given a difficulty with value 1 should call the repository', async () => {
-                const expectedExercise = new Exercise(0, 'A name', 'A description', 1);
+                const expectedExercise = new Exercise(0, 'A name', 'A description', 1, 'username');
                 createSpy.mockResolvedValue(receivedExercise)
 
-                const result = await sut.create('A name', 'A description', 1);
+                const result = await sut.create('A name', 'A description', 1, 'username');
 
                 expect(result).toStrictEqual(fakeExerciseDTO);
                 expect(createSpy).toBeCalledWith(expectedExercise)
             })
 
             test('Given a difficulty with value 10 should call the repository', async () => {
-                const expectedExercise = new Exercise(0, 'A name', 'A description', 10);
+                const expectedExercise = new Exercise(0, 'A name', 'A description', 10, 'username');
                 createSpy.mockResolvedValue(receivedExercise)
 
-                const result = await sut.create('A name', 'A description', 10);
+                const result = await sut.create('A name', 'A description', 10, 'username');
 
                 expect(result).toStrictEqual(fakeExerciseDTO);
                 expect(createSpy).toBeCalledWith(expectedExercise)
+            })
+        })
+
+        describe('CreatedBy validations', () => {
+            test('Given an empty username should fail', async () => {
+                await expect(sut.create('A name', 'A description', 5, '')).rejects.toThrowError(new InvalidCreatedBy());
             })
         })
     })
