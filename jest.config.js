@@ -21,7 +21,6 @@ module.exports = {
     "!**/node_modules/**",
     "!**/dist/**",
     "!**/**.{spec,test}.ts"
-  ]
+  ],
+  setupFilesAfterEnv: ['./jest.setup.js'],
 }
-
-jest.setTimeout(30000)
