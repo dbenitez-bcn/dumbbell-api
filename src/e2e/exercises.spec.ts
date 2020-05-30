@@ -32,7 +32,7 @@ describe('Exercises e2e', () => {
 
             expect(noExercises.status).toBe(404);
 
-            await createExerciseAndGetId(exerciseParams);
+            await createExerciseAndGetId(exerciseParams, userTokenA);
 
             const exercisesList = await request(app)
                 .get(Endpoints.EXERCISES)
@@ -45,7 +45,7 @@ describe('Exercises e2e', () => {
 
     describe('Fetch one exercise', () => {
         test('Happy path', async () => {
-            const id = await createExerciseAndGetId(exerciseParams);
+            const id = await createExerciseAndGetId(exerciseParams, userTokenA);
             const response = await request(app)
                 .get(Endpoints.EXERCISE + '/' + id)
                 .send();
@@ -137,7 +137,7 @@ describe('Exercises e2e', () => {
         let id: number;
 
         beforeAll(async () => {
-            id = await createExerciseAndGetId(exerciseParams);
+            id = await createExerciseAndGetId(exerciseParams, userTokenA);
         })
 
         test('Happy path', async () => {
@@ -157,6 +157,23 @@ describe('Exercises e2e', () => {
 
                 expect(response.status).toBe(401);
                 expect(response.text).toBe("Invalid or missing token");
+            })
+
+            test.skip('Given a user that has not created the exercise when tring to update should send an unauthorized response', async () => {
+                const params = {
+                    name: 'New name',
+                    description: 'Test description',
+                    difficulty: 5
+                };
+                const exerciseId = await createExerciseAndGetId(exerciseParams, userTokenA);
+
+                const response = await request(app)
+                    .put(Endpoints.EXERCISE + '/' + exerciseId)
+                    .send(params)
+                    .set('Authorization', `Bearer ${userTokenB}`);
+
+                expect(response.status).toBe(401);
+                expect(response.text).toBe('This action is not allowed.');
             })
 
             test('Given an invalid name should send a 422 status', async () => {
@@ -209,7 +226,7 @@ describe('Exercises e2e', () => {
     describe('Delete exercise', () => {
         describe('Happy path', () => {
             test('Given an existing id should not fail', async () => {
-                const id = await createExerciseAndGetId(exerciseParams);
+                const id = await createExerciseAndGetId(exerciseParams, userTokenA);
 
                 const response = await request(app)
                     .delete(Endpoints.EXERCISE + '/' + id)
@@ -231,7 +248,7 @@ describe('Exercises e2e', () => {
 
         describe('Sad path', () => {
             test('Given no token should send a 401 status', async () => {
-                const id = await createExerciseAndGetId(exerciseParams);
+                const id = await createExerciseAndGetId(exerciseParams, userTokenA);
 
                 const response = await request(app)
                     .delete(Endpoints.EXERCISE + '/' + id)
@@ -239,6 +256,18 @@ describe('Exercises e2e', () => {
 
                 expect(response.status).toBe(401);
                 expect(response.text).toBe("Invalid or missing token");
+            })
+
+            test.skip('Given a user that has not created the exercise when tring to update should send an unauthorized response', async () => {
+                const id = await createExerciseAndGetId(exerciseParams, userTokenA);
+
+                const response = await request(app)
+                    .delete(Endpoints.EXERCISE + '/' + id)
+                    .send()
+                    .set('Authorization', `Bearer ${userTokenB}`);
+
+                expect(response.status).toBe(401);
+                expect(response.text).toBe('This action is not allowed.');
             })
 
             test('Given an invalid exercise id should fail', async () => {
@@ -253,11 +282,11 @@ describe('Exercises e2e', () => {
         })
     })
 
-    const createExerciseAndGetId = async (params: any): Promise<number> => {
+    const createExerciseAndGetId = async (params: any, token: string): Promise<number> => {
         const response = await request(app)
             .post(Endpoints.EXERCISE)
             .send(params)
-            .set('Authorization', `Bearer ${userTokenA}`);
+            .set('Authorization', `Bearer ${token}`);
 
         return response.body.id
     }
