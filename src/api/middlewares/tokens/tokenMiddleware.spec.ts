@@ -6,9 +6,9 @@ import { FakeResponseBuilder } from "../../test/testutils";
 import InvalidToken from "../../../src/tokens/domain/errors/invalidToken";
 
 describe('tokenMiddleware', () => {
-    const A_BAERER_TOKEN = 'Baerer token';
+    const A_BAERER_TOKEN = 'Bearer token';
     const next = jest.fn();
-    const getTokenDataFromBaerer = jest.fn();
+    const getTokenDataFromBearer = jest.fn();
     const statusSpy = jest.fn().mockReturnThis();
     const sendSpy = jest.fn().mockReturnThis();
     const res = new FakeResponseBuilder().withStatus(statusSpy).withSend(sendSpy).build();
@@ -19,7 +19,7 @@ describe('tokenMiddleware', () => {
         body: {}
     } as unknown as Request;
     const fakeTokenService = {
-        getTokenDataFromBaerer
+        getTokenDataFromBearer
     } as unknown as TokenService;
     const sut = new TokenMiddleware(fakeTokenService);
 
@@ -35,25 +35,25 @@ describe('tokenMiddleware', () => {
 
         test('Should get the token and set in the request body', () => {
             const A_USERNAME = 'username';
-            getTokenDataFromBaerer.mockReturnValueOnce({ username: A_USERNAME });
+            getTokenDataFromBearer.mockReturnValueOnce({ username: A_USERNAME });
 
             sut.validateToken(req, res, next);
 
             expect(req.body.username).toBe(A_USERNAME);
-            expect(getTokenDataFromBaerer).toBeCalledWith(A_BAERER_TOKEN);
+            expect(getTokenDataFromBearer).toBeCalledWith(A_BAERER_TOKEN);
             expect(next).toBeCalledTimes(1);
         })
 
         test('Given an invalid token should fail', () => {
             const error = new InvalidToken();
-            getTokenDataFromBaerer.mockImplementationOnce(() => {
+            getTokenDataFromBearer.mockImplementationOnce(() => {
                 throw error;
             });
 
             sut.validateToken(req, res, next);
 
             expect(req.body.username).toBeUndefined();
-            expect(getTokenDataFromBaerer).toBeCalledWith(A_BAERER_TOKEN);
+            expect(getTokenDataFromBearer).toBeCalledWith(A_BAERER_TOKEN);
             expect(next).toBeCalledTimes(0);
             expect(statusSpy).toBeCalledWith(401);
             expect(sendSpy).toBeCalledWith(error.message);
@@ -61,7 +61,7 @@ describe('tokenMiddleware', () => {
 
         test('Given no token should fail', () => {
             const error = new InvalidToken();
-            getTokenDataFromBaerer.mockImplementationOnce(() => {
+            getTokenDataFromBearer.mockImplementationOnce(() => {
                 throw error;
             });
             req.headers = {};
@@ -69,7 +69,7 @@ describe('tokenMiddleware', () => {
             sut.validateToken(req, res, next);
 
             expect(req.body.username).toBeUndefined();
-            expect(getTokenDataFromBaerer).toBeCalledWith('');
+            expect(getTokenDataFromBearer).toBeCalledWith('');
             expect(next).toBeCalledTimes(0);
             expect(statusSpy).toBeCalledWith(401);
             expect(sendSpy).toBeCalledWith(error.message);
