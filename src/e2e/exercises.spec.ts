@@ -137,20 +137,20 @@ describe('Exercises e2e', () => {
         test('Happy path', async () => {
             const response = await request(app)
                 .put(Endpoints.EXERCISE + '/' + id)
-                .set('Authorization', `Bearer ${userToken}`)
-                .send(exerciseParams);
+                .send(exerciseParams)
+                .set('Authorization', `Bearer ${userToken}`);
 
             expect(response.status).toBe(204);
         })
 
         describe('Sad path', () => {
-            test.skip('Given no token should send a 401 status', async () => {
+            test('Given no token should send a 401 status', async () => {
                 const response = await request(app)
                     .put(Endpoints.EXERCISE + '/' + id)
                     .send(exerciseParams);
 
                 expect(response.status).toBe(401);
-                expect(isNumber(response.text)).toBe("Invaid or missing token");
+                expect(response.text).toBe("Invalid or missing token");
             })
 
             test('Given an invalid name should send a 422 status', async () => {
@@ -162,8 +162,8 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .put(Endpoints.EXERCISE + '/' + id)
-                    .set('Authorization', `Bearer ${userToken}`)
-                    .send(params);
+                    .send(params)
+                    .set('Authorization', `Bearer ${userToken}`);
 
                 expect(response.status).toBe(422);
             })
@@ -177,8 +177,8 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .put(Endpoints.EXERCISE + '/' + id)
-                    .set('Authorization', `Bearer ${userToken}`)
-                    .send(params);
+                    .send(params)
+                    .set('Authorization', `Bearer ${userToken}`);
 
                 expect(response.status).toBe(422);
             })
@@ -192,8 +192,8 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .put(Endpoints.EXERCISE + '/' + id)
-                    .set('Authorization', `Bearer ${userToken}`)
-                    .send(params);
+                    .send(params)
+                    .set('Authorization', `Bearer ${userToken}`);
 
                 expect(response.status).toBe(422);
             })
@@ -207,8 +207,8 @@ describe('Exercises e2e', () => {
 
                 const response = await request(app)
                     .delete(Endpoints.EXERCISE + '/' + id)
-                    .set('Authorization', `Bearer ${userToken}`)
-                    .send();
+                    .send()
+                    .set('Authorization', `Bearer ${userToken}`);
 
                 expect(response.status).toBe(204);
             })
@@ -216,15 +216,15 @@ describe('Exercises e2e', () => {
             test('Given an non existing exercise id should not fail', async () => {
                 const response = await request(app)
                     .delete(Endpoints.EXERCISE + '/10000')
-                    .set('Authorization', `Bearer ${userToken}`)
-                    .send();
+                    .send()
+                    .set('Authorization', `Bearer ${userToken}`);
 
                 expect(response.status).toBe(204);
             })
         })
 
         describe('Sad path', () => {
-            test.skip('Given no token should send a 401 status', async () => {
+            test('Given no token should send a 401 status', async () => {
                 const id = await createExerciseAndGetId(exerciseParams);
 
                 const response = await request(app)
@@ -232,7 +232,7 @@ describe('Exercises e2e', () => {
                     .send(exerciseParams);
 
                 expect(response.status).toBe(401);
-                expect(isNumber(response.text)).toBe("Invaid or missing token");
+                expect(response.text).toBe("Invalid or missing token");
             })
 
             test('Given an invalid exercise id should fail', async () => {

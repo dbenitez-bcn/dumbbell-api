@@ -27,11 +27,13 @@ router.get(
 
 router.delete(
     Endpoints.EXERCISE + "/:id",
+    middleware.validateToken.bind(middleware),
     controller.delete.bind(controller)
 );
 
 router.put(
     Endpoints.EXERCISE + "/:id",
+    middleware.validateToken.bind(middleware),
     controller.update.bind(controller)
 );
 
