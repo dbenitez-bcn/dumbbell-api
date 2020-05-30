@@ -4,10 +4,10 @@ import { Endpoints } from "../api/config/constants";
 import { isNumber } from "util";
 
 describe('Exercises e2e', () => {
-    const usernameA = 'exerciseUsernameA';
-    const usernameB = 'exerciseUsernameB';
-    const emailA = 'exerciseUsernameA@dumbbell.com';
-    const emailB = 'exerciseUsernameB@dumbbell.com';
+    const USERNAME_A = 'exerciseUsernameA';
+    const USERNAME_B = 'exerciseUsernameB';
+    const EMAIL_A = 'exerciseUsernameA@dumbbell.com';
+    const EMAIL_B = 'exerciseUsernameB@dumbbell.com';
     let app: any;
     let userTokenA: string;
     let userTokenB: string;
@@ -20,8 +20,8 @@ describe('Exercises e2e', () => {
 
     beforeAll(async () => {
         app = await startServer();
-        userTokenA = await createUser(usernameA, emailA);
-        userTokenB = await createUser(usernameB, emailB);
+        userTokenA = await createUser(USERNAME_A, EMAIL_A);
+        userTokenB = await createUser(USERNAME_B, EMAIL_B);
     })
 
     describe('Fetch exercises', () => {
