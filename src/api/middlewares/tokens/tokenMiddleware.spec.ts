@@ -14,7 +14,7 @@ describe('tokenMiddleware', () => {
     const res = new FakeResponseBuilder().withStatus(statusSpy).withSend(sendSpy).build();
     const req = {
         headers: {
-            Authorization: A_BAERER_TOKEN
+            authorization: A_BAERER_TOKEN
         },
         body: {}
     } as unknown as Request;
@@ -27,7 +27,7 @@ describe('tokenMiddleware', () => {
         afterEach(() => {
             req.body = {};
             req.headers = {
-                Authorization: A_BAERER_TOKEN
+                authorization: A_BAERER_TOKEN
             }
             jest.clearAllMocks();
             jest.clearAllTimers();
