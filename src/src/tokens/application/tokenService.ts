@@ -2,7 +2,7 @@ import * as jwt from "jsonwebtoken";
 import { injectable } from "inversify";
 import Secrets from "../../../core/secrets";
 import InvalidToken from "../domain/errors/invalidToken";
-import BaererToken from "../domain/valueObjects/BaererToken";
+import BearerToken from "../domain/valueObjects/BearerToken";
 
 @injectable()
 export default class TokenService {
@@ -13,8 +13,8 @@ export default class TokenService {
         return jwt.sign(payload, Secrets.JWT_SCRET);
     }
     
-    getTokenDataFromBaerer(token: string) {
-        const baererToken = new BaererToken(token);
+    getTokenDataFromBearer(token: string) {
+        const baererToken = new BearerToken(token);
         try {
             return <any>jwt.verify(baererToken.value, Secrets.JWT_SCRET);
         } catch (e) {

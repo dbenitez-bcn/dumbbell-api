@@ -24,7 +24,7 @@ describe('Token service', () => {
         })
     })
     
-    describe('getTokenDataFromBaerer', () => {
+    describe('getTokenDataFromBearer', () => {
         afterEach(() => {
             jest.clearAllTimers();
             jest.clearAllMocks();
@@ -36,9 +36,9 @@ describe('Token service', () => {
             }
             verify.mockReturnValue(expectedData);
             const sut = new TokenService();
-            const token = 'Baerer aToken';
+            const token = 'Bearer aToken';
 
-            const result = sut.getTokenDataFromBaerer(token);
+            const result = sut.getTokenDataFromBearer(token);
 
             expect(result).toBe(expectedData);
             expect(verify).toBeCalledWith('aToken', Secrets.JWT_SCRET);
@@ -49,39 +49,39 @@ describe('Token service', () => {
                 throw new Error();
             });
             const sut = new TokenService();
-            const token = 'Baerer aToken';
+            const token = 'Bearer aToken';
 
-            const fun = () => { sut.getTokenDataFromBaerer(token); }
+            const fun = () => { sut.getTokenDataFromBearer(token); }
 
             expect(fun).toThrow(InvalidToken);
             expect(verify).toBeCalledWith('aToken', Secrets.JWT_SCRET);
         });
 
-        test('Given a invalid baerer syntax should fail', () => {
+        test('Given a invalid bearer syntax should fail', () => {
             const sut = new TokenService();
             const token = 'aToken';
 
-            const fun = () => { sut.getTokenDataFromBaerer(token); }
+            const fun = () => { sut.getTokenDataFromBearer(token); }
 
             expect(fun).toThrow(InvalidToken);
             expect(verify).not.toBeCalled();
         });
 
-        test('Given a invalid baerer format should fail', () => {
+        test('Given a invalid bearer format should fail', () => {
             const sut = new TokenService();
-            const token = 'Baererino aToken';
+            const token = 'Bearerino aToken';
 
-            const fun = () => { sut.getTokenDataFromBaerer(token); }
+            const fun = () => { sut.getTokenDataFromBearer(token); }
 
             expect(fun).toThrow(InvalidToken);
             expect(verify).not.toBeCalled();
         });
 
-        test('Given an empty baerer should fail', () => {
+        test('Given an empty bearer should fail', () => {
             const sut = new TokenService();
             const token = '';
 
-            const fun = () => { sut.getTokenDataFromBaerer(token); }
+            const fun = () => { sut.getTokenDataFromBearer(token); }
 
             expect(fun).toThrow(InvalidToken);
             expect(verify).not.toBeCalled();
