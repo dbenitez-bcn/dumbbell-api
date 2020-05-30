@@ -30,6 +30,16 @@
 				{
 					"name": "Create exercise",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -76,6 +86,16 @@
 				{
 					"name": "Update exercise",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -143,6 +163,16 @@
 				{
 					"name": "Delete exercise",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -219,6 +249,29 @@
 				},
 				{
 					"name": "user login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c65f4719-b6ed-4082-a262-e3c226b11c4f",
+								"exec": [
+									"var bodyData = JSON.parse(responseBody);",
+									"pm.environment.set(\"TOKEN\", bodyData.token);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ce694d6d-096e-493b-badc-36d6273b5932",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
