@@ -1,4 +1,4 @@
-import Constants from "../../constants";
+import Constants from "../../constants/constants";
 
 export default class UnauthorizedAction extends Error {
     constructor() {

@@ -6,7 +6,7 @@ import LoginFailure from "../domain/errors/loginFailure";
 import DITypes from "../../../core/iot/diTypes";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
 import UserRole from "../domain/valueObjects/userRole";
-import UnauthorizedAction from "../domain/errors/unauthorizedAction";
+import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 import TokenService from "../../tokens/application/tokenService";
 
 @injectable()

@@ -8,5 +8,4 @@ export default class Constants {
     public static EMAIL_ALREADY_EXIST = "Email already exist";
     public static LOGIN_FAILURE = "Email or password incorrect. Please try again.";
     public static USER_NOT_FOUND = "User not found";
-    public static UNAUTHORIZED = "This action is not allowed.";
 }

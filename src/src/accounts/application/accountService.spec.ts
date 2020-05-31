@@ -7,7 +7,7 @@ import Email from '../domain/valueObjects/email';
 import LoginFailure from '../domain/errors/loginFailure';
 import HashedPassword from '../domain/valueObjects/hashedPassword';
 import UserRole from "../domain/valueObjects/userRole";
-import UnauthorizedAction from "../domain/errors/unauthorizedAction";
+import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 import TokenService from "../../tokens/application/tokenService";
 
 describe('Account service', () => {

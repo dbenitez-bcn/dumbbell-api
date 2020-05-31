@@ -7,7 +7,7 @@ import UserNotFound from "../../../src/accounts/domain/errors/userNotFound";
 import InvalidEmail from "../../../src/accounts/domain/errors/invalidEmail";
 import InvalidPasswordFormat from "../../../src/accounts/domain/errors/invalidPasswordFormat";
 import InvalidPasswordLength from "../../../src/accounts/domain/errors/invalidPasswordLength";
-import UnauthorizedAction from "../../../src/accounts/domain/errors/unauthorizedAction";
+import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 
 @injectable()
 export default class AuthController {
