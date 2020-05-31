@@ -1,7 +1,7 @@
 {
   "name": "dumbbell",
   "version": "1.0.0",
-  "description": "",
+  "description": "Dumbbell api",
   "main": "dist/api/index.js",
   "scripts": {
     "dev": "APP_ENV=dev tsc-watch --onSuccess \"node ./dist/api/index.js\"",
