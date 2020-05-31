@@ -159,7 +159,16 @@ describe('Exercises e2e', () => {
                 expect(response.text).toBe("Invalid or missing token");
             })
 
-            test.skip('Given a user that has not created the exercise when tring to update should send an unauthorized response', async () => {
+            test('Given non existing exercise should send a 404 status', async () => {
+                const response = await request(app)
+                    .put(Endpoints.EXERCISE + '/' + 1000)
+                    .send(exerciseParams)
+                    .set('Authorization', `Bearer ${userTokenA}`);
+
+                expect(response.status).toBe(404);
+            })
+
+            test('Given a user that has not created the exercise when tring to update should send an unauthorized response', async () => {
                 const params = {
                     name: 'New name',
                     description: 'Test description',
@@ -235,15 +244,6 @@ describe('Exercises e2e', () => {
 
                 expect(response.status).toBe(204);
             })
-
-            test('Given an non existing exercise id should not fail', async () => {
-                const response = await request(app)
-                    .delete(Endpoints.EXERCISE + '/10000')
-                    .send()
-                    .set('Authorization', `Bearer ${userTokenA}`);
-
-                expect(response.status).toBe(204);
-            })
         })
 
         describe('Sad path', () => {
@@ -258,7 +258,16 @@ describe('Exercises e2e', () => {
                 expect(response.text).toBe("Invalid or missing token");
             })
 
-            test.skip('Given a user that has not created the exercise when tring to update should send an unauthorized response', async () => {
+            test('Given an non existing exercise id should fail', async () => {
+                const response = await request(app)
+                    .delete(Endpoints.EXERCISE + '/10000')
+                    .send()
+                    .set('Authorization', `Bearer ${userTokenA}`);
+
+                expect(response.status).toBe(404);
+            })
+
+            test('Given a user that has not created the exercise when tring to update should send an unauthorized response', async () => {
                 const id = await createExerciseAndGetId(exerciseParams, userTokenA);
 
                 const response = await request(app)

@@ -13,6 +13,9 @@ import Name from "../domain/valueObject/name";
 import Description from "../domain/valueObject/description";
 import Difficulty from "../domain/valueObject/difficulty";
 import InvalidCreatedBy from "../domain/errors/InvalidCreatedBy";
+import UserRepository from "../../accounts/domain/repositories/userRepository";
+import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
+import CreatedBy from "../domain/valueObject/createdBy";
 
 describe('Exercise Service', () => {
     const fakeExerciseDTO = getFakeExerciseDTO();
@@ -21,11 +24,13 @@ describe('Exercise Service', () => {
     const A_NAME = 'A name';
     const A_DESCRIPTION = 'A description';
     const A_DIFFICULTY = 5;
+    const A_USERNAME = 'username';
     const createSpy = jest.fn();
     const getAllSpy = jest.fn();
     const getByIdlSpy = jest.fn();
     const updateSpy = jest.fn();
     const deleteSpy = jest.fn();
+    const findByEmail = jest.fn();
     const repository: ExerciseRepository = {
         create: createSpy,
         getAll: getAllSpy,
@@ -33,6 +38,9 @@ describe('Exercise Service', () => {
         update: updateSpy,
         delete: deleteSpy
     }
+    const userRepository = {
+        findByEmail
+    } as unknown as UserRepository;
     const sut = new ExerciseService(repository);
 
     afterEach(() => {
@@ -168,7 +176,11 @@ describe('Exercise Service', () => {
                 description: new Description(A_DESCRIPTION),
                 difficutly: new Difficulty(A_DIFFICULTY)
             }
-            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy(A_USERNAME)
+            });
+            
+            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
 
             expect(updateSpy).toBeCalledWith(id, params);
         })
@@ -179,7 +191,7 @@ describe('Exercise Service', () => {
                 description: new Description(A_DESCRIPTION),
                 difficutly: new Difficulty(A_DIFFICULTY)
             }
-            await sut.update(AN_ID, null!, A_DESCRIPTION, A_DIFFICULTY);
+            await sut.update(AN_ID, null!, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
 
             expect(updateSpy).toBeCalledWith(id, params);
         })
@@ -190,7 +202,7 @@ describe('Exercise Service', () => {
                 name: new Name(A_NAME),
                 difficutly: new Difficulty(A_DIFFICULTY)
             }
-            await sut.update(AN_ID, A_NAME, null!, A_DIFFICULTY);
+            await sut.update(AN_ID, A_NAME, null!, A_DIFFICULTY, A_USERNAME);
 
             expect(updateSpy).toBeCalledWith(id, params);
         })
@@ -201,39 +213,62 @@ describe('Exercise Service', () => {
                 name: new Name(A_NAME),
                 description: new Description(A_DESCRIPTION)
             }
-            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, null!);
+            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, null!, A_USERNAME);
 
             expect(updateSpy).toBeCalledWith(id, params);
         })
-        
+
         test('Given empty name should fail', async () => {
-            await expect(sut.update(AN_ID, '', A_DESCRIPTION, A_DIFFICULTY)).rejects.toThrowError(new InvalidName());
+            await expect(sut.update(AN_ID, '', A_DESCRIPTION, A_DIFFICULTY, A_USERNAME)).rejects.toThrowError(new InvalidName());
         })
-        
+
         test('Given empty description should fail', async () => {
-            await expect(sut.update(AN_ID, A_NAME, '', A_DIFFICULTY)).rejects.toThrowError(new InvalidDescription());
+            await expect(sut.update(AN_ID, A_NAME, '', A_DIFFICULTY, A_USERNAME)).rejects.toThrowError(new InvalidDescription());
         })
-        
+
         test('Given invalid difficutly should fail', async () => {
-            await expect(sut.update(AN_ID, A_NAME, A_DESCRIPTION, 0)).rejects.toThrowError(new InvalidDifficulty());
-        })  
-        
+            await expect(sut.update(AN_ID, A_NAME, A_DESCRIPTION, 0, A_USERNAME)).rejects.toThrowError(new InvalidDifficulty());
+        })
+
         test('Given no id should fail', async () => {
-            await expect(sut.update(null!, A_NAME, A_DESCRIPTION, A_DIFFICULTY)).rejects.toThrowError(new InvalidExerciseId());
-        })        
+            await expect(sut.update(null!, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME)).rejects.toThrowError(new InvalidExerciseId());
+        })
+
+        test('Given a user that did not create the exercise should fail', async () => {
+            const id = new ExerciseId(AN_ID);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy('testerino')
+            });
+
+            await expect(sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME)).rejects.toThrowError(new UnauthorizedAction());
+            expect(getByIdlSpy).toBeCalledWith(id);
+        })
     })
 
     describe('Delete', () => {
         test('Given an id should delete an exercise', async () => {
             const expectedId = new ExerciseId(AN_ID);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy(A_USERNAME)
+            });
 
-            await sut.delete(AN_ID);
+            await sut.delete(AN_ID, A_USERNAME);
 
             expect(deleteSpy).toBeCalledWith(expectedId);
         })
 
         test('Given an invalid id should fail', async () => {
-            await expect(sut.getById(0)).rejects.toThrowError(new InvalidExerciseId());
+            await expect(sut.delete(0, A_USERNAME)).rejects.toThrowError(new InvalidExerciseId());
+        })
+
+        test('Given a user that did not create the exercise should fail', async () => {
+            const id = new ExerciseId(AN_ID);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy('testerino')
+            });
+
+            await expect(sut.delete(AN_ID, A_USERNAME)).rejects.toThrowError(new UnauthorizedAction());
+            expect(getByIdlSpy).toBeCalledWith(id);
         })
     })
 })

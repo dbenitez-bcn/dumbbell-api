@@ -10,6 +10,7 @@ import ExercisesNotFound from "../../../src/exercises/domain/errors/ExercisesNot
 import ExerciseNotFound from "../../../src/exercises/domain/errors/ExerciseNotFound";
 import InvalidExerciseId from "../../../src/exercises/domain/errors/InvalidExerciseId";
 import { getFakeExerciseDTO } from "../../../src/exercises/test/testUtils";
+import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 
 describe('Exercise controller', () => {
     const AN_ID = 1;
@@ -56,7 +57,7 @@ describe('Exercise controller', () => {
             createSpy.mockResolvedValue(AN_EXERCISE_DTO);
 
             await sut.create(req, res);
-            
+
             expect(createSpy).lastCalledWith(A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
             expect(statusSpy).toBeCalledWith(201);
             expect(sendSpy).toBeCalledWith(AN_EXERCISE_DTO);
@@ -104,7 +105,7 @@ describe('Exercise controller', () => {
     })
 
     describe('get all', () => {
-        const req = { } as Request;
+        const req = {} as Request;
 
         afterEach(() => {
             jest.clearAllMocks()
@@ -156,7 +157,7 @@ describe('Exercise controller', () => {
             jest.clearAllTimers()
         })
 
-        test('Should return a single exercise', async () => {
+        test('Should return a single exercise', async () => {
             getByIdSpy.mockResolvedValue(AN_EXERCISE_DTO);
 
             await sut.getById(req, res);
@@ -207,7 +208,8 @@ describe('Exercise controller', () => {
         const body = {
             name: A_NAME,
             description: A_DESCRIPTION,
-            difficulty: A_DIFFICULTY
+            difficulty: A_DIFFICULTY,
+            username: A_USERNAME
         }
         const req = { params, body } as unknown as Request;
 
@@ -219,7 +221,7 @@ describe('Exercise controller', () => {
         test('Given an id should update the exercise', async () => {
             await sut.update(req, res);
 
-            expect(updateSpy).toBeCalledWith(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY);
+            expect(updateSpy).toBeCalledWith(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
             expect(statusSpy).toBeCalledWith(204);
             expect(sendSpy).toBeCalledTimes(1);
         })
@@ -275,24 +277,47 @@ describe('Exercise controller', () => {
             expect(statusSpy).toBeCalledWith(422);
             expect(sendSpy).toBeCalledWith(error.message);
         })
+
+        test('Given an exercise not found error should fail', async () => {
+            const error = new ExerciseNotFound();
+            updateSpy.mockRejectedValue(error);
+
+            await sut.update(req, res);
+
+            expect(statusSpy).toBeCalledWith(404);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given a unauthorized error should fail', async () => {
+            const error = new UnauthorizedAction();
+            updateSpy.mockRejectedValue(error);
+
+            await sut.update(req, res);
+
+            expect(statusSpy).toBeCalledWith(401);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
     })
 
 
     describe('delete', () => {
         const params = {
-            id: AN_ID
+            id: AN_ID,
         }
-        const req = { params } as unknown as Request;
+        const body = {
+            username: A_USERNAME
+        }
+        const req = { params, body } as unknown as Request;
 
         afterEach(() => {
             jest.clearAllMocks()
             jest.clearAllTimers()
         })
 
-        test('Should delete a single exercise', async () => {
+        test('Should delete a single exercise', async () => {
             await sut.delete(req, res);
 
-            expect(deleteSpy).lastCalledWith(AN_ID);
+            expect(deleteSpy).lastCalledWith(AN_ID, A_USERNAME);
             expect(statusSpy).toBeCalledWith(204);
             expect(sendSpy).toBeCalledWith();
         })
@@ -316,6 +341,28 @@ describe('Exercise controller', () => {
 
             expect(deleteSpy).toBeCalledTimes(1);
             expect(statusSpy).toBeCalledWith(500);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given an exercise not found should fail', async () => {
+            const error = new ExerciseNotFound();
+            deleteSpy.mockRejectedValue(error);
+
+            await sut.delete(req, res);
+
+            expect(deleteSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(404);
+            expect(sendSpy).toBeCalledWith(error.message);
+        })
+
+        test('Given an authorized should fail', async () => {
+            const error = new UnauthorizedAction();
+            deleteSpy.mockRejectedValue(error);
+
+            await sut.delete(req, res);
+
+            expect(deleteSpy).toBeCalledTimes(1);
+            expect(statusSpy).toBeCalledWith(401);
             expect(sendSpy).toBeCalledWith(error.message);
         })
     })

@@ -8,6 +8,7 @@ import Difficulty from "../domain/valueObject/difficulty";
 import { injectable, inject } from "inversify";
 import DITypes from "../../../core/iot/diTypes";
 import ExerciseDTO from "../domain/dtos/exerciseDTO";
+import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 
 @injectable()
 export default class ExerciseService {
@@ -30,8 +31,12 @@ export default class ExerciseService {
         return new ExerciseDTO(exercise.id, exercise.name.value, exercise.description.value, exercise.difficulty.value, exercise.createdBy.value);
     }
 
-    async update(id: number, name: string, description: string, difficulty: number) {
+    async update(id: number, name: string, description: string, difficulty: number, username: string) {
         const exerciseId = new ExerciseId(id);
+        const exercise = await this.repository.getById(exerciseId);
+        if (exercise.createdBy.value !== username) {
+            throw new UnauthorizedAction();
+        }
         const params: ExerciseParams = {}
         if (typeof name === 'string') params.name = new Name(name);
         if (typeof description === 'string') params.description = new Description(description);
@@ -39,8 +44,12 @@ export default class ExerciseService {
         await this.repository.update(exerciseId, params);
     }
 
-    async delete(id: number) {
+    async delete(id: number, username: string) {
         const exerciseId = new ExerciseId(id);
+        const exercise = await this.repository.getById(exerciseId);
+        if (exercise.createdBy.value !== username) {
+            throw new UnauthorizedAction();
+        }
         await this.repository.delete(exerciseId);
     }
 }

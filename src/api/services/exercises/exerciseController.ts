@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { injectable, inject } from "inversify";
 import ExerciseService from "../../../src/exercises/services/exerciseService";
 import InvalidName from "../../../src/exercises/domain/errors/InvalidName";
 import InvalidDescription from "../../../src/exercises/domain/errors/InvalidDescription";
@@ -6,7 +7,7 @@ import InvalidDifficulty from "../../../src/exercises/domain/errors/InvalidDiffi
 import ExercisesNotFound from "../../../src/exercises/domain/errors/ExercisesNotFound";
 import InvalidExerciseId from "../../../src/exercises/domain/errors/InvalidExerciseId";
 import ExerciseNotFound from "../../../src/exercises/domain/errors/ExerciseNotFound";
-import { injectable, inject } from "inversify";
+import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 
 @injectable()
 export default class ExerciseController {
@@ -55,10 +56,14 @@ export default class ExerciseController {
     async update(req: Request, res: Response) {
         const id = parseInt(req.params.id);
         try {
-            await this.service.update(id, req.body.name, req.body.description, parseInt(req.body.difficulty))
+            await this.service.update(id, req.body.name, req.body.description, parseInt(req.body.difficulty), req.body.username)
         } catch (e) {
             if (e instanceof InvalidExerciseId || this.isParamError(e)) {
                 res.status(422).send(e.message);
+            } else if (e instanceof UnauthorizedAction) {
+                res.status(401).send(e.message);
+            } else if (e instanceof ExerciseNotFound) {
+                res.status(404).send(e.message);
             } else {
                 res.status(500).send(e.message);
             }
@@ -70,12 +75,16 @@ export default class ExerciseController {
     async delete(req: Request, res: Response) {
         const id = parseInt(req.params.id);
         try {
-            await this.service.delete(id)
+            await this.service.delete(id, req.body.username)
             res.status(204).send();
         }
         catch (e) {
             if (e instanceof InvalidExerciseId) {
                 res.status(422).send(e.message);
+            } else if (e instanceof UnauthorizedAction) {
+                res.status(401).send(e.message);
+            } else if (e instanceof ExerciseNotFound) {
+                res.status(404).send(e.message);
             } else {
                 res.status(500).send(e.message);
             }
