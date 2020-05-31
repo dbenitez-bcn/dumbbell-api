@@ -16,6 +16,8 @@ import InvalidCreatedBy from "../domain/errors/InvalidCreatedBy";
 import UserRepository from "../../accounts/domain/repositories/userRepository";
 import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 import CreatedBy from "../domain/valueObject/createdBy";
+import UserRole from "../../accounts/domain/valueObjects/userRole";
+import Username from "../../accounts/domain/valueObjects/username";
 
 describe('Exercise Service', () => {
     const fakeExerciseDTO = getFakeExerciseDTO();
@@ -30,7 +32,7 @@ describe('Exercise Service', () => {
     const getByIdlSpy = jest.fn();
     const updateSpy = jest.fn();
     const deleteSpy = jest.fn();
-    const findByEmail = jest.fn();
+    const findByUsername = jest.fn();
     const repository: ExerciseRepository = {
         create: createSpy,
         getAll: getAllSpy,
@@ -39,9 +41,9 @@ describe('Exercise Service', () => {
         delete: deleteSpy
     }
     const userRepository = {
-        findByEmail
+        findByUsername
     } as unknown as UserRepository;
-    const sut = new ExerciseService(repository);
+    const sut = new ExerciseService(repository, userRepository);
 
     afterEach(() => {
         jest.clearAllMocks();
@@ -169,20 +171,25 @@ describe('Exercise Service', () => {
     })
 
     describe('update', () => {
-        test('Should update an exercise', async () => {
-            const id = new ExerciseId(AN_ID);
-            const params: ExerciseParams = {
-                name: new Name(A_NAME),
-                description: new Description(A_DESCRIPTION),
-                difficutly: new Difficulty(A_DIFFICULTY)
-            }
+        const params: ExerciseParams = {
+            name: new Name(A_NAME),
+            description: new Description(A_DESCRIPTION),
+            difficutly: new Difficulty(A_DIFFICULTY)
+        }
+
+        beforeEach(() =>{
             getByIdlSpy.mockResolvedValue({
                 createdBy: new CreatedBy(A_USERNAME)
             });
-            
-            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
+            findByUsername.mockResolvedValue({
+                username: new Username(A_USERNAME),
+                role: UserRole.OPERATOR
+            })
+        })
 
-            expect(updateSpy).toBeCalledWith(id, params);
+        afterEach(() => {
+            jest.clearAllMocks();
+            jest.clearAllTimers();
         })
 
         test('Given no name should update an exercise', async () => {
@@ -234,41 +241,156 @@ describe('Exercise Service', () => {
             await expect(sut.update(null!, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME)).rejects.toThrowError(new InvalidExerciseId());
         })
 
-        test('Given a user that did not create the exercise should fail', async () => {
+        test('Given a user with operator role that created the exercise should update the exercise', async () => {
             const id = new ExerciseId(AN_ID);
+            const username = new Username(A_USERNAME);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy(A_USERNAME)
+            });
+            findByUsername.mockResolvedValue({
+                username,
+                role: UserRole.OPERATOR
+            })
+
+            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
+
+            expect(updateSpy).toBeCalledWith(id, params);
+            expect(getByIdlSpy).toBeCalledWith(id);
+            expect(findByUsername).toBeCalledWith(username);
+        })
+
+        test('Given a user with user role that did created the exercise should update the exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const username = new Username(A_USERNAME);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy(A_USERNAME)
+            });
+            findByUsername.mockResolvedValue({
+                username,
+                role: UserRole.USER
+            })
+
+            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
+
+            expect(updateSpy).toBeCalledWith(id, params);
+            expect(getByIdlSpy).toBeCalledWith(id);
+            expect(findByUsername).toBeCalledWith(username);
+        })
+
+        test('Given a user with operator role that did not created the exercise update delete the exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const username = new Username(A_USERNAME);
             getByIdlSpy.mockResolvedValue({
                 createdBy: new CreatedBy('testerino')
             });
+            findByUsername.mockResolvedValue({
+                username,
+                role: UserRole.OPERATOR
+            })
+
+            await sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME);
+
+            expect(updateSpy).toBeCalledWith(id, params);
+            expect(getByIdlSpy).toBeCalledWith(id);
+            expect(findByUsername).toBeCalledWith(username);
+        })
+
+        test('Given a user with user role that did not created the exercise should fail', async () => {
+            const id = new ExerciseId(AN_ID);
+            const username = new Username(A_USERNAME);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy('testerino')
+            });
+            findByUsername.mockResolvedValue({
+                username,
+                role: UserRole.USER
+            })
 
             await expect(sut.update(AN_ID, A_NAME, A_DESCRIPTION, A_DIFFICULTY, A_USERNAME)).rejects.toThrowError(new UnauthorizedAction());
+
             expect(getByIdlSpy).toBeCalledWith(id);
+            expect(findByUsername).toBeCalledWith(username);
         })
     })
 
     describe('Delete', () => {
-        test('Given an id should delete an exercise', async () => {
-            const expectedId = new ExerciseId(AN_ID);
+        afterEach(() => {
+            jest.clearAllMocks();
+            jest.clearAllTimers();
+        })
+        test('Given a user with operator role that created the exercise should delete the exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const username = new Username(A_USERNAME);
             getByIdlSpy.mockResolvedValue({
                 createdBy: new CreatedBy(A_USERNAME)
             });
+            findByUsername.mockResolvedValue({
+                username,
+                role: UserRole.OPERATOR
+            })
 
             await sut.delete(AN_ID, A_USERNAME);
 
-            expect(deleteSpy).toBeCalledWith(expectedId);
+            expect(deleteSpy).toBeCalledWith(id);
+            expect(getByIdlSpy).toBeCalledWith(id);
+            expect(findByUsername).toBeCalledWith(username);
+        })
+
+        test('Given a user with user role that did created the exercise should delete the exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const username = new Username(A_USERNAME);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy(A_USERNAME)
+            });
+            findByUsername.mockResolvedValue({
+                username,
+                role: UserRole.USER
+            })
+
+            await sut.delete(AN_ID, A_USERNAME);
+
+            expect(deleteSpy).toBeCalledWith(id);
+            expect(getByIdlSpy).toBeCalledWith(id);
+            expect(findByUsername).toBeCalledWith(username);
+        })
+
+        test('Given a user with operator role that did not created the exercise should delete the exercise', async () => {
+            const id = new ExerciseId(AN_ID);
+            const username = new Username(A_USERNAME);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy('testerino')
+            });
+            findByUsername.mockResolvedValue({
+                username,
+                role: UserRole.OPERATOR
+            })
+
+            await sut.delete(AN_ID, A_USERNAME);
+
+            expect(deleteSpy).toBeCalledWith(id);
+            expect(getByIdlSpy).toBeCalledWith(id);
+            expect(findByUsername).toBeCalledWith(username);
+        })
+
+        test('Given a user with user role that did not created the exercise should fail', async () => {
+            const id = new ExerciseId(AN_ID);
+            const username = new Username(A_USERNAME);
+            getByIdlSpy.mockResolvedValue({
+                createdBy: new CreatedBy('testerino')
+            });
+            findByUsername.mockResolvedValue({
+                username,
+                role: UserRole.USER
+            })
+
+            await expect(sut.delete(AN_ID, A_USERNAME)).rejects.toThrowError(new UnauthorizedAction());
+
+            expect(getByIdlSpy).toBeCalledWith(id);
+            expect(findByUsername).toBeCalledWith(username);
         })
 
         test('Given an invalid id should fail', async () => {
             await expect(sut.delete(0, A_USERNAME)).rejects.toThrowError(new InvalidExerciseId());
-        })
-
-        test('Given a user that did not create the exercise should fail', async () => {
-            const id = new ExerciseId(AN_ID);
-            getByIdlSpy.mockResolvedValue({
-                createdBy: new CreatedBy('testerino')
-            });
-
-            await expect(sut.delete(AN_ID, A_USERNAME)).rejects.toThrowError(new UnauthorizedAction());
-            expect(getByIdlSpy).toBeCalledWith(id);
         })
     })
 })

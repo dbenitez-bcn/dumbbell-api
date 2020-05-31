@@ -9,10 +9,17 @@ import { injectable, inject } from "inversify";
 import DITypes from "../../../core/iot/diTypes";
 import ExerciseDTO from "../domain/dtos/exerciseDTO";
 import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
+import UserRepository from "../../accounts/domain/repositories/userRepository";
+import Username from "../../accounts/domain/valueObjects/username";
+import UserRole from "../../accounts/domain/valueObjects/userRole";
+import User from "../../accounts/domain/aggregates/user";
 
 @injectable()
 export default class ExerciseService {
-    constructor(@inject(DITypes.ExerciseRepository) private readonly repository: ExerciseRepository) { }
+    constructor(
+        @inject(DITypes.ExerciseRepository) private readonly repository: ExerciseRepository,
+        @inject(DITypes.UserRepository) private readonly userRepository: UserRepository
+    ) { }
 
     async create(name: string, description: string, difficulty: number, createdBy: string): Promise<ExerciseDTO> {
         const exercise = new Exercise(0, name, description, difficulty, createdBy);
@@ -34,7 +41,8 @@ export default class ExerciseService {
     async update(id: number, name: string, description: string, difficulty: number, username: string) {
         const exerciseId = new ExerciseId(id);
         const exercise = await this.repository.getById(exerciseId);
-        if (exercise.createdBy.value !== username) {
+        const user = await this.userRepository.findByUsername(new Username(username));
+        if (!this.isOwner(user, exercise) && !this.isOperator(user)) {
             throw new UnauthorizedAction();
         }
         const params: ExerciseParams = {}
@@ -47,9 +55,18 @@ export default class ExerciseService {
     async delete(id: number, username: string) {
         const exerciseId = new ExerciseId(id);
         const exercise = await this.repository.getById(exerciseId);
-        if (exercise.createdBy.value !== username) {
+        const user = await this.userRepository.findByUsername(new Username(username));
+        if (!this.isOwner(user, exercise) && !this.isOperator(user)) {
             throw new UnauthorizedAction();
         }
         await this.repository.delete(exerciseId);
+    }
+
+    private isOperator(user: User) {
+        return user.role == UserRole.OPERATOR;
+    }
+
+    private isOwner(user: User, exercise: Exercise) {
+        return user.username.value == exercise.createdBy.value;
     }
 }

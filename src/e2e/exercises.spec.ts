@@ -1,16 +1,22 @@
 import request from "supertest";
+import { isNumber } from "util";
+import { getRepository } from "typeorm";
 import { startServer } from "../api/server";
 import { Endpoints } from "../api/config/constants";
-import { isNumber } from "util";
+import UserDB from "../src/accounts/domain/typeormEntities/user";
+import UserRole from "../src/accounts/domain/valueObjects/userRole";
 
 describe('Exercises e2e', () => {
     const USERNAME_A = 'exerciseUsernameA';
     const USERNAME_B = 'exerciseUsernameB';
+    const USERNAME_OPERATOR = 'exerciseUsernameOperator';
     const EMAIL_A = 'exerciseUsernameA@dumbbell.com';
     const EMAIL_B = 'exerciseUsernameB@dumbbell.com';
+    const EMAIL_OPERATOR = 'exerciseUsernameOperator@dumbbell.com';
     let app: any;
     let userTokenA: string;
     let userTokenB: string;
+    let userTokenOperator: string;
 
     const exerciseParams = {
         name: 'Test name',
@@ -22,6 +28,8 @@ describe('Exercises e2e', () => {
         app = await startServer();
         userTokenA = await createUser(USERNAME_A, EMAIL_A);
         userTokenB = await createUser(USERNAME_B, EMAIL_B);
+        userTokenOperator = await createUser(USERNAME_OPERATOR, EMAIL_OPERATOR);
+        updateRoleToOperator(USERNAME_OPERATOR);
     })
 
     describe('Fetch exercises', () => {
@@ -139,14 +147,24 @@ describe('Exercises e2e', () => {
         beforeAll(async () => {
             id = await createExerciseAndGetId(exerciseParams, userTokenA);
         })
+        describe('Happy path', () => {
+            test('Given a user that created the exercise should update the exercise', async () => {
+                const response = await request(app)
+                    .put(Endpoints.EXERCISE + '/' + id)
+                    .send(exerciseParams)
+                    .set('Authorization', `Bearer ${userTokenA}`);
 
-        test('Happy path', async () => {
-            const response = await request(app)
-                .put(Endpoints.EXERCISE + '/' + id)
-                .send(exerciseParams)
-                .set('Authorization', `Bearer ${userTokenA}`);
+                expect(response.status).toBe(204);
+            })
 
-            expect(response.status).toBe(204);
+            test('Given a user with operator role that did not creat the exercise should update the exercise', async () => {
+                const response = await request(app)
+                    .put(Endpoints.EXERCISE + '/' + id)
+                    .send(exerciseParams)
+                    .set('Authorization', `Bearer ${userTokenOperator}`);
+
+                expect(response.status).toBe(204);
+            })
         })
 
         describe('Sad path', () => {
@@ -244,6 +262,22 @@ describe('Exercises e2e', () => {
 
                 expect(response.status).toBe(204);
             })
+
+            test('Given a user with operator role that did not creat the exercise should delete the exercise', async () => {
+                const id = await createExerciseAndGetId(exerciseParams, userTokenA);
+
+                const deleteResponse = await request(app)
+                    .delete(Endpoints.EXERCISE + '/' + id)
+                    .send()
+                    .set('Authorization', `Bearer ${userTokenOperator}`);
+                const getResponse = await request(app)
+                    .get(Endpoints.EXERCISE + '/' + id)
+                    .send()
+                    .set('Authorization', `Bearer ${userTokenOperator}`);
+
+                expect(deleteResponse.status).toBe(204);
+                expect(getResponse.status).toBe(404);
+            })
         })
 
         describe('Sad path', () => {
@@ -317,5 +351,14 @@ describe('Exercises e2e', () => {
             })
 
         return response.body.token;
+    }
+
+    const updateRoleToOperator = async (username: string) => {
+        const repo = getRepository(UserDB);
+        const operator = await repo.findOne({
+            username: username
+        });
+        operator!.role = UserRole.OPERATOR;
+        repo.save(operator!);
     }
 })
