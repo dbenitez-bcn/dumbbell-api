@@ -32,6 +32,7 @@ import TypeormUsersRepository from "./typeormUsersRepository";
 import UserDB from "../domain/typeormEntities/user";
 import UserRole from "../domain/valueObjects/userRole";
 import User from "../domain/aggregates/user";
+import Username from "../domain/valueObjects/username";
 
 describe('typeormUsersRepository', () => {
     const sut = new TypeormUsersRepository();
@@ -99,6 +100,37 @@ describe('typeormUsersRepository', () => {
             findOneSpy.mockRejectedValue(new Error());
 
             await expect(sut.findByEmail(email)).rejects.toThrowError(DatabaseFailure);
+        })
+    })
+
+    describe('findByUsername', () => {
+        const username = new Username('testerino');
+        
+        test('Should return a hashed password', async () => {
+            const userDB = new UserDB();
+            userDB.password = 'hashedpassword';
+            userDB.email = 'test@dumbbell.com';
+            userDB.username = 'testerino';
+            userDB.role = UserRole.USER;
+            findOneSpy.mockResolvedValue(userDB);
+            const expected = new User(userDB.username, userDB.email, new HashedPassword(userDB.password), userDB.role);
+
+            const result = await sut.findByUsername(username);
+
+            expect(findOneSpy).toBeCalledWith({username: username.value});
+            expect(result).toStrictEqual(expected);
+        })
+
+        test('Given no user should fail', async () => {
+            findOneSpy.mockResolvedValue(undefined);
+
+            await expect(sut.findByEmail(username)).rejects.toThrowError(UserNotFound);
+        })
+
+        test('Given an error when accessing to databse should fail', async () => {
+            findOneSpy.mockRejectedValue(new Error());
+
+            await expect(sut.findByEmail(username)).rejects.toThrowError(DatabaseFailure);
         })
     })
 })

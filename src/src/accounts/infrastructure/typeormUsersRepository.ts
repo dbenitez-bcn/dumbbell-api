@@ -9,6 +9,7 @@ import ExistingUsername from "../domain/errors/existingUsername";
 import ExistingEmail from "../domain/errors/existingEmail";
 import UserNotFound from "../domain/errors/userNotFound";
 import HashedPassword from "../domain/valueObjects/hashedPassword";
+import Username from "../domain/valueObjects/username";
 
 @injectable()
 export default class TypeormUsersRepository implements UserRepository {
@@ -40,6 +41,17 @@ export default class TypeormUsersRepository implements UserRepository {
 
     async findByEmail(email: Email): Promise<User> {
         const user = await this.repository.findOne({ email: email.value })
+            .catch(() => {
+                throw new DatabaseFailure();
+            });
+        if (user === undefined) {
+            throw new UserNotFound();
+        }
+        return new User(user.username, user.email, new HashedPassword(user.password), user.role);
+    }
+
+    async findByUsername(username: Username): Promise<User> {
+        const user = await this.repository.findOne({ username: username.value })
             .catch(() => {
                 throw new DatabaseFailure();
             });
