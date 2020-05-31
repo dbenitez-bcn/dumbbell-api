@@ -17,10 +17,10 @@ describe('Account service', () => {
     const create = jest.fn();
     const findByEmail = jest.fn();
     const generateToken = jest.fn().mockReturnValue('token')
-    const repository: UserRepository = {
+    const repository = {
         create,
         findByEmail
-    }
+    } as unknown as UserRepository;
     const fakeTokenService = {
         generateToken
     } as unknown as TokenService;
