@@ -7,7 +7,7 @@ import AuthController from "../../api/services/auth/authController";
 import UsersController from "../../api/services/users/usersController";
 import ExerciseController from "../../api/services/exercises/exerciseController";
 import ExerciseRepository from "../../src/exercises/domain/repositories/exerciseRepository";
-import TypeormExerciseRepository from "../../src/exercises/infrastructure/typeormExerciseRepository";
+import TypeormExerciseRepository from "../../src/exercises/infrastructure/typeorm/repositories/typeormExerciseRepository";
 import ExerciseService from "../../src/exercises/services/exerciseService";
 import TokenService from "../../src/tokens/application/tokenService";
 import TokenMiddleware from "../../api/middlewares/tokens/tokenMiddleware";

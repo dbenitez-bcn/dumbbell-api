@@ -1,15 +1,15 @@
 import { injectable } from "inversify";
 import { getRepository, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
-import ExerciseRepository from "../domain/repositories/exerciseRepository";
-import Exercise from "../domain/aggregates/exercise";
-import DatabaseFailure from "../domain/errors/DatabaseFailure";
-import ExerciseId from "../domain/valueObject/exerciseId";
-import ExerciseParams from "../domain/aggregates/exerciseParams";
-import ExerciseDB from "../domain/typeormEntities/exercise";
-import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
-import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
-import UserDB from "../../accounts/infrastructure/typeorm/entities/user";
+import ExerciseRepository from "../../../domain/repositories/exerciseRepository";
+import Exercise from "../../../domain/aggregates/exercise";
+import DatabaseFailure from "../../../domain/errors/DatabaseFailure";
+import ExerciseId from "../../../domain/valueObject/exerciseId";
+import ExerciseParams from "../../../domain/aggregates/exerciseParams";
+import ExerciseDB from "../../../domain/typeormEntities/exercise";
+import ExercisesNotFound from "../../../domain/errors/ExercisesNotFound";
+import ExerciseNotFound from "../../../domain/errors/ExerciseNotFound";
+import UserDB from "../../../../accounts/infrastructure/typeorm/entities/user";
 
 @injectable()
 export default class TypeormExerciseRepository implements ExerciseRepository {

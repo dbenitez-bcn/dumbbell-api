@@ -1,11 +1,11 @@
-import DatabaseFailure from "../domain/errors/DatabaseFailure";
-import ExerciseId from "../domain/valueObject/exerciseId";
-import ExerciseParams from "../domain/aggregates/exerciseParams";
-import Difficulty from "../domain/valueObject/difficulty";
-import Description from "../domain/valueObject/description";
-import Name from "../domain/valueObject/name";
-import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
-import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
+import DatabaseFailure from "../../../domain/errors/DatabaseFailure";
+import ExerciseId from "../../../domain/valueObject/exerciseId";
+import ExerciseParams from "../../../domain/aggregates/exerciseParams";
+import Difficulty from "../../../domain/valueObject/difficulty";
+import Description from "../../../domain/valueObject/description";
+import Name from "../../../domain/valueObject/name";
+import ExercisesNotFound from "../../../domain/errors/ExercisesNotFound";
+import ExerciseNotFound from "../../../domain/errors/ExerciseNotFound";
 
 const saveSpy = jest.fn();
 const findSpy = jest.fn();
@@ -36,9 +36,9 @@ jest.mock('inversify', () => ({
 }));
 
 import TypeormExerciseRepository from "./typeormExerciseRepository";
-import ExerciseDB from "../domain/typeormEntities/exercise";
-import { getFakeExerciseDB, getFakeExercise } from "../test/testUtils";
-import Exercise from "../domain/aggregates/exercise";
+import ExerciseDB from "../../../domain/typeormEntities/exercise";
+import { getFakeExerciseDB, getFakeExercise } from "../../../test/testUtils";
+import Exercise from "../../../domain/aggregates/exercise";
 
 describe('Typeorm repository', () => {
     const ID_VALUE = 1
