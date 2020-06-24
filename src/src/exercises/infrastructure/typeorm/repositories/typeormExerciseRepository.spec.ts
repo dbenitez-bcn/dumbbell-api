@@ -36,7 +36,7 @@ jest.mock('inversify', () => ({
 }));
 
 import TypeormExerciseRepository from "./typeormExerciseRepository";
-import ExerciseDB from "../../../domain/typeormEntities/exercise";
+import ExerciseDB from "../entities/exercise";
 import { getFakeExerciseDB, getFakeExercise } from "../../../test/testUtils";
 import Exercise from "../../../domain/aggregates/exercise";
 

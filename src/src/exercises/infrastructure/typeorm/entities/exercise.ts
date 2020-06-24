@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseTableEntity } from './baseTableEntity';
-import Secrets from '../../../../core/secrets';
-import UserDB from '../../../accounts/infrastructure/typeorm/entities/user';
+import Secrets from '../../../../../core/secrets';
+import UserDB from '../../../../accounts/infrastructure/typeorm/entities/user';
 
 @Entity(Secrets.DB_TB_EXERCISES)
 export default class ExerciseDB extends BaseTableEntity{

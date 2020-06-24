@@ -1,4 +1,4 @@
-import ExerciseDB from "../domain/typeormEntities/exercise";
+import ExerciseDB from "../infrastructure/typeorm/entities/exercise";
 import { getFakeUserDB } from "../../accounts/test/getFakeUserDB";
 
 export const getFakeExerciseDB = () => {

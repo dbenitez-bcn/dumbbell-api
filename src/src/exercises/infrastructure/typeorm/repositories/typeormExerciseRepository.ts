@@ -6,7 +6,7 @@ import Exercise from "../../../domain/aggregates/exercise";
 import DatabaseFailure from "../../../domain/errors/DatabaseFailure";
 import ExerciseId from "../../../domain/valueObject/exerciseId";
 import ExerciseParams from "../../../domain/aggregates/exerciseParams";
-import ExerciseDB from "../../../domain/typeormEntities/exercise";
+import ExerciseDB from "../entities/exercise";
 import ExercisesNotFound from "../../../domain/errors/ExercisesNotFound";
 import ExerciseNotFound from "../../../domain/errors/ExerciseNotFound";
 import UserDB from "../../../../accounts/infrastructure/typeorm/entities/user";
