@@ -1,15 +1,15 @@
 import { getRepository, Repository } from "typeorm";
 import { injectable } from "inversify";
-import UserRepository from "../domain/repositories/userRepository";
-import User from "../domain/aggregates/user";
-import Email from "../domain/valueObjects/email";
-import UserDB from "../domain/typeormEntities/user";
-import DatabaseFailure from "../../exercises/domain/errors/DatabaseFailure";
-import ExistingUsername from "../domain/errors/existingUsername";
-import ExistingEmail from "../domain/errors/existingEmail";
-import UserNotFound from "../domain/errors/userNotFound";
-import HashedPassword from "../domain/valueObjects/hashedPassword";
-import Username from "../domain/valueObjects/username";
+import UserRepository from "../../../domain/repositories/userRepository";
+import User from "../../../domain/aggregates/user";
+import Email from "../../../domain/valueObjects/email";
+import UserDB from "../entities/user";
+import DatabaseFailure from "../../../../exercises/domain/errors/DatabaseFailure";
+import ExistingUsername from "../../../domain/errors/existingUsername";
+import ExistingEmail from "../../../domain/errors/existingEmail";
+import UserNotFound from "../../../domain/errors/userNotFound";
+import HashedPassword from "../../../domain/valueObjects/hashedPassword";
+import Username from "../../../domain/valueObjects/username";
 
 @injectable()
 export default class TypeormUsersRepository implements UserRepository {

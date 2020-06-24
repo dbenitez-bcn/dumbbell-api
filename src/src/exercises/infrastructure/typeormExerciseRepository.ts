@@ -9,7 +9,7 @@ import ExerciseParams from "../domain/aggregates/exerciseParams";
 import ExerciseDB from "../domain/typeormEntities/exercise";
 import ExercisesNotFound from "../domain/errors/ExercisesNotFound";
 import ExerciseNotFound from "../domain/errors/ExerciseNotFound";
-import UserDB from "../../accounts/domain/typeormEntities/user";
+import UserDB from "../../accounts/infrastructure/typeorm/entities/user";
 
 @injectable()
 export default class TypeormExerciseRepository implements ExerciseRepository {

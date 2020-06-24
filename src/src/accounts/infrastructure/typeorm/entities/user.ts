@@ -1,7 +1,7 @@
 import { Entity, Unique, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
-import Secrets from "../../../../core/secrets";
-import UserRole from "../valueObjects/userRole";
-import ExerciseDB from "../../../exercises/domain/typeormEntities/exercise";
+import Secrets from "../../../../../core/secrets";
+import UserRole from "../../../domain/valueObjects/userRole";
+import ExerciseDB from "../../../../exercises/domain/typeormEntities/exercise";
 
 @Entity(Secrets.DB_TB_USERS)
 @Unique(['email'])

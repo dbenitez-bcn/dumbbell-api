@@ -3,7 +3,7 @@ import { isNumber } from "util";
 import { getRepository } from "typeorm";
 import { startServer } from "../api/server";
 import { Endpoints } from "../api/config/constants";
-import UserDB from "../src/accounts/domain/typeormEntities/user";
+import UserDB from "../src/accounts/infrastructure/typeorm/entities/user";
 import UserRole from "../src/accounts/domain/valueObjects/userRole";
 
 describe('Exercises e2e', () => {

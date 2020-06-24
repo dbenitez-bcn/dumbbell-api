@@ -1,4 +1,4 @@
-import UserDB from "../domain/typeormEntities/user"
+import UserDB from "../infrastructure/typeorm/entities/user"
 
 export const getFakeUserDB = () => {
     const user = new UserDB();

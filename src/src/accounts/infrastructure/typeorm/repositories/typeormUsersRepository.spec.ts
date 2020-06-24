@@ -1,10 +1,10 @@
-import DatabaseFailure from "../../exercises/domain/errors/DatabaseFailure";
-import { getFakeUser } from "../test/testUtils";
-import HashedPassword from "../domain/valueObjects/hashedPassword";
-import UserNotFound from "../domain/errors/userNotFound";
-import ExistingEmail from "../domain/errors/existingEmail";
-import ExistingUsername from "../domain/errors/existingUsername";
-import Email from "../domain/valueObjects/email";
+import DatabaseFailure from "../../../../exercises/domain/errors/DatabaseFailure";
+import { getFakeUser } from "../../../test/testUtils";
+import HashedPassword from "../../../domain/valueObjects/hashedPassword";
+import UserNotFound from "../../../domain/errors/userNotFound";
+import ExistingEmail from "../../../domain/errors/existingEmail";
+import ExistingUsername from "../../../domain/errors/existingUsername";
+import Email from "../../../domain/valueObjects/email";
 
 const insertSpy = jest.fn();
 const findOneSpy = jest.fn();
@@ -29,10 +29,10 @@ jest.mock('inversify', () => ({
 }));
 
 import TypeormUsersRepository from "./typeormUsersRepository";
-import UserDB from "../domain/typeormEntities/user";
-import UserRole from "../domain/valueObjects/userRole";
-import User from "../domain/aggregates/user";
-import Username from "../domain/valueObjects/username";
+import UserDB from "../entities/user";
+import UserRole from "../../../domain/valueObjects/userRole";
+import User from "../../../domain/aggregates/user";
+import Username from "../../../domain/valueObjects/username";
 
 describe('typeormUsersRepository', () => {
     const sut = new TypeormUsersRepository();

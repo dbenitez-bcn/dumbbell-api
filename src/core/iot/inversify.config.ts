@@ -1,7 +1,7 @@
 import { Container } from "inversify";
 import UserRepository from "../../src/accounts/domain/repositories/userRepository";
 import DITypes from "./diTypes";
-import TypeormUsersRepository from "../../src/accounts/infrastructure/typeormUsersRepository";
+import TypeormUsersRepository from "../../src/accounts/infrastructure/typeorm/repositories/typeormUsersRepository";
 import AccountService from "../../src/accounts/application/accountService";
 import AuthController from "../../api/services/auth/authController";
 import UsersController from "../../api/services/users/usersController";
