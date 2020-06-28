@@ -8,18 +8,22 @@ import HashedPassword from "../domain/valueObjects/hashedPassword";
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 import TokenService from "../../tokens/application/tokenService";
+import EventBus from "../../../core/domain/events/eventBus";
+import UserCreatedEvent from "../domain/events/userCreatedEvent";
 
 @injectable()
 export default class AccountService {
     constructor(
         @inject(DITypes.UserRepository) private repository: UserRepository,
-        @inject(TokenService) private tokenService: TokenService
+        @inject(TokenService) private tokenService: TokenService,
+        @inject(DITypes.EventBus) private eventBus: EventBus
     ) { }
 
     async register(username: string, email: string, password: string) {
         const user = User.newUser(username, email, password);
         user.hashPassword();
-        await this.repository.create(user);
+        const userCreated = await this.repository.create(user);
+        this.eventBus.publish(new UserCreatedEvent(userCreated.email.value, userCreated.username.value, userCreated.role));
     }
 
     async login(email: string, password: string) {

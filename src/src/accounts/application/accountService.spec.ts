@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import EventBus from "../../../core/domain/events/eventBus";
 import User from '../domain/aggregates/user';
 const usertMock = User.prototype as jest.Mocked<typeof User.prototype>;
 import UserRepository from "../domain/repositories/userRepository";
@@ -9,6 +10,7 @@ import HashedPassword from '../domain/valueObjects/hashedPassword';
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 import TokenService from "../../tokens/application/tokenService";
+import UserCreatedEvent from "../domain/events/userCreatedEvent";
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';
@@ -24,9 +26,13 @@ describe('Account service', () => {
     const fakeTokenService = {
         generateToken
     } as unknown as TokenService;
+    const fakeEventBus = {
+        publish: jest.fn(),
+        subscribe: jest.fn()
+    } as EventBus
     usertMock.hashPassword = jest.fn().mockReturnValue(A_PASSWORD);
     
-    const sut = new AccountService(repository, fakeTokenService);
+    const sut = new AccountService(repository, fakeTokenService, fakeEventBus);
 
     afterEach(() => {
         jest.clearAllMocks();
@@ -36,11 +42,14 @@ describe('Account service', () => {
     describe('Register', () => {
         test('Should register a new user', async () => {
             const expected = User.newUser(A_USERNAME, AN_EMAIL, A_PASSWORD);
+            const expectedEvent = new UserCreatedEvent(AN_EMAIL, A_USERNAME, UserRole.USER);
+            create.mockResolvedValue(expected);
 
             await sut.register(A_USERNAME, AN_EMAIL, A_PASSWORD);
 
             expect(create).toBeCalledWith(expected);
             expect(usertMock.hashPassword).toBeCalledTimes(1);
+            expect(fakeEventBus.publish).toBeCalledWith(expectedEvent);
         })
     })
 
