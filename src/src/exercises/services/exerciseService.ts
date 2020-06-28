@@ -18,7 +18,7 @@ import User from "../../accounts/domain/aggregates/user";
 export default class ExerciseService {
     constructor(
         @inject(DITypes.ExerciseRepository) private readonly repository: ExerciseRepository,
-        @inject(DITypes.UserRepository) private readonly userRepository: UserRepository
+        @inject(DITypes.UserAccountRepository) private readonly userRepository: UserRepository
     ) { }
 
     async create(name: string, description: string, difficulty: number, createdBy: string): Promise<ExerciseDTO> {

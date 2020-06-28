@@ -14,7 +14,7 @@ import UserCreatedEvent from "../../../core/domain/events/events/userCreatedEven
 @injectable()
 export default class AccountService {
     constructor(
-        @inject(DITypes.UserRepository) private repository: UserRepository,
+        @inject(DITypes.UserAccountRepository) private repository: UserRepository,
         @inject(TokenService) private tokenService: TokenService,
         @inject(DITypes.EventBus) private eventBus: EventBus
     ) { }

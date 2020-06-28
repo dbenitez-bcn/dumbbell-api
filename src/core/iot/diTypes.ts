@@ -1,5 +1,5 @@
 const DITypes = {
-    UserRepository: Symbol("UserRepository"),
+    UserAccountRepository: Symbol("UserAccountRepository"),
     ExerciseRepository: Symbol("ExerciseRepository"),
     EventBus: Symbol("EventBus")
 }

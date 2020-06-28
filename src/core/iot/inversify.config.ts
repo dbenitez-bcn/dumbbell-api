@@ -20,7 +20,7 @@ const DIContainer = new Container();
 DIContainer.bind<EventBus>(DITypes.EventBus).to(LocalEventBus);
 
 // Repositories
-DIContainer.bind<UserRepository>(DITypes.UserRepository).to(TypeormUsersRepository);
+DIContainer.bind<UserRepository>(DITypes.UserAccountRepository).to(TypeormUsersRepository);
 DIContainer.bind<ExerciseRepository>(DITypes.ExerciseRepository).to(TypeormExerciseRepository);
 
 // Services
