@@ -3,6 +3,7 @@ import Email from "../valueObjects/email";
 import Password from "../valueObjects/password";
 import PlainPassword from "../valueObjects/plainPassword";
 import UserRole from "../valueObjects/userRole";
+import HashedPassword from "../valueObjects/hashedPassword";
 
 export default class User {
     constructor(username: string, email: string, password: Password, role: UserRole) {
@@ -29,5 +30,9 @@ export default class User {
 
     static newUser(username: string, email: string, password: string): User {
         return new User(username, email, new PlainPassword(password), UserRole.USER);
+    }
+
+    static fromDatabase(username: string, email: string, password: string, role: UserRole): User {
+        return new User(username, email, new HashedPassword(password), role);
     }
 }
