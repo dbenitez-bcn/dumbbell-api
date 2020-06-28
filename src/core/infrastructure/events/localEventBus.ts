@@ -1,7 +1,9 @@
 import EventBus from "../../domain/events/eventBus";
+import { injectable } from "inversify";
 import DumbbellEvent from "../../domain/events/dumbbellEvent";
 import { Subscriber } from "../../domain/events/subscriber";
 
+@injectable()
 export default class LocalEventBus implements EventBus {
     private receivers: {
         [key: string]: Subscriber[]

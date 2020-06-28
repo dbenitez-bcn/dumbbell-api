@@ -1,7 +1,10 @@
-import LocalEventBus from "./localEventBus";
 import FakeEvent from "../../test/fakeEvent";
 import { Subscriber } from "../../domain/events/subscriber";
 import DumbbellEvent from "../../domain/events/dumbbellEvent";
+jest.mock('inversify', () => ({
+    injectable: jest.fn()
+}));
+import LocalEventBus from "./localEventBus";
 
 describe('localEventBus', () => {
     test('Given an event emited should execute the subscribed methods', () => {
