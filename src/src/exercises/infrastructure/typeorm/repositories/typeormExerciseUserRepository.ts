@@ -2,15 +2,15 @@ import { Repository, getRepository } from "typeorm";
 import DatabaseFailure from "../../../domain/errors/DatabaseFailure";
 import ExistingUsername from "../../../domain/errors/existingUsername";
 import User from "../../../domain/aggregates/user";
-import ExerciseUserDB from "../entities/user";
+import UserDB from "../entities/user";
 import { injectable } from "inversify";
 
 @injectable()
 export default class TypeormExerciseUserRepository {
-    private repository: Repository<ExerciseUserDB>;
+    private repository: Repository<UserDB>;
 
     constructor() {
-        this.repository = getRepository(ExerciseUserDB);
+        this.repository = getRepository(UserDB);
     }
 
     async create(user: User): Promise<User> {

@@ -3,10 +3,10 @@ import Secrets from "../../../../../core/secrets";
 import UserRole from "../../../domain/valueObjects/userRole";
 import ExerciseDB from "../../../../exercises/infrastructure/typeorm/entities/exercise";
 
-@Entity(Secrets.DB_TB_USERS)
+@Entity(Secrets.DB_TB_ACCOUNT_USERS)
 @Unique(['email'])
 @Unique(['username'])
-export default class UserDB {
+export default class UserAccountDB {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

@@ -3,7 +3,7 @@ import { injectable } from "inversify";
 import UserRepository from "../../../domain/repositories/userRepository";
 import User from "../../../domain/aggregates/user";
 import Email from "../../../domain/valueObjects/email";
-import UserDB from "../entities/user";
+import UserAccountDB from "../entities/user";
 import DatabaseFailure from "../../../../exercises/domain/errors/DatabaseFailure";
 import ExistingUsername from "../../../domain/errors/existingUsername";
 import ExistingEmail from "../../../domain/errors/existingEmail";
@@ -13,10 +13,10 @@ import Username from "../../../domain/valueObjects/username";
 
 @injectable()
 export default class TypeormUsersRepository implements UserRepository {
-    private repository: Repository<UserDB>;
+    private repository: Repository<UserAccountDB>;
 
     constructor() {
-        this.repository = getRepository(UserDB);
+        this.repository = getRepository(UserAccountDB);
     }
 
     async create(user: User): Promise<User> {

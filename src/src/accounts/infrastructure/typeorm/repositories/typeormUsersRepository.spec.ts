@@ -29,7 +29,7 @@ jest.mock('inversify', () => ({
 }));
 
 import TypeormUsersRepository from "./typeormUsersRepository";
-import UserDB from "../entities/user";
+import UserAccountDB from "../entities/user";
 import UserRole from "../../../domain/valueObjects/userRole";
 import User from "../../../domain/aggregates/user";
 import Username from "../../../domain/valueObjects/username";
@@ -81,7 +81,7 @@ describe('typeormUsersRepository', () => {
     describe('findByEmail', () => {
         const email = new Email('test@dumbbell.com');
         test('Should return a hashed password', async () => {
-            const userDB = new UserDB();
+            const userDB = new UserAccountDB();
             userDB.password = 'hashedpassword';
             userDB.email = 'test@dumbbell.com';
             userDB.username = 'username';
@@ -112,7 +112,7 @@ describe('typeormUsersRepository', () => {
         const username = new Username('testerino');
         
         test('Should return a hashed password', async () => {
-            const userDB = new UserDB();
+            const userDB = new UserAccountDB();
             userDB.password = 'hashedpassword';
             userDB.email = 'test@dumbbell.com';
             userDB.username = 'testerino';

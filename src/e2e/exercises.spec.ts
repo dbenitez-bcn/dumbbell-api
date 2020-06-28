@@ -3,7 +3,7 @@ import { isNumber } from "util";
 import { getRepository } from "typeorm";
 import { startServer } from "../api/server";
 import { Endpoints } from "../api/config/constants";
-import UserDB from "../src/accounts/infrastructure/typeorm/entities/user";
+import UserAccountDB from "../src/accounts/infrastructure/typeorm/entities/user";
 import UserRole from "../src/accounts/domain/valueObjects/userRole";
 
 describe('Exercises e2e', () => {
@@ -354,7 +354,7 @@ describe('Exercises e2e', () => {
     }
 
     const updateRoleToOperator = async (username: string) => {
-        const repo = getRepository(UserDB);
+        const repo = getRepository(UserAccountDB);
         const operator = await repo.findOne({
             username: username
         });

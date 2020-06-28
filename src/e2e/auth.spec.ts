@@ -2,7 +2,7 @@ import request from "supertest";
 import { getRepository } from "typeorm";
 import { startServer } from "../api/server";
 import { Endpoints } from "../api/config/constants";
-import UserDB from "../src/accounts/infrastructure/typeorm/entities/user";
+import UserAccountDB from "../src/accounts/infrastructure/typeorm/entities/user";
 import UserRole from "../src/accounts/domain/valueObjects/userRole";
 
 describe('Auth e2e', () => {
@@ -135,7 +135,7 @@ describe('Auth e2e', () => {
     }
 
     const updateRoleToOperator = async (username: string) => {
-        const repo = getRepository(UserDB);
+        const repo = getRepository(UserAccountDB);
         const operator = await repo.findOne({
             username: username
         });

@@ -9,16 +9,16 @@ import ExerciseParams from "../../../domain/aggregates/exerciseParams";
 import ExerciseDB from "../entities/exercise";
 import ExercisesNotFound from "../../../domain/errors/ExercisesNotFound";
 import ExerciseNotFound from "../../../domain/errors/ExerciseNotFound";
-import UserDB from "../../../../accounts/infrastructure/typeorm/entities/user";
+import UserAccountDB from "../../../../accounts/infrastructure/typeorm/entities/user";
 
 @injectable()
 export default class TypeormExerciseRepository implements ExerciseRepository {
     private exerciseRepository: Repository<ExerciseDB>
-    private userRepository: Repository<UserDB>
+    private userRepository: Repository<UserAccountDB>
 
     constructor() {
         this.exerciseRepository = getRepository(ExerciseDB);
-        this.userRepository = getRepository(UserDB);
+        this.userRepository = getRepository(UserAccountDB);
     }
 
     async create(exercise: Exercise): Promise<Exercise> {

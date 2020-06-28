@@ -4,7 +4,7 @@ import UserRole from "../../../domain/valueObject/userRole";
 
 @Entity(Secrets.DB_TB_EXERCISE_USERS)
 @Unique(['username'])
-export default class ExerciseUserDB {
+export default class UserDB {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
