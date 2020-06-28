@@ -129,13 +129,13 @@ describe('typeormUsersRepository', () => {
         test('Given no user should fail', async () => {
             findOneSpy.mockResolvedValue(undefined);
 
-            await expect(sut.findByEmail(username)).rejects.toThrowError(UserNotFound);
+            await expect(sut.findByUsername(username)).rejects.toThrowError(UserNotFound);
         })
 
         test('Given an error when accessing to databse should fail', async () => {
             findOneSpy.mockRejectedValue(new Error());
 
-            await expect(sut.findByEmail(username)).rejects.toThrowError(DatabaseFailure);
+            await expect(sut.findByUsername(username)).rejects.toThrowError(DatabaseFailure);
         })
     })
 })
