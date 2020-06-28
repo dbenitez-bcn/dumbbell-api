@@ -11,8 +11,13 @@ import TypeormExerciseRepository from "../../src/exercises/infrastructure/typeor
 import ExerciseService from "../../src/exercises/services/exerciseService";
 import TokenService from "../../src/tokens/application/tokenService";
 import TokenMiddleware from "../../api/middlewares/tokens/tokenMiddleware";
+import EventBus from "../domain/events/eventBus";
+import LocalEventBus from "../infrastructure/events/localEventBus";
 
 const DIContainer = new Container();
+
+// Event bus
+DIContainer.bind<EventBus>(DITypes.EventBus).to(LocalEventBus);
 
 // Repositories
 DIContainer.bind<UserRepository>(DITypes.UserRepository).to(TypeormUsersRepository);
