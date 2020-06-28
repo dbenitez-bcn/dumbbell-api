@@ -6,10 +6,10 @@ import ExistingEmail from "../../../domain/errors/existingEmail";
 import ExistingUsername from "../../../domain/errors/existingUsername";
 import Email from "../../../domain/valueObjects/email";
 
-const insertSpy = jest.fn();
+const saveSpy = jest.fn();
 const findOneSpy = jest.fn();
 const repoMock = jest.fn().mockReturnValue({
-    insert: insertSpy,
+    save: saveSpy,
     findOne: findOneSpy,
 })
 jest.mock('typeorm', () => ({
@@ -33,6 +33,7 @@ import UserDB from "../entities/user";
 import UserRole from "../../../domain/valueObjects/userRole";
 import User from "../../../domain/aggregates/user";
 import Username from "../../../domain/valueObjects/username";
+import { getFakeUserDB } from "../../../test/getFakeUserDB";
 
 describe('typeormUsersRepository', () => {
     const sut = new TypeormUsersRepository();
@@ -45,27 +46,31 @@ describe('typeormUsersRepository', () => {
                 email: user.email.value,
                 password: user.password.value
             }
+            const dbUser = getFakeUserDB();
+            const expectedDomainUser = User.fromDatabase(dbUser.username, dbUser.email, dbUser.password, dbUser.role);
+            saveSpy.mockResolvedValue(dbUser);
 
-            await sut.create(user);
+            const result = await sut.create(user);
 
-            expect(insertSpy).toBeCalledWith(expectedUser);
+            expect(saveSpy).toBeCalledWith(expectedUser);
+            expect(result).toStrictEqual(expectedDomainUser);
         })
 
         test('Given an error when accessing to database should fail', async () => {
-            insertSpy.mockRejectedValue(new Error());
+            saveSpy.mockRejectedValue(new Error());
 
             await expect(sut.create(user)).rejects.toThrowError(DatabaseFailure);
         })
 
         test('Given an existing email should fail', async () => {
-            insertSpy.mockRejectedValue({
+            saveSpy.mockRejectedValue({
                 detail: 'Key (email)=(email) already exists.',
             });
 
             await expect(sut.create(user)).rejects.toThrowError(ExistingEmail);
         })
         test('Given an existing username should fail', async () => {
-            insertSpy.mockRejectedValue({
+            saveSpy.mockRejectedValue({
                 detail: 'Key (username)=(username) already exists.',
             });
 
