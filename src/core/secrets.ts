@@ -10,6 +10,7 @@ export default class Secrets {
     public static DB_PASSWORD = process.env.DB_PASSWORD
     public static DB_TB_EXERCISES = process.env.DB_TB_EXERCISES
     public static DB_TB_USERS = process.env.DB_TB_USERS
+    public static DB_TB_EXERCISE_USERS = process.env.DB_TB_EXERCISE_USERS
     public static APP_ENV = process.env.APP_ENV
     public static JWT_SCRET = process.env.JWT_SCRET || ''
     public static PORT = 9000;

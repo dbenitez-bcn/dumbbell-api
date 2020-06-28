@@ -8,10 +8,14 @@ module.exports = {
     "synchronize": true,
     "logging": true,
     "logger": "file",
-    "entities": ["src/src/exercises/infrastructure/typeorm/entities/exercise.ts", "src/src/accounts/infrastructure/typeorm/entities/user.ts"],
+    "entities": [
+        "src/src/exercises/infrastructure/typeorm/entities/exercise.ts", 
+        "src/src/accounts/infrastructure/typeorm/entities/user.ts", 
+        "src/src/exercises/infrastructure/typeorm/entities/user.ts"
+    ],
     "migrations": ["src/core/migrations/**/*.ts"],
     "cli": {
-       "entitiesDir": "src/api/models/entities",
-       "migrationsDir": "/src/core/migrations"
+        "entitiesDir": "src/api/models/entities",
+        "migrationsDir": "/src/core/migrations"
     }
 }

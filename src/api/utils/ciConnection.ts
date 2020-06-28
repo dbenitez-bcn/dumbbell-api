@@ -7,7 +7,11 @@ export const ciConnection: ConnectionOptions = {
     username: "circleci",
     password: "Passw0rd",
     database: 'circleci',
-    entities: ["src/src/exercises/infrastructure/typeorm/entities/exercise.ts", "src/src/accounts/infrastructure/typeorm/entities/user.ts"],
+    entities: [
+        "src/src/exercises/infrastructure/typeorm/entities/exercise.ts",
+        "src/src/accounts/infrastructure/typeorm/entities/user.ts",
+        "src/src/exercises/infrastructure/typeorm/entities/user.ts"
+    ],
     dropSchema: true,
     synchronize: true,
     logging: false
