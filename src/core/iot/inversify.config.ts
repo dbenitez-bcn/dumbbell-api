@@ -1,7 +1,7 @@
 import { Container } from "inversify";
-import UserRepository from "../../src/accounts/domain/repositories/userRepository";
+import AccountRepository from "../../src/accounts/domain/repositories/userRepository";
 import DITypes from "./diTypes";
-import TypeormUsersRepository from "../../src/accounts/infrastructure/typeorm/repositories/typeormUsersRepository";
+import TypeormAccountRepository from "../../src/accounts/infrastructure/typeorm/repositories/typeormAccountRepository";
 import AccountService from "../../src/accounts/application/accountService";
 import AuthController from "../../api/services/auth/authController";
 import UsersController from "../../api/services/users/usersController";
@@ -20,7 +20,7 @@ const DIContainer = new Container();
 DIContainer.bind<EventBus>(DITypes.EventBus).to(LocalEventBus);
 
 // Repositories
-DIContainer.bind<UserRepository>(DITypes.UserAccountRepository).to(TypeormUsersRepository);
+DIContainer.bind<AccountRepository>(DITypes.UserAccountRepository).to(TypeormAccountRepository);
 DIContainer.bind<ExerciseRepository>(DITypes.ExerciseRepository).to(TypeormExerciseRepository);
 
 // Services

@@ -9,7 +9,7 @@ import { injectable, inject } from "inversify";
 import DITypes from "../../../core/iot/diTypes";
 import ExerciseDTO from "../domain/dtos/exerciseDTO";
 import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
-import UserRepository from "../../accounts/domain/repositories/userRepository";
+import AccountRepository from "../../accounts/domain/repositories/userRepository";
 import Username from "../../accounts/domain/valueObjects/username";
 import UserRole from "../../accounts/domain/valueObjects/userRole";
 import User from "../../accounts/domain/aggregates/user";
@@ -18,7 +18,7 @@ import User from "../../accounts/domain/aggregates/user";
 export default class ExerciseService {
     constructor(
         @inject(DITypes.ExerciseRepository) private readonly repository: ExerciseRepository,
-        @inject(DITypes.UserAccountRepository) private readonly userRepository: UserRepository
+        @inject(DITypes.UserAccountRepository) private readonly userRepository: AccountRepository
     ) { }
 
     async create(name: string, description: string, difficulty: number, createdBy: string): Promise<ExerciseDTO> {

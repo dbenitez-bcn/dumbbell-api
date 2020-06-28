@@ -2,7 +2,7 @@ import "reflect-metadata";
 import EventBus from "../../../core/domain/events/eventBus";
 import User from '../domain/aggregates/user';
 const usertMock = User.prototype as jest.Mocked<typeof User.prototype>;
-import UserRepository from "../domain/repositories/userRepository";
+import AccountRepository from "../domain/repositories/userRepository";
 import AccountService from "./accountService";
 import Email from '../domain/valueObjects/email';
 import LoginFailure from '../domain/errors/loginFailure';
@@ -22,7 +22,7 @@ describe('Account service', () => {
     const repository = {
         create,
         findByEmail
-    } as unknown as UserRepository;
+    } as unknown as AccountRepository;
     const fakeTokenService = {
         generateToken
     } as unknown as TokenService;

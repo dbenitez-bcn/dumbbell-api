@@ -28,7 +28,7 @@ jest.mock('inversify', () => ({
     injectable: jest.fn()
 }));
 
-import TypeormUsersRepository from "./typeormUsersRepository";
+import TypeormAccountRepository from "./typeormAccountRepository";
 import UserAccountDB from "../entities/user";
 import UserRole from "../../../domain/valueObjects/userRole";
 import User from "../../../domain/aggregates/user";
@@ -36,7 +36,7 @@ import Username from "../../../domain/valueObjects/username";
 import { getFakeUserDB } from "../../../test/getFakeUserDB";
 
 describe('typeormUsersRepository', () => {
-    const sut = new TypeormUsersRepository();
+    const sut = new TypeormAccountRepository();
 
     describe('create', () => {
         const user = getFakeUser();

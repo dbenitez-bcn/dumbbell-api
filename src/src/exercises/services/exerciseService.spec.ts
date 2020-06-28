@@ -13,7 +13,7 @@ import Name from "../domain/valueObject/name";
 import Description from "../domain/valueObject/description";
 import Difficulty from "../domain/valueObject/difficulty";
 import InvalidCreatedBy from "../domain/errors/InvalidCreatedBy";
-import UserRepository from "../../accounts/domain/repositories/userRepository";
+import AccountRepository from "../../accounts/domain/repositories/userRepository";
 import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 import CreatedBy from "../domain/valueObject/createdBy";
 import UserRole from "../../accounts/domain/valueObjects/userRole";
@@ -42,7 +42,7 @@ describe('Exercise Service', () => {
     }
     const userRepository = {
         findByUsername
-    } as unknown as UserRepository;
+    } as unknown as AccountRepository;
     const sut = new ExerciseService(repository, userRepository);
 
     afterEach(() => {

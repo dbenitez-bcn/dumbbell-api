@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import UserRepository from "../domain/repositories/userRepository";
+import AccountRepository from "../domain/repositories/userRepository";
 import User from "../domain/aggregates/user";
 import Email from "../domain/valueObjects/email";
 import LoginFailure from "../domain/errors/loginFailure";
@@ -14,7 +14,7 @@ import UserCreatedEvent from "../../../core/domain/events/events/userCreatedEven
 @injectable()
 export default class AccountService {
     constructor(
-        @inject(DITypes.UserAccountRepository) private repository: UserRepository,
+        @inject(DITypes.UserAccountRepository) private repository: AccountRepository,
         @inject(TokenService) private tokenService: TokenService,
         @inject(DITypes.EventBus) private eventBus: EventBus
     ) { }
