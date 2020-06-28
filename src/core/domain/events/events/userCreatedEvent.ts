@@ -1,4 +1,4 @@
-import DumbbellEvent from "../../../../core/domain/events/dumbbellEvent";
+import DumbbellEvent from "../../../../core/domain/events/events/dumbbellEvent";
 
 export default class UserCreatedEvent extends DumbbellEvent {
     constructor(

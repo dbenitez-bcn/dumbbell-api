@@ -1,3 +1,3 @@
-import DumbbellEvent from "./dumbbellEvent";
+import DumbbellEvent from "./events/dumbbellEvent";
 
 export type Subscriber = (event: DumbbellEvent) => void;

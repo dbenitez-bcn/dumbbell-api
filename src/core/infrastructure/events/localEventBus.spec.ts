@@ -1,6 +1,6 @@
 import FakeEvent from "../../test/fakeEvent";
 import { Subscriber } from "../../domain/events/subscriber";
-import DumbbellEvent from "../../domain/events/dumbbellEvent";
+import DumbbellEvent from "../../domain/events/events/dumbbellEvent";
 jest.mock('inversify', () => ({
     injectable: jest.fn()
 }));

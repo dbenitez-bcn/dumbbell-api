@@ -1,4 +1,4 @@
-import DumbbellEvent from "./dumbbellEvent";
+import DumbbellEvent from "./events/dumbbellEvent";
 import { Subscriber } from "./subscriber";
 
 export default interface EventBus {

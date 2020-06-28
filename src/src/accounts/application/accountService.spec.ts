@@ -10,7 +10,7 @@ import HashedPassword from '../domain/valueObjects/hashedPassword';
 import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 import TokenService from "../../tokens/application/tokenService";
-import UserCreatedEvent from "../domain/events/userCreatedEvent";
+import UserCreatedEvent from "../../../core/domain/events/events/userCreatedEvent";
 
 describe('Account service', () => {
     const A_USERNAME = 'testerino';

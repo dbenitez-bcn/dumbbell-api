@@ -1,6 +1,6 @@
 import EventBus from "../../domain/events/eventBus";
 import { injectable } from "inversify";
-import DumbbellEvent from "../../domain/events/dumbbellEvent";
+import DumbbellEvent from "../../domain/events/events/dumbbellEvent";
 import { Subscriber } from "../../domain/events/subscriber";
 
 @injectable()

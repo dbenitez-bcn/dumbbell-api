@@ -9,7 +9,7 @@ import UserRole from "../domain/valueObjects/userRole";
 import UnauthorizedAction from "../../../core/domain/errors/unauthorizedAction";
 import TokenService from "../../tokens/application/tokenService";
 import EventBus from "../../../core/domain/events/eventBus";
-import UserCreatedEvent from "../domain/events/userCreatedEvent";
+import UserCreatedEvent from "../../../core/domain/events/events/userCreatedEvent";
 
 @injectable()
 export default class AccountService {
